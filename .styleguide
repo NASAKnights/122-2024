@@ -1,0 +1,33 @@
+cppHeaderFileInclude {
+  \.h$
+  \.hpp$
+  \.inl$
+  \.inc$
+}
+
+cppSrcFileInclude {
+  \.cpp$
+}
+
+modifiableFileExclude {
+  gradle/
+  \.etx$
+  \.png$
+}
+
+includeOtherLibs {
+  Eigen/
+  ctre/
+  drake/
+  fmt/
+  frc/
+  frc2/
+  gtest/
+  hal/
+  networktables/
+  opencv2/
+  photonlib/
+  rev/.*?\.h$
+  units/
+  wpi/
+}
