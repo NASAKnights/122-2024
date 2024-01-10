@@ -79,7 +79,7 @@ void to_json(json &j, const NKTrajectory::State &state) {
 }
 
 void from_json(const json &j, NKTrajectory &traj) {
-  traj = NKTrajectory(j.at("samples").get<std::vector<NKTrajectory::State>>());
+  traj = NKTrajectory(j.get<std::vector<NKTrajectory::State>>());
 }
 
 void to_json(json &j, const NKTrajectory &traj) { j = json{traj.m_states}; }

@@ -39,6 +39,7 @@ public:
   void InitEncoder(int encoderID);
   frc::Rotation2d GetRotation();
   frc::Rotation2d GetAbsoluteRotation();
+  void Reset();
 
 private:
   // Components (e.g. motor controllers and sensors) should generally be

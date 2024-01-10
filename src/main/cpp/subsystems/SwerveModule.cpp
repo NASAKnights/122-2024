@@ -22,9 +22,9 @@ using namespace ModuleConstants;
 
 SwerveModule::SwerveModule(int driveMotorID, int steerMotorID,
                            int steerEncoderId, frc::Rotation2d angleOffset)
-    : m_id{driveMotorID / 10}, m_driveMotor{driveMotorID, "NKCanivore1"},
-      m_steerMotor{steerMotorID, "NKCanivore1"},
-      m_steerEncoder{steerEncoderId, "NKCanivore1"}, m_angleOffset{angleOffset},
+    : m_id{driveMotorID / 10}, m_driveMotor{driveMotorID, "NKCanivore"},
+      m_steerMotor{steerMotorID, "NKCanivore"},
+      m_steerEncoder{steerEncoderId, "NKCanivore"}, m_angleOffset{angleOffset},
       m_driveSim("TalonFX", driveMotorID), m_steerSim("TalonFX", steerMotorID),
       m_driveSimVelocity(m_driveSim.GetDouble("Velocity")),
       m_driveSimPosition(m_driveSim.GetDouble("Position")),
@@ -78,7 +78,9 @@ SwerveModule::SwerveModule(int driveMotorID, int steerMotorID,
 
   steerConfig.Feedback.FeedbackRemoteSensorID = m_steerEncoder.GetDeviceID();
   steerConfig.Feedback.FeedbackSensorSource =
-      signals::FeedbackSensorSourceValue::RemoteCANcoder;
+      signals::FeedbackSensorSourceValue::FusedCANcoder;
+  steerConfig.Feedback.SensorToMechanismRatio = 1.0;
+  steerConfig.Feedback.RotorToSensorRatio = kTurnGearRatio;
   steerConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
   m_driveMotor.GetConfigurator().Apply(driveConfig);
