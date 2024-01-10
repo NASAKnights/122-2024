@@ -1,6 +1,6 @@
 // Copyright (c) FRC Team 122. All Rights Reserved.
 
-#include "Subsystems/SwerveDrive.hpp"
+#include "subsystems/SwerveDrive.hpp"
 
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/smartdashboard/SmartDashboard.h>

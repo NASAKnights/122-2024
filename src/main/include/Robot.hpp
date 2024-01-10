@@ -10,7 +10,7 @@
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/RunCommand.h>
 
-#include "Subsystems/SwerveDrive.hpp"
+#include "subsystems/SwerveDrive.hpp"
 
 class Robot : public frc::TimedRobot {
 public:
