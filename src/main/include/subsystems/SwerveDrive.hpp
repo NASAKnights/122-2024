@@ -21,6 +21,7 @@
 #include <networktables/DoubleArrayTopic.h>
 #include <networktables/NetworkTableInstance.h>
 #include <wpi/array.h>
+#include <ctre/phoenix6/Pigeon2.hpp>
 
 #include "Constants.hpp"
 #include "SwerveModule.hpp"
@@ -61,6 +62,8 @@ private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   AHRS navx{frc::SPI::Port::kMXP};
+
+  ctre::phoenix6::hardware::Pigeon2 m_pigeon{9, "NKCANivore"};
 
   std::array<SwerveModule, 4> modules;
 

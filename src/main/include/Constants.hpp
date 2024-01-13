@@ -102,7 +102,7 @@ namespace ModuleConstants {
 const auto kMaxSpeed = DriveConstants::kMaxTranslationalVelocity;
 // meters
 const auto kWheelDiameterMeters =
-    units::meter_t{DriveConstants::kSDSModule.wheelDiameter};
+    units::meter_t{0.092815210491};
 // meters / turn
 const auto kWheelCircumference =
     kWheelDiameterMeters * std::numbers::pi / units::turn_t{1.0};

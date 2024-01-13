@@ -10,6 +10,7 @@
 #include <units/velocity.h>
 
 #include "commands/TrajectoryFollower.hpp"
+#include "frc2/command/InstantCommand.h"
 #include "util/NKTrajectoryManager.hpp"
 
 Robot::Robot() { this->CreateRobot(); }
@@ -103,10 +104,10 @@ void Robot::CreateRobot() {
         frc::SmartDashboard::PutNumber("Joystick/Right X Axis", rightXAxis);
         m_swerveDrive.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
             -leftXAxis * DriveConstants::kMaxTranslationalVelocity,
-            // units::meters_per_second_t{0}, 
-            // units::radians_per_second_t{0},
-            -leftYAxis * DriveConstants::kMaxTranslationalVelocity,
-            -rightXAxis * DriveConstants::kMaxRotationalVelocity,
+            units::meters_per_second_t{0}, 
+            units::radians_per_second_t{0},
+            // -leftYAxis * DriveConstants::kMaxTranslationalVelocity,
+            // -rightXAxis * DriveConstants::kMaxRotationalVelocity,
             m_swerveDrive.GetHeading()));
       },
       {&m_swerveDrive}));
@@ -123,7 +124,7 @@ void Robot::CreateRobot() {
  */
 void Robot::BindCommands() {
   frc2::JoystickButton(&m_driverController, 1)
-      .OnTrue(frc2::CommandPtr((frc2::RunCommand([this] {
+      .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
         return m_swerveDrive.ResetHeading();
       })))); // TODO assign as test
 }
