@@ -104,10 +104,10 @@ void Robot::CreateRobot() {
         frc::SmartDashboard::PutNumber("Joystick/Right X Axis", rightXAxis);
         m_swerveDrive.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
             -leftXAxis * DriveConstants::kMaxTranslationalVelocity,
-            units::meters_per_second_t{0}, 
-            units::radians_per_second_t{0},
-            // -leftYAxis * DriveConstants::kMaxTranslationalVelocity,
-            // -rightXAxis * DriveConstants::kMaxRotationalVelocity,
+            // units::meters_per_second_t{0}, 
+            // units::radians_per_second_t{0},
+            -leftYAxis * DriveConstants::kMaxTranslationalVelocity,
+            -rightXAxis * DriveConstants::kMaxRotationalVelocity,
             m_swerveDrive.GetHeading()));
       },
       {&m_swerveDrive}));

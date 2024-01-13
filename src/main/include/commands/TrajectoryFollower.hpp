@@ -30,7 +30,7 @@ private:
 
   frc::Timer m_timestamp;
 
-  frc::PIDController m_controllerX{6.0, 0, 0};
-  frc::PIDController m_controllerY{6.0, 0, 0};
-  frc::PIDController m_controllerRotation{10.0, 0, 0};
+  frc::PIDController m_controllerX{8.0, 0, 0};
+  frc::PIDController m_controllerY{8.0, 0, 0};
+  frc::PIDController m_controllerRotation{14.0, 0, 0};
 };
