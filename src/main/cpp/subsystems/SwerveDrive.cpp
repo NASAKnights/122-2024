@@ -45,9 +45,13 @@ SwerveDrive::SwerveDrive()
 // This method will be called once per scheduler run
 void SwerveDrive::Periodic() {
   // getCameraResults();
-  // sensor fusion? EKF (eek kinda fun)
+  // sensor fusion? EKF (eek kinda fun) (extended Kalman filter)
   // publishOdometry(odometry.GetPose());
-  frc::SmartDashboard::PutNumber("Heading", GetHeading().Degrees().value());
+  frc::SmartDashboard::PutNumber("Heading", double {GetHeading().Degrees().value()});
+  frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
+  frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
+  frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
+  PrintNetworkTableValues();
 }
 
 void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
@@ -62,9 +66,9 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
     modules[i].SetDesiredState(states[i]);
   }
 
-  frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
-  frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
-  frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
+  // frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
+  // frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
+  // frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
 }
 
 void SwerveDrive::SetFast() {}
@@ -131,13 +135,14 @@ std::optional<frc::Pose3d> SwerveDrive::getCameraResults() {
 
   if (time != 0.0) {
     auto compressedResults = result.value;
-    return frc::Pose3d(
+    rotation_q = frc::Quaternion(compressedResults.at(6),
+                                     compressedResults.at(3),
+                                     compressedResults.at(4),
+                                     compressedResults.at(5));
         frc::Translation3d(units::meter_t{compressedResults.at(0)},
                            units::meter_t{compressedResults.at(1)},
                            units::meter_t{compressedResults.at(2)}),
-        frc::Rotation3d(units::radian_t{compressedResults.at(3)},
-                        units::radian_t{compressedResults.at(4)},
-                        units::radian_t{compressedResults.at(5)}));
+        frc::Rotation3d(rotation_q);
   } else {
     return std::nullopt;
   }
@@ -151,4 +156,20 @@ void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
 
 void SwerveDrive::PrintNetworkTableValues() {
   // TODO: write print function :3
+
+  std::optional<frc::Pose3d> position = getCameraResults();
+  if (position != std::nullopt) {
+    auto position_unwrapped = std::move(*position);
+    frc::SmartDashboard::PutNumber("Cam X", double {position_unwrapped.X()});
+    frc::SmartDashboard::PutNumber("Cam Y", double {position_unwrapped.Y()});
+    frc::SmartDashboard::PutNumber("Cam Z", double {position_unwrapped.Z()});
+
+    frc::SmartDashboard::PutNumber("Cam Rot X", double {position_unwrapped.Rotation().GetQuaternion().X()});
+    frc::SmartDashboard::PutNumber("Cam Rot Y", double {position_unwrapped.Rotation().GetQuaternion().Y()});
+    frc::SmartDashboard::PutNumber("Cam Rot X", double {position_unwrapped.Rotation().GetQuaternion().Z()});
+    frc::SmartDashboard::PutNumber("Cam Rot W", double {position_unwrapped.Rotation().GetQuaternion().W()});
+    // std::string x = std::to_string(double {position_unwrapped.X()});
+    // std::cout << "X position :" << x << "/n";
+  }
+  
 }
