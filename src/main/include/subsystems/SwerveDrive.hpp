@@ -18,9 +18,12 @@
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc/geometry/Quaternion.h>
 #include <networktables/DoubleArrayTopic.h>
 #include <networktables/NetworkTableInstance.h>
 #include <wpi/array.h>
+#include <iostream>
+#include <string>
 #include <ctre/phoenix6/Pigeon2.hpp>
 
 #include "Constants.hpp"
@@ -78,9 +81,10 @@ private:
   // ----------------------
 
   nt::NetworkTableInstance networkTableInst;
-  std::string_view ntName;
+  std::string_view ntName = "camera_based_pose";
   std::shared_ptr<nt::NetworkTable> poseTable;
   nt::DoubleArraySubscriber ntPoseSubscribe;
+  frc::Quaternion rotation_q; //w, x, y, z
 
   nt::DoubleArrayPublisher ntPosePublisher;
   nt::DoubleArrayTopic ntPoseTopic;

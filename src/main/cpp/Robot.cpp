@@ -150,6 +150,7 @@ void Robot::UpdateDashboard() {
           DriveConstants::kMaxTranslationalVelocity.value());
   frc::SmartDashboard::PutNumber("Swerve Drive Heading",
                                  m_swerveDrive.GetHeading().Degrees().value());
+  m_swerveDrive.PrintNetworkTableValues();
 }
 
 #ifndef RUNNING_FRC_TESTS
