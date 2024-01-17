@@ -10,6 +10,7 @@
 #include <units/velocity.h>
 
 #include "commands/TrajectoryFollower.hpp"
+#include "frc2/command/InstantCommand.h"
 #include "util/NKTrajectoryManager.hpp"
 
 Robot::Robot() { this->CreateRobot(); }
@@ -123,7 +124,7 @@ void Robot::CreateRobot() {
  */
 void Robot::BindCommands() {
   frc2::JoystickButton(&m_driverController, 1)
-      .OnTrue(frc2::CommandPtr((frc2::RunCommand([this] {
+      .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
         return m_swerveDrive.ResetHeading();
       })))); // TODO assign as test
 }

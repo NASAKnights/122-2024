@@ -61,9 +61,9 @@ const auto kTrackwidthMeters = 0.4_m;
 const auto kWheelbaseMeters = 0.4_m;
 
 const double kDefaultAxisDeadband = 0.15;
-const units::meters_per_second_t kMaxTranslationalVelocity{0.5};
+const units::meters_per_second_t kMaxTranslationalVelocity{1.5};
 
-const units::radians_per_second_t kMaxRotationalVelocity{1};
+const units::radians_per_second_t kMaxRotationalVelocity{2};
 const bool kIsFieldRelative = true;
 
 const frc::Rotation2d kFrontLeftOffset{-units::degree_t{103}}; // module 1
@@ -102,7 +102,7 @@ namespace ModuleConstants {
 const auto kMaxSpeed = DriveConstants::kMaxTranslationalVelocity;
 // meters
 const auto kWheelDiameterMeters =
-    units::meter_t{DriveConstants::kSDSModule.wheelDiameter};
+    units::meter_t{0.092815210491};
 // meters / turn
 const auto kWheelCircumference =
     kWheelDiameterMeters * std::numbers::pi / units::turn_t{1.0};

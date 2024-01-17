@@ -22,9 +22,9 @@ using namespace ModuleConstants;
 
 SwerveModule::SwerveModule(int driveMotorID, int steerMotorID,
                            int steerEncoderId, frc::Rotation2d angleOffset)
-    : m_id{driveMotorID / 10}, m_driveMotor{driveMotorID, "NKCanivore"},
-      m_steerMotor{steerMotorID, "NKCanivore"},
-      m_steerEncoder{steerEncoderId, "NKCanivore"}, m_angleOffset{angleOffset},
+    : m_id{driveMotorID / 10}, m_driveMotor{driveMotorID, "NKCANivore"},
+      m_steerMotor{steerMotorID, "NKCANivore"},
+      m_steerEncoder{steerEncoderId, "NKCANivore"}, m_angleOffset{angleOffset},
       m_driveSim("TalonFX", driveMotorID), m_steerSim("TalonFX", steerMotorID),
       m_driveSimVelocity(m_driveSim.GetDouble("Velocity")),
       m_driveSimPosition(m_driveSim.GetDouble("Position")),
@@ -87,6 +87,8 @@ SwerveModule::SwerveModule(int driveMotorID, int steerMotorID,
   m_steerMotor.GetConfigurator().Apply(steerConfig);
   m_steerEncoder.GetConfigurator().Apply(CANcoderConfig);
 
+  m_driveMotor.SetPosition(units::turn_t{0});
+
   if constexpr (frc::RobotBase::IsSimulation()) {
     m_simTimer.Start();
   }
@@ -103,6 +105,9 @@ void SwerveModule::Periodic() {
   frc::SmartDashboard::PutNumber(
       "Module " + std::to_string(m_id) + "/" + " Velocity",
       (m_driveMotor.GetVelocity()).GetValue().value());
+  frc::SmartDashboard::PutNumber(
+      "Module " + std::to_string(m_id) + "/" + " Rotations",
+      (m_driveMotor.GetPosition()).GetValue().value());
   // frc::SmartDashboard::PutNumber("Module " + std::to_string(m_id) + " Magnet
   // offset",
   //                                m_angleOffset.Degrees().value());
@@ -135,7 +140,9 @@ void SwerveModule::SetDesiredState(frc::SwerveModuleState state) {
   auto steerRequest = controls::PositionVoltage{0_tr}.WithSlot(0);
   auto driveRequest = controls::VelocityVoltage{0_tps}.WithSlot(0);
   m_steerMotor.SetControl(steerRequest.WithPosition(state.angle.Radians()));
+  // m_steerMotor.SetControl(steerRequest.WithPosition(units::degree_t{45}));
   frc::SmartDashboard::PutNumber("/Conversion", kDriveGearRatio);
+  frc::SmartDashboard::PutNumber(std::to_string(m_id) + "/Desired angle", state.angle.Degrees().value());
   m_driveMotor.SetControl(
       driveRequest.WithVelocity(state.speed / kDriveConversion));
 

@@ -30,7 +30,7 @@ NKTrajectoryManager::GetTrajectory(const std::string &name) {
 std::map<std::string, NKTrajectory> NKTrajectoryManager::LoadTrajectories() {
   std::map<std::string, NKTrajectory> trajectories;
   path trajDir =
-      path(frc::filesystem::GetDeployDirectory()) / path("trajectories");
+      path(frc::filesystem::GetDeployDirectory()) / path("choreo");
   for (const auto &file : directory_iterator(trajDir)) {
     auto filename = file.path().filename().string();
     if (filename.ends_with(".traj")) {

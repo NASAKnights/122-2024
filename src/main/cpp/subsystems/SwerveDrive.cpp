@@ -25,7 +25,7 @@ SwerveDrive::SwerveDrive()
                             ElectricalConstants::kBackRightEncoderID,
                             DriveConstants::kBackRightOffset)}},
       odometry{DriveConstants::kSwerveKinematics,
-               frc::Rotation2d(units::degree_t{-navx.GetAngle()}),
+               frc::Rotation2d(units::degree_t{m_pigeon.GetAngle()}),
                {modules[0].GetPosition(), modules[1].GetPosition(),
                 modules[2].GetPosition(), modules[3].GetPosition()},
                frc::Pose2d()},
@@ -47,11 +47,12 @@ void SwerveDrive::Periodic() {
   // getCameraResults();
   // sensor fusion? EKF (eek kinda fun) (extended Kalman filter)
   // publishOdometry(odometry.GetPose());
-  frc::SmartDashboard::PutNumber("Heading", double {GetHeading().Degrees().value()});
-  frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
-  frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
-  frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
+
   PrintNetworkTableValues();
+
+  frc::SmartDashboard::PutNumber("Heading", GetHeading().Degrees().value());
+  UpdateOdometry();
+
 }
 
 void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
@@ -66,9 +67,13 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
     modules[i].SetDesiredState(states[i]);
   }
 
-  // frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
-  // frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
-  // frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
+  frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
+  frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
+  frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
+
+  frc::SmartDashboard::PutNumber("drive/x meters", odometry.GetPose().X().value());
+  frc::SmartDashboard::PutNumber("drive/y meters", odometry.GetPose().Y().value());
+  frc::SmartDashboard::PutNumber("drive/rotation degrees", odometry.GetPose().Rotation().Degrees().value());
 }
 
 void SwerveDrive::SetFast() {}
@@ -76,10 +81,10 @@ void SwerveDrive::SetFast() {}
 void SwerveDrive::SetSlow() {}
 
 frc::Rotation2d SwerveDrive::GetHeading() {
-  return units::degree_t{-navx.GetAngle()};
+  return m_pigeon.GetRotation2d();
 }
 
-void SwerveDrive::ResetHeading() { navx.ZeroYaw(); }
+void SwerveDrive::ResetHeading() { m_pigeon.Reset(); }
 
 void SwerveDrive::ResetDriveEncoders() {
   for (auto &module : modules) {
