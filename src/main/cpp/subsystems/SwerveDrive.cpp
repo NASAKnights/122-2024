@@ -35,7 +35,7 @@ SwerveDrive::SwerveDrive()
   speeds = frc::ChassisSpeeds();
   networkTableInst.StartServer();
 
-  poseTable = networkTableInst.GetTable("poseXD");
+  poseTable = networkTableInst.GetTable("ROS2Bridge");
   ntPoseSubscribe = poseTable->GetDoubleArrayTopic(ntName).Subscribe(
       {}, {.periodic = 0.01, .sendAll = true});
 
