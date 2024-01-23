@@ -25,6 +25,7 @@
 #include <iostream>
 #include <string>
 #include <ctre/phoenix6/Pigeon2.hpp>
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
 
 #include "Constants.hpp"
 #include "SwerveModule.hpp"
@@ -57,15 +58,14 @@ public:
   void InitializePID();
   void SetReference(frc::Pose2d);
 
-  std::optional<frc::Pose3d> getCameraResults();
   void PublishOdometry(frc::Pose2d);
   void PrintNetworkTableValues();
-
+  void UpdatePoseEstimate();
 private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   AHRS navx{frc::SPI::Port::kMXP};
-
+   
   ctre::phoenix6::hardware::Pigeon2 m_pigeon{9, "NKCANivore"};
 
   std::array<SwerveModule, 4> modules;
@@ -85,7 +85,7 @@ private:
   std::shared_ptr<nt::NetworkTable> poseTable;
   nt::DoubleArraySubscriber ntPoseSubscribe;
   frc::Quaternion rotation_q; //w, x, y, z
-
+  frc::SwerveDrivePoseEstimator m_poseEstimator;
   nt::DoubleArrayPublisher ntPosePublisher;
   nt::DoubleArrayTopic ntPoseTopic;
 };

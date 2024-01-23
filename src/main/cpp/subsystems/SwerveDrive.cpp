@@ -6,6 +6,9 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Constants.hpp"
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
+#include <frc/estimator/PoseEstimator.h>
+#include <frc/trajectory/constraint/SwerveDriveKinematicsConstraint.h>
 
 SwerveDrive::SwerveDrive()
     : modules{{SwerveModule(ElectricalConstants::kFrontLeftDriveMotorID,
@@ -30,7 +33,16 @@ SwerveDrive::SwerveDrive()
                 modules[2].GetPosition(), modules[3].GetPosition()},
                frc::Pose2d()},
       pidX{0.9, 1e-4, 0}, pidY{0.9, 1e-4, 0}, pidRot{0.15, 0, 0},
-      networkTableInst(nt::NetworkTableInstance::GetDefault()) {
+      networkTableInst{nt::NetworkTableInstance::GetDefault()},
+      m_poseEstimator{
+          DriveConstants::kSwerveKinematics,
+          frc::Rotation2d(units::degree_t{m_pigeon.GetAngle()}),
+          {modules[0].GetPosition(), modules[1].GetPosition(),
+            modules[2].GetPosition(), modules[3].GetPosition()},
+          frc::Pose2d()}
+      
+      {
+      
   navx.Calibrate();
   speeds = frc::ChassisSpeeds();
   networkTableInst.StartServer();
@@ -125,7 +137,7 @@ void SwerveDrive::SetReference(frc::Pose2d desiredPose) {
     speeds = frc::ChassisSpeeds{
         units::meters_per_second_t{
             pidX.Calculate(GetPose().X().value(), desiredPose.X().value())},
-        units::meters_per_second_t{
+        units::meters_per_second_t{3
             pidY.Calculate(GetPose().Y().value(), desiredPose.Y().value())},
         units::radians_per_second_t{0}};
     Drive(speeds);
@@ -134,23 +146,26 @@ void SwerveDrive::SetReference(frc::Pose2d desiredPose) {
 
 //--------------------------------------------
 
-std::optional<frc::Pose3d> SwerveDrive::getCameraResults() {
+void SwerveDrive::UpdatePoseEstimate() {
   auto result = ntPoseSubscribe.GetAtomic();
   auto time = result.time; // time stamp
 
-  if (time != 0.0) {
+  if (result.value::empty() != true) {
     auto compressedResults = result.value;
     rotation_q = frc::Quaternion(compressedResults.at(6),
                                      compressedResults.at(3),
                                      compressedResults.at(4),
                                      compressedResults.at(5));
-        frc::Translation3d(units::meter_t{compressedResults.at(0)},
+
+    auto posTranslation =frc::Translation3d(units::meter_t{compressedResults.at(0)},
                            units::meter_t{compressedResults.at(1)},
                            units::meter_t{compressedResults.at(2)}),
-        frc::Rotation3d(rotation_q);
-  } else {
-    return std::nullopt;
+    auto cameraPose = frc::Pose3d(posTranslation, frc::Rotation3d(rotation_q));
+    frc::Pose2d visionMeasurement2d = cameraPose.ToPose2d();
+    m_poseEstimator.AddVisionMeasurement(visionMeasurement2d, compressedResults.at(7))
   }
+
+  m_poseEstimator.Update(m_pigeon.GetRotation2d(),time);
 }
 
 void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
@@ -159,10 +174,18 @@ void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
   ntPosePublisher.Set(poseDeconstruct, time);
 }
 
+
+
+void UpdateVision(){
+    m_poseEstimator.AddVisionMeasurement(visionMeasurement2d, getCameraResults().time);
+
+};
+
+
 void SwerveDrive::PrintNetworkTableValues() {
   // TODO: write print function :3
 
-  std::optional<frc::Pose3d> position = getCameraResults();
+  std::<frc::Pose3d> position = getCameraResults();
   if (position != std::nullopt) {
     auto position_unwrapped = std::move(*position);
     frc::SmartDashboard::PutNumber("Cam X", double {position_unwrapped.X()});
