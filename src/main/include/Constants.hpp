@@ -87,9 +87,9 @@ const frc::Translation2d kBackRightPosition =
     frc::Translation2d(units::meter_t{-kTrackwidthMeters / 2.0},
                        units::meter_t{-kWheelbaseMeters / 2.0});
 
-const frc::SwerveDriveKinematics kSwerveKinematics =
-    frc::SwerveDriveKinematics(kFrontLeftPosition, kFrontRightPosition,
-                               kBackLeftPosition, kBackRightPosition);
+// const frc::SwerveDriveKinematics kSwerveKinematics =
+//     frc::SwerveDriveKinematics(kFrontLeftPosition, kFrontRightPosition,
+//                                kBackLeftPosition, kBackRightPosition);
 
 const double kDriveLimit = 0.15; // 0.7 fast
 const double kRotationLimit = kDriveLimit;

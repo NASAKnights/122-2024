@@ -2,7 +2,6 @@
 
 #include "subsystems/SwerveDrive.hpp"
 
-#include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Constants.hpp"
@@ -24,13 +23,24 @@ SwerveDrive::SwerveDrive()
                             ElectricalConstants::kBackRightTurnMotorID,
                             ElectricalConstants::kBackRightEncoderID,
                             DriveConstants::kBackRightOffset)}},
-      odometry{DriveConstants::kSwerveKinematics,
+      kSwerveKinematics{{DriveConstants::kFrontLeftPosition, 
+                        DriveConstants::kFrontRightPosition,
+                        DriveConstants::kBackLeftPosition, 
+                        DriveConstants::kBackRightPosition}},
+      odometry{kSwerveKinematics,
                frc::Rotation2d(units::degree_t{m_pigeon.GetAngle()}),
                {modules[0].GetPosition(), modules[1].GetPosition(),
                 modules[2].GetPosition(), modules[3].GetPosition()},
                frc::Pose2d()},
       pidX{0.9, 1e-4, 0}, pidY{0.9, 1e-4, 0}, pidRot{0.15, 0, 0},
-      networkTableInst(nt::NetworkTableInstance::GetDefault()) {
+      networkTableInst(nt::NetworkTableInstance::GetDefault()),
+      m_poseEstimator{
+          kSwerveKinematics,
+          frc::Rotation2d(units::degree_t{m_pigeon.GetAngle()}),
+          {modules[0].GetPosition(), modules[1].GetPosition(),
+            modules[2].GetPosition(), modules[3].GetPosition()},
+          frc::Pose2d()} 
+{
   navx.Calibrate();
   speeds = frc::ChassisSpeeds();
   networkTableInst.StartServer();
@@ -56,9 +66,9 @@ void SwerveDrive::Periodic() {
 }
 
 void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
-  auto states = DriveConstants::kSwerveKinematics.ToSwerveModuleStates(speeds);
+  auto states = kSwerveKinematics.ToSwerveModuleStates(speeds);
 
-  DriveConstants::kSwerveKinematics.DesaturateWheelSpeeds(
+  kSwerveKinematics.DesaturateWheelSpeeds(
       &states, speeds, units::meters_per_second_t{ModuleConstants::kMaxSpeed},
       DriveConstants::kMaxTranslationalVelocity,
       DriveConstants::kMaxRotationalVelocity);
@@ -134,23 +144,27 @@ void SwerveDrive::SetReference(frc::Pose2d desiredPose) {
 
 //--------------------------------------------
 
-std::optional<frc::Pose3d> SwerveDrive::getCameraResults() {
+void SwerveDrive::UpdatePoseEstimate() {
   auto result = ntPoseSubscribe.GetAtomic();
-  auto time = result.time; // time stamp
+  // auto time = result.time; // time stamp
 
-  if (time != 0.0) {
+  if (result.value.size() > 0) {
     auto compressedResults = result.value;
     rotation_q = frc::Quaternion(compressedResults.at(6),
                                      compressedResults.at(3),
                                      compressedResults.at(4),
                                      compressedResults.at(5));
-        frc::Translation3d(units::meter_t{compressedResults.at(0)},
+
+    auto posTranslation =frc::Translation3d(units::meter_t{compressedResults.at(0)},
                            units::meter_t{compressedResults.at(1)},
-                           units::meter_t{compressedResults.at(2)}),
-        frc::Rotation3d(rotation_q);
-  } else {
-    return std::nullopt;
+                           units::meter_t{compressedResults.at(2)});
+    frc::Pose3d cameraPose = frc::Pose3d(posTranslation, frc::Rotation3d(rotation_q));
+    frc::Pose2d visionMeasurement2d = cameraPose.ToPose2d();
+    m_poseEstimator.AddVisionMeasurement(visionMeasurement2d, 
+                          units::second_t {compressedResults.at(7)});
   }
+
+  m_poseEstimator.Update(m_pigeon.GetRotation2d(),GetModulePositions());
 }
 
 void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
@@ -161,20 +175,5 @@ void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
 
 void SwerveDrive::PrintNetworkTableValues() {
   // TODO: write print function :3
-
-  std::optional<frc::Pose3d> position = getCameraResults();
-  if (position != std::nullopt) {
-    auto position_unwrapped = std::move(*position);
-    frc::SmartDashboard::PutNumber("Cam X", double {position_unwrapped.X()});
-    frc::SmartDashboard::PutNumber("Cam Y", double {position_unwrapped.Y()});
-    frc::SmartDashboard::PutNumber("Cam Z", double {position_unwrapped.Z()});
-
-    frc::SmartDashboard::PutNumber("Cam Rot X", double {position_unwrapped.Rotation().GetQuaternion().X()});
-    frc::SmartDashboard::PutNumber("Cam Rot Y", double {position_unwrapped.Rotation().GetQuaternion().Y()});
-    frc::SmartDashboard::PutNumber("Cam Rot X", double {position_unwrapped.Rotation().GetQuaternion().Z()});
-    frc::SmartDashboard::PutNumber("Cam Rot W", double {position_unwrapped.Rotation().GetQuaternion().W()});
-    // std::string x = std::to_string(double {position_unwrapped.X()});
-    // std::cout << "X position :" << x << "/n";
-  }
   
 }

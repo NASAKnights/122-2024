@@ -26,6 +26,10 @@
 #include <string>
 #include <ctre/phoenix6/Pigeon2.hpp>
 
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
+#include <frc/estimator/PoseEstimator.h>
+#include <frc/trajectory/constraint/SwerveDriveKinematicsConstraint.h>
+
 #include "Constants.hpp"
 #include "SwerveModule.hpp"
 
@@ -57,7 +61,7 @@ public:
   void InitializePID();
   void SetReference(frc::Pose2d);
 
-  std::optional<frc::Pose3d> getCameraResults();
+  void UpdatePoseEstimate();
   void PublishOdometry(frc::Pose2d);
   void PrintNetworkTableValues();
 
@@ -69,6 +73,7 @@ private:
   ctre::phoenix6::hardware::Pigeon2 m_pigeon{9, "NKCANivore"};
 
   std::array<SwerveModule, 4> modules;
+  frc::SwerveDriveKinematics<4> kSwerveKinematics;
 
   frc::ChassisSpeeds speeds;
   frc::SwerveDriveOdometry<4> odometry;
@@ -85,6 +90,7 @@ private:
   std::shared_ptr<nt::NetworkTable> poseTable;
   nt::DoubleArraySubscriber ntPoseSubscribe;
   frc::Quaternion rotation_q; //w, x, y, z
+  frc::SwerveDrivePoseEstimator<4> m_poseEstimator;
 
   nt::DoubleArrayPublisher ntPosePublisher;
   nt::DoubleArrayTopic ntPoseTopic;
