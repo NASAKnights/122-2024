@@ -38,6 +38,7 @@ private:
 
   // Subsystems
   SwerveDrive m_swerveDrive;
+  Arm arm;
 
   // PS4 controllers
   frc::Joystick m_driverController{DriveConstants::kDriverPort};

@@ -12,6 +12,7 @@
 #include "commands/TrajectoryFollower.hpp"
 #include "frc2/command/InstantCommand.h"
 #include "util/NKTrajectoryManager.hpp"
+#include <arm/Arm.h>
 
 Robot::Robot() { this->CreateRobot(); }
 
@@ -115,6 +116,8 @@ void Robot::CreateRobot() {
   // Configure the button bindings
   BindCommands();
   m_swerveDrive.ResetHeading();
+  //Intialize Arm Subsystem 
+
 
   frc::SmartDashboard::PutNumber("Voltage", 0.0);
 }
@@ -127,6 +130,14 @@ void Robot::BindCommands() {
       .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
         return m_swerveDrive.ResetHeading();
       })))); // TODO assign as test
+/*a
+  frc2::JoystickButton(&m_operatorController, 1)
+    .OnTrue(ArmIn(&_arm).ToPtr());
+*/
+  frc2::JoystickButton(&m_operatorController, 1)
+      .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
+        return arm.armIn();
+      })))); 
 }
 
 /**

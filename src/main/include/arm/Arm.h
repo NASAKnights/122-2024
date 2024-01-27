@@ -6,26 +6,32 @@
 
 #include <frc2/command/SubsystemBase.h>
 
+#include <ctre/phoenix6/CANcoder.hpp>
+#include <ctre/phoenix6/TalonFX.hpp>
+#include <frc/DigitalInput.h>
+
+
 class Arm : public frc2::SubsystemBase {
  public:
-  Arm();
+ Arm();
 
-
-  void Periodic() override;
-
-  // move arm in ()
-  // move arm out()
-
-  // print () (optional) - encoder value
+  void Periodic() override; 
+ 
+ 
+  void armIn();
+  void armOut();
+  void printLog();
 
  private:
+  ctre::phoenix6::hardware::TalonFX m_AngleMotor;
+  //TODO: Change later to absolute
+   ctre::phoenix6::hardware::CANcoder m_Encoder;
+ 
 
-  // one motor (assume TalonFX)
-  // assume relative encoder 
-  // can easily change to absolute
-
+   frc::DigitalInput rightLimitSwitch {0};
+   frc::DigitalInput leftLimitSwitch {1};
+  
   // assume gearing is 1:1
-  // might? two limit switches
 
 
 };
