@@ -14,10 +14,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class arm
-    : public frc2::CommandHelper<frc2::Command, arm> {
+class ArmOut
+    : public frc2::CommandHelper<frc2::Command, ArmOut> {
  public:
-  arm();
+  ArmOut();
 
   void Initialize() override;
 

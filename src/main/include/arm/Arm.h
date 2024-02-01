@@ -10,6 +10,8 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/DigitalInput.h>
 
+#include "Constants.hpp"
+
 
 class Arm : public frc2::SubsystemBase {
  public:
@@ -22,14 +24,22 @@ class Arm : public frc2::SubsystemBase {
   void armOut();
   void printLog();
 
+  void resetPivotEncoder();
+  double getPivotAngle();
+
+
  private:
   ctre::phoenix6::hardware::TalonFX m_AngleMotor;
-  //TODO: Change later to absolute
-   ctre::phoenix6::hardware::CANcoder m_Encoder;
- 
+  ctre::phoenix6::configs::TalonFXConfiguration armAngleConfig;
+  ctre::phoenix6::configs::CANcoderConfiguration armEncoderConfig;
 
-   frc::DigitalInput rightLimitSwitch {0};
-   frc::DigitalInput leftLimitSwitch {1};
+  ctre::phoenix6::configs::Slot0Configs armSlot0Configs;
+  ctre::phoenix6::configs::CurrentLimitsConfigs armCurrentLimitConfig;
+  //TODO: Change later to absolute
+  ctre::phoenix6::hardware::CANcoder m_Encoder;
+
+  frc::DigitalInput rightLimitSwitch {0};
+  frc::DigitalInput leftLimitSwitch {1};
   
   // assume gearing is 1:1
 

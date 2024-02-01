@@ -2,22 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "arm/commands/arm.h"
+#include "arm/commands/ArmOut.h"
 
-arm::arm() {
+ArmOut::ArmOut() {
   // Use addRequirements() here to declare subsystem dependencies.
 }
 
 // Called when the command is initially scheduled.
-void arm::Initialize() {}
+void ArmOut::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void arm::Execute() {}
+void ArmOut::Execute() {}
 
 // Called once the command ends or is interrupted.
-void arm::End(bool interrupted) {}
+void ArmOut::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool arm::IsFinished() {
+bool ArmOut::IsFinished() {
   return false;
 }
