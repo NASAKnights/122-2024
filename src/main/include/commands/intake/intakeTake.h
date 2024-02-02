@@ -6,7 +6,8 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <intake/Intake.h>
+#include <subsystems/Intake.h>
+#include <subsystems/Shooter.h>
 
 /**
  * An example command.
@@ -15,10 +16,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class intakeOut
-    : public frc2::CommandHelper<frc2::Command, intakeOut> {
+class intakeTake
+    : public frc2::CommandHelper<frc2::Command, intakeTake> {
  public:
-  intakeOut(Intake*);
+  intakeTake(Intake* _intake, Shooter* _shooter);
 
   void Initialize() override;
 
@@ -30,4 +31,5 @@ class intakeOut
 
 private:
   Intake* intake;
+  Shooter* shooter;
 };

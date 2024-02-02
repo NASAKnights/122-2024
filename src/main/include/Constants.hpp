@@ -161,3 +161,7 @@ inline double calculateAxis(double axis, double deadband) {
 }
 
 } // namespace MathUtilNK
+
+namespace ShooterConstants {
+const double motorRampSpeed = 5000; 
+}

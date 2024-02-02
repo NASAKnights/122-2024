@@ -6,7 +6,6 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc/DigitalInput.h>
-#include <ctre/phoenix6/TalonFX.hpp>
 
 class Indexer : public frc2::SubsystemBase {
  public:
@@ -23,6 +22,5 @@ class Indexer : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  ctre::phoenix6::hardware::TalonFX m_indexerMotor{11};
   frc::DigitalInput limitSwitch{0};
 };
