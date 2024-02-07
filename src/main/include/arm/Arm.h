@@ -11,6 +11,9 @@
 #include <frc/DigitalInput.h>
 
 #include "Constants.hpp"
+#include <frc/DutyCycleEncoder.h>
+#include <frc/controller/PIDController.h>
+
 
 
 class Arm : public frc2::SubsystemBase {
@@ -23,9 +26,11 @@ class Arm : public frc2::SubsystemBase {
   void armIn();
   void armOut();
   void printLog();
+  void set_Motor_Position(int);
 
   void resetPivotEncoder();
   double getPivotAngle();
+  void InitializePID_ARM();
 
 
  private:
@@ -38,8 +43,12 @@ class Arm : public frc2::SubsystemBase {
   //TODO: Change later to absolute
   ctre::phoenix6::hardware::CANcoder m_Encoder;
 
-  frc::DigitalInput rightLimitSwitch {0};
+
+  
+  frc::PIDController pid_Angle;
+  frc::DigitalInput rightLimitSwitch {3};
   frc::DigitalInput leftLimitSwitch {1};
+  frc::DutyCycleEncoder Trough_Encoder {2};	
   
   // assume gearing is 1:1
 

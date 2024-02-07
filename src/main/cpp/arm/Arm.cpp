@@ -4,10 +4,13 @@
 
 #include "arm/Arm.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <ctre/phoenix6/core/CoreTalonFX.hpp>
+#include <iostream>
 
 Arm::Arm() :
     m_AngleMotor{1},
-    m_Encoder{1}
+    m_Encoder{1},
+    pid_Angle{0.8,0.3,0.1}
 {
     armSlot0Configs.kP = ArmConstants::kArmP;
     armSlot0Configs.kI = ArmConstants::kArmI;
@@ -23,40 +26,63 @@ Arm::Arm() :
     armAngleConfig.CurrentLimits = armCurrentLimitConfig;
 
     m_AngleMotor.GetConfigurator().Apply(armAngleConfig);
-
+    m_AngleMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+ 
     //TODO remove once we have proper encoder
 
-    m_AngleMotor.SetPosition(units::turn_t{0.0});
-
+    m_AngleMotor.SetPosition(units::turn_t{Trough_Encoder.GetAbsolutePosition()-0.1});
+    
 }
 
 // This method will be called once per scheduler run
-void Arm::Periodic() {}
+void Arm::Periodic() {
+
+   printLog();
+  m_AngleMotor.SetPosition(units::turn_t{Trough_Encoder.GetAbsolutePosition()-0.1}); 
+
+}
 
 
 void Arm::armIn(){
-//If no turn Motor turn motor on (we need to change direection)
-//Check in loop  if either Limit switch or Encoder Reaches certain position
-//If yes stop motor
-     auto armRequest = ctre::phoenix6::controls::PositionVoltage{0_tr}.WithSlot(0);
+          int des__Angle = 0.24;
+          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle);
+          while (fabs(pid_Angle.GetPositionError()) > 0.1)
+          {
+            m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle)});
 
-    m_AngleMotor.SetControl(armRequest.WithPosition(units::turn_t{0.5}));
+          }
+          m_AngleMotor.StopMotor();
+          
 }
 
 void Arm::armOut(){
-//If no turn Motor turn motor on (we need to change direection)
-//Check in loop  if either Limit switch or Encoder Reaches certain position
-//If yes stop motor 
-    auto armRequest = ctre::phoenix6::controls::PositionVoltage{0_tr}.WithSlot(0);
+         
+          int des__Angle = 0.54;
+          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle);
+          while (fabs(pid_Angle.GetPositionError()) > 0.1)
+          {
+            m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle)});
 
-    m_AngleMotor.SetControl(armRequest.WithPosition(units::turn_t{0.0}));
-
+          }
+          m_AngleMotor.StopMotor();
 }
 
-void Arm::printLog(){
-//frc::SmartDashboard::PutNumber("ArmEndoder ",m_Encoder);
+
+void Arm:: set_Motor_Position(int des__Angle){
+          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle);
+          while (fabs(pid_Angle.GetPositionError()) > 0.1)
+          {
+            m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle)});
+
+          }
+          m_AngleMotor.StopMotor();
+}
     
+void Arm::printLog(){
+frc::SmartDashboard::PutNumber("ARm_encoder_GetAbs",Trough_Encoder.GetAbsolutePosition()*360);   
+frc::SmartDashboard::PutNumber("Error",fabs(pid_Angle.GetPositionError()));
 }
+
 
 void Arm::resetPivotEncoder() {
     m_AngleMotor.SetPosition(units::turn_t{0.0});

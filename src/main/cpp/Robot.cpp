@@ -116,6 +116,7 @@ void Robot::CreateRobot() {
   // Configure the button bindings
   BindCommands();
   m_swerveDrive.ResetHeading();
+
   //Intialize Arm Subsystem 
 
 
@@ -134,12 +135,19 @@ void Robot::BindCommands() {
   frc2::JoystickButton(&m_operatorController, 1)
     .OnTrue(ArmIn(&_arm).ToPtr());
 */
-  frc2::JoystickButton(&m_operatorController, 1)
+
+  frc2::JoystickButton(&m_driverController, 2)
       .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
         return arm.armIn();
       })))); 
-}
+  frc2::JoystickButton(&m_driverController, 3)
+      .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
+        return arm.armOut();
+      })))); 
 
+
+
+}
 /**
  * Returns the Autonomous Command
  */
@@ -162,8 +170,8 @@ void Robot::UpdateDashboard() {
   frc::SmartDashboard::PutNumber("Swerve Drive Heading",
                                  m_swerveDrive.GetHeading().Degrees().value());
   // m_swerveDrive.PrintNetworkTableValues();
+  //arm.printLog();
 }
-
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif

@@ -152,8 +152,8 @@ const double kSteerD = 0.0;
 } // namespace ModuleConstants
 
 namespace ArmConstants {
-const double kArmP = 2.0;
-const double kArmI = 0.0;
+const double kArmP = 0.9;
+const double kArmI = 0.1;
 const double kArmD = 0.0;
 
 const bool kArmEnableCurrentLimit = true;
