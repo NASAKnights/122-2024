@@ -23,11 +23,11 @@ class Arm : public frc2::SubsystemBase {
   void Periodic() override; 
  
  
-  void armIn();
-  void armOut();
+  void arm_UP();
+  void arm_DOWN();
   void printLog();
-  void set_Motor_Position(int);
-
+  void set_Arm_Position(int);
+  void Set_Current();
   void resetPivotEncoder();
   double getPivotAngle();
   void InitializePID_ARM();

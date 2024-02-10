@@ -10,7 +10,7 @@
 Arm::Arm() :
     m_AngleMotor{1},
     m_Encoder{1},
-    pid_Angle{0.8,0.3,0.1}
+    pid_Angle{10,0.1,0.1}
 {
     armSlot0Configs.kP = ArmConstants::kArmP;
     armSlot0Configs.kI = ArmConstants::kArmI;
@@ -27,62 +27,81 @@ Arm::Arm() :
 
     m_AngleMotor.GetConfigurator().Apply(armAngleConfig);
     m_AngleMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
- 
+    //m_AngleMotor.SetInverted(true);
     //TODO remove once we have proper encoder
 
-    m_AngleMotor.SetPosition(units::turn_t{Trough_Encoder.GetAbsolutePosition()-0.1});
+    m_AngleMotor.SetPosition(units::turn_t{Trough_Encoder.GetAbsolutePosition()});
     
 }
 
 // This method will be called once per scheduler run
 void Arm::Periodic() {
-
+   
    printLog();
-  m_AngleMotor.SetPosition(units::turn_t{Trough_Encoder.GetAbsolutePosition()-0.1}); 
+   m_AngleMotor.SetPosition(units::turn_t{Trough_Encoder.GetAbsolutePosition()}); 
+   
+
+}
+/*
+0.2654 real 
+2.8 value we use 
+0.56 UP
+*/
+
+void Arm::arm_UP(){
+         /* float des__Angle = 0.36;
+          pid_Angle.SetSetpoint(des__Angle);
+          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition(), des__Angle);
+          if (fabs(pid_Angle.GetPositionError()) > 0.01)
+          {
+            m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition(), des__Angle)});
+
+          }*/
+          m_AngleMotor.SetVoltage(units::volt_t{0.4});
+
+
 
 }
 
-
-void Arm::armIn(){
-          int des__Angle = 0.24;
-          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle);
-          while (fabs(pid_Angle.GetPositionError()) > 0.1)
+void Arm::arm_DOWN(){
+         /*
+          float des__Angle = 0.28;
+          pid_Angle.SetSetpoint(des__Angle);
+          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition(), des__Angle);
+          if (fabs(pid_Angle.GetPositionError()) > 0.01)
           {
-            m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle)});
-
-          }
-          m_AngleMotor.StopMotor();
-          
-}
-
-void Arm::armOut(){
-         
-          int des__Angle = 0.54;
-          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle);
-          while (fabs(pid_Angle.GetPositionError()) > 0.1)
-          {
-            m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle)});
-
-          }
-          m_AngleMotor.StopMotor();
+            m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition(), des__Angle)});
+            
+          }*/
+          m_AngleMotor.SetVoltage(units::volt_t{-0.4});
 }
 
 
-void Arm:: set_Motor_Position(int des__Angle){
-          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle);
-          while (fabs(pid_Angle.GetPositionError()) > 0.1)
+void Arm:: set_Arm_Position(int des__Angle){
+          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition(), des__Angle);
+          if (fabs(pid_Angle.GetPositionError()) > 0.1)
           {
-            m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition()-0.1, des__Angle)});
+            m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition(), des__Angle)});
 
           }
           m_AngleMotor.StopMotor();
 }
     
 void Arm::printLog(){
-frc::SmartDashboard::PutNumber("ARm_encoder_GetAbs",Trough_Encoder.GetAbsolutePosition()*360);   
-frc::SmartDashboard::PutNumber("Error",fabs(pid_Angle.GetPositionError()));
+  
+frc::SmartDashboard::PutNumber("ARM_enc_ABS",Trough_Encoder.GetAbsolutePosition());   
+frc::SmartDashboard::PutNumber("Error_ARM_PID",(pid_Angle.GetPositionError()));
+frc::SmartDashboard::PutNumber("Voltage_ARM_PID",(pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())));
+frc::SmartDashboard::PutNumber("Voltage_ARM_MOtor",(pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())));
+
+
 }
 
+void Arm::Set_Current() {
+
+    pid_Angle.SetSetpoint(Trough_Encoder.GetAbsolutePosition());
+    m_AngleMotor.StopMotor();
+}
 
 void Arm::resetPivotEncoder() {
     m_AngleMotor.SetPosition(units::turn_t{0.0});

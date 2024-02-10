@@ -38,7 +38,6 @@ void Robot::RobotPeriodic() {
  */
 void Robot::DisabledInit() {}
 
-void Robot::DisabledPeriodic() {}
 
 /**
  * This autonomous runs the autonomous command selected by your {@link
@@ -137,13 +136,20 @@ void Robot::BindCommands() {
 */
 
   frc2::JoystickButton(&m_driverController, 2)
-      .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
-        return arm.armIn();
-      })))); 
-  frc2::JoystickButton(&m_driverController, 3)
-      .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
-        return arm.armOut();
-      })))); 
+      .WhileTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
+        return arm.arm_UP();
+      })))).OnFalse(frc2::CommandPtr((frc2::InstantCommand([this] {
+        return arm.Set_Current();
+      }))));  
+       
+        frc2::JoystickButton(&m_driverController, 3)
+      .WhileTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
+        return arm.arm_DOWN();
+      })))).OnFalse(frc2::CommandPtr((frc2::InstantCommand([this] {
+        return arm.Set_Current();
+      }))));  
+
+      
 
 
 
@@ -155,6 +161,10 @@ frc2::CommandPtr Robot::GetAutonomousCommand() {
   return TrajectoryFollower(&m_swerveDrive,
                             &NKTrajectoryManager::GetTrajectory("NewPath"))
       .ToPtr();
+}
+
+void Robot::DisabledPeriodic() {
+  arm.Set_Current();
 }
 
 /**
