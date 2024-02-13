@@ -8,9 +8,11 @@
 #include <iostream>
 
 Arm::Arm() :
-    m_AngleMotor{1},
-    m_Encoder{1},
-    pid_Angle{10,0.1,0.1},
+    m_AngleMotor{ArmConstants::kAngleMotorId},
+    m_Encoder{ArmConstants::kAbsEncoderId},
+    pid_Angle{ArmConstants::kAngleP,
+              ArmConstants::kAngleI,
+              ArmConstants::kAngleD},
     voltRequest{units::volt_t {0.0}}
 {
     armSlot0Configs.kP = ArmConstants::kArmP;
