@@ -26,7 +26,7 @@ class Arm : public frc2::SubsystemBase {
   void arm_UP();
   void arm_DOWN();
   void printLog();
-  void set_Arm_Position(int);
+  void set_Arm_Position(float);
   void Set_Current();
   void resetPivotEncoder();
   double getPivotAngle();
@@ -42,6 +42,8 @@ class Arm : public frc2::SubsystemBase {
   ctre::phoenix6::configs::CurrentLimitsConfigs armCurrentLimitConfig;
   //TODO: Change later to absolute
   ctre::phoenix6::hardware::CANcoder m_Encoder;
+
+  ctre::phoenix6::controls::VoltageOut voltRequest;
 
 
   

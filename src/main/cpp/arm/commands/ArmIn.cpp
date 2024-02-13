@@ -3,8 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "arm/commands/ArmIn.h"
+#include "arm/subsystem/Arm.h"
 
-ArmIn::ArmIn() {
+ArmIn::ArmIn(Arm *arm) {
   // Use addRequirements() here to declare subsystem dependencies.
 }
 
