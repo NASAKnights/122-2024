@@ -11,6 +11,7 @@
 #include <frc2/command/RunCommand.h>
 
 #include "subsystems/SwerveDrive.hpp"
+#include "arm/commands/GoToAngle.h"
 #include "arm/Arm.h"
 
 class Robot : public frc::TimedRobot {

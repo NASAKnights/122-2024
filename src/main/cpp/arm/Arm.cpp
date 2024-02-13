@@ -69,10 +69,10 @@ void Arm:: set_Arm_Position(float des__Angle){
           double temp = Trough_Encoder.GetAbsolutePosition();
           if (fabs(pid_Angle.GetPositionError()) > 0.01)
           {
-            frc::SmartDashboard::PutNumber("ARM_enc_ABS",temp);   
-            frc::SmartDashboard::PutNumber("Error_ARM_PID",(pid_Angle.GetPositionError()));
-            frc::SmartDashboard::PutNumber("Voltage_ARM_PID",(pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())));
-            frc::SmartDashboard::PutNumber("Voltage_ARM_MOtor",(m_AngleMotor.GetMotorVoltage().GetValueAsDouble()));
+            // frc::SmartDashboard::PutNumber("ARM_enc_ABS",temp);   
+            // frc::SmartDashboard::PutNumber("Error_ARM_PID",(pid_Angle.GetPositionError()));
+            // frc::SmartDashboard::PutNumber("Voltage_ARM_PID",(pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())));
+            // frc::SmartDashboard::PutNumber("Voltage_ARM_MOtor",(m_AngleMotor.GetMotorVoltage().GetValueAsDouble()));
             //m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition(), des__Angle)});
             m_AngleMotor.SetControl(voltRequest.WithOutput(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())}));
           }
@@ -81,10 +81,10 @@ void Arm:: set_Arm_Position(float des__Angle){
     
 void Arm::printLog(){
   
-//frc::SmartDashboard::PutNumber("ARM_enc_ABS",Trough_Encoder.GetAbsolutePosition());   
-//frc::SmartDashboard::PutNumber("Error_ARM_PID",(pid_Angle.GetPositionError()));
-//frc::SmartDashboard::PutNumber("Voltage_ARM_PID",(pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())));
-//frc::SmartDashboard::PutNumber("Voltage_ARM_MOtor",(m_AngleMotor.GetMotorVoltage().GetValueAsDouble()));
+frc::SmartDashboard::PutNumber("ARM_enc_ABS",Trough_Encoder.GetAbsolutePosition());   
+frc::SmartDashboard::PutNumber("Error_ARM_PID",(pid_Angle.GetPositionError()));
+frc::SmartDashboard::PutNumber("Voltage_ARM_PID",(pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())));
+frc::SmartDashboard::PutNumber("Voltage_ARM_MOtor",(m_AngleMotor.GetMotorVoltage().GetValueAsDouble()));
 
 
 }
@@ -101,4 +101,8 @@ void Arm::resetPivotEncoder() {
 
 double Arm::getPivotAngle() {
     return double (m_AngleMotor.GetPosition().GetValue());
+}
+
+bool Arm::atSetpoint() {
+    return fabs(pid_Angle.GetPositionError()) > 0.01;
 }

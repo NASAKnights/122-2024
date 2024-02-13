@@ -32,6 +32,8 @@ class Arm : public frc2::SubsystemBase {
   double getPivotAngle();
   void InitializePID_ARM();
 
+  bool atSetpoint();
+
 
  private:
   ctre::phoenix6::hardware::TalonFX m_AngleMotor;

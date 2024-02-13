@@ -132,22 +132,32 @@ void Robot::BindCommands() {
       })))); // TODO assign as test
 /*a
   frc2::JoystickButton(&m_operatorController, 1)
-    .OnTrue(ArmIn(&_arm).ToPtr());
+    .OnTrue(ArmDown(&_arm).ToPtr());
 */
 
-  frc2::JoystickButton(&m_driverController, 2)
-      .WhileTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
-        return arm.arm_UP();
-      })))).OnFalse(frc2::CommandPtr((frc2::InstantCommand([this] {
+  frc2::JoystickButton(&m_driverController, 2).WhileTrue(frc2::RunCommand(
+      [this] {
+        arm.set_Arm_Position(0.36);
+      },
+      {&arm}).ToPtr()
+      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([&] {
         return arm.Set_Current();
-      }))));  
-       
-        frc2::JoystickButton(&m_driverController, 3)
-      .WhileTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
-        return arm.arm_DOWN();
-      })))).OnFalse(frc2::CommandPtr((frc2::InstantCommand([this] {
+      },
+      {&arm}).ToPtr()));
+
+  frc2::JoystickButton(&m_driverController, 3).WhileTrue(frc2::RunCommand(
+      [this] {
+        arm.set_Arm_Position(0.27);
+      },
+      {&arm}).ToPtr()
+      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([&] {
         return arm.Set_Current();
-      }))));  
+      },
+      {&arm}).ToPtr())); 
+
+  
+
+  
 
       
 

@@ -2,22 +2,29 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "arm/commands/ArmOut.h"
+#include "arm/commands/GoToAngle.h"
 
-ArmOut::ArmOut() {
+GoToAngle::GoToAngle(Arm* i_arm, double angle): 
+  m_arm(i_arm), 
+  m_angle(angle)
+{
   // Use addRequirements() here to declare subsystem dependencies.
+  AddRequirements(m_arm);
+  
 }
 
 // Called when the command is initially scheduled.
-void ArmOut::Initialize() {}
+void GoToAngle::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void ArmOut::Execute() {}
+void GoToAngle::Execute() {
+  m_arm->set_Arm_Position(m_angle);
+}
 
 // Called once the command ends or is interrupted.
-void ArmOut::End(bool interrupted) {}
+void GoToAngle::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool ArmOut::IsFinished() {
-  return false;
+bool GoToAngle::IsFinished() {
+  return m_arm->atSetpoint();
 }

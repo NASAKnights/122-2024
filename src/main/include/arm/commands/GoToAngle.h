@@ -6,6 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include "arm/Arm.h"
 
 /**
  * An example command.
@@ -14,10 +15,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class ArmOut
-    : public frc2::CommandHelper<frc2::Command, ArmOut> {
+class GoToAngle
+    : public frc2::CommandHelper<frc2::Command, GoToAngle> {
  public:
-  ArmOut();
+  GoToAngle(Arm* i_arm, double angle);
 
   void Initialize() override;
 
@@ -26,4 +27,9 @@ class ArmOut
   void End(bool interrupted) override;
 
   bool IsFinished() override;
+
+private:
+  Arm * m_arm;
+  double m_angle;
+  
 };
