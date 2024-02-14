@@ -12,7 +12,7 @@
 
 #include "Constants.hpp"
 #include <frc/DutyCycleEncoder.h>
-#include <frc/controller/PIDController.h>
+#include <frc/controller/ProfiledPIDController.h>
 
 
 
@@ -32,7 +32,7 @@ class Arm : public frc2::SubsystemBase {
   double getPivotAngle();
   void InitializePID_ARM();
 
-  bool atSetpoint();
+  //bool atSetpoint();
 
 
  private:
@@ -44,12 +44,8 @@ class Arm : public frc2::SubsystemBase {
   ctre::phoenix6::configs::CurrentLimitsConfigs armCurrentLimitConfig;
   //TODO: Change later to absolute
   ctre::phoenix6::hardware::CANcoder m_Encoder;
-
+  frc::ProfiledPIDController<units::degrees> pid_Angle;
   ctre::phoenix6::controls::VoltageOut voltRequest;
-
-
-  
-  frc::PIDController pid_Angle;
   frc::DigitalInput rightLimitSwitch {3};
   frc::DigitalInput leftLimitSwitch {1};
   frc::DutyCycleEncoder Trough_Encoder {2};	

@@ -137,7 +137,8 @@ void Robot::BindCommands() {
 
   frc2::JoystickButton(&m_driverController, 2).WhileTrue(frc2::RunCommand(
       [this] {
-        arm.set_Arm_Position(0.36);
+        //108
+        arm.set_Arm_Position(0.30*360);
       },
       {&arm}).ToPtr()
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([&] {
@@ -147,7 +148,8 @@ void Robot::BindCommands() {
 
   frc2::JoystickButton(&m_driverController, 3).WhileTrue(frc2::RunCommand(
       [this] {
-        arm.set_Arm_Position(0.27);
+        //54
+        arm.set_Arm_Position(0.15*360);
       },
       {&arm}).ToPtr()
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([&] {

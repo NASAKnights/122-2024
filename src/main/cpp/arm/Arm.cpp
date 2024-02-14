@@ -12,12 +12,15 @@ Arm::Arm() :
     m_Encoder{ArmConstants::kAbsEncoderId},
     pid_Angle{ArmConstants::kAngleP,
               ArmConstants::kAngleI,
-              ArmConstants::kAngleD},
+              ArmConstants::kAngleD,
+              frc::TrapezoidProfile<units::degrees>::Constraints{units::degrees_per_second_t{5}, units::degrees_per_second_squared_t{10}}},
     voltRequest{units::volt_t {0.0}}
 {
     armSlot0Configs.kP = ArmConstants::kArmP;
     armSlot0Configs.kI = ArmConstants::kArmI;
     armSlot0Configs.kD = ArmConstants::kArmD;
+   
+
     //voltRequest = ctre::phoenix6::controls::VoltageOut(units::volt_t {0.0});
 
     armAngleConfig.Slot0 = armSlot0Configs;
@@ -34,8 +37,9 @@ Arm::Arm() :
     //m_AngleMotor.SetInverted(true);
     //TODO remove once we have proper encoder
 
+    pid_Angle.SetTolerance(units::degree_t{0.005*360});
     m_AngleMotor.SetPosition(units::turn_t{Trough_Encoder.GetAbsolutePosition()});
-    pid_Angle.SetSetpoint(0);
+           pid_Angle.SetGoal(units::degree_t{0});
 
 }
 
@@ -53,39 +57,24 @@ void Arm::Periodic() {
 0.56 UP
 */
 
-void Arm::arm_UP(){
-          float des__Angle = 0.36;
-        set_Arm_Position(des__Angle);
-}
 
-void Arm::arm_DOWN(){
-         
-          float des__Angle = 0.28;
-          set_Arm_Position(des__Angle);
-}
-
+ //0.1111
 
 void Arm:: set_Arm_Position(float des__Angle){
-          pid_Angle.SetSetpoint(des__Angle);
-          pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition(), des__Angle);
-          double temp = Trough_Encoder.GetAbsolutePosition();
-          if (fabs(pid_Angle.GetPositionError()) > 0.01)
-          {
-            // frc::SmartDashboard::PutNumber("ARM_enc_ABS",temp);   
-            // frc::SmartDashboard::PutNumber("Error_ARM_PID",(pid_Angle.GetPositionError()));
-            // frc::SmartDashboard::PutNumber("Voltage_ARM_PID",(pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())));
-            // frc::SmartDashboard::PutNumber("Voltage_ARM_MOtor",(m_AngleMotor.GetMotorVoltage().GetValueAsDouble()));
-            //m_AngleMotor.SetVoltage(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition(), des__Angle)});
-            m_AngleMotor.SetControl(voltRequest.WithOutput(units::volt_t {pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())}));
+           pid_Angle.Calculate(units::degree_t{Trough_Encoder.GetAbsolutePosition()});
+           pid_Angle.SetGoal(units::degree_t{des__Angle});
+          if (!pid_Angle.AtGoal())
+          { 
+            m_AngleMotor.SetControl(voltRequest.WithOutput(units::volt_t {pid_Angle.Calculate(units::degree_t{Trough_Encoder.GetAbsolutePosition()})}));
           }
           else m_AngleMotor.StopMotor();
 }
     
 void Arm::printLog(){
   
-frc::SmartDashboard::PutNumber("ARM_enc_ABS",Trough_Encoder.GetAbsolutePosition());   
-frc::SmartDashboard::PutNumber("Error_ARM_PID",(pid_Angle.GetPositionError()));
-frc::SmartDashboard::PutNumber("Voltage_ARM_PID",(pid_Angle.Calculate(Trough_Encoder.GetAbsolutePosition())));
+frc::SmartDashboard::PutNumber("ARM_enc_ABS",Trough_Encoder.GetAbsolutePosition()*360);   
+frc::SmartDashboard::PutNumber("Error_ARM_PID",(pid_Angle.GetPositionError().value()));
+frc::SmartDashboard::PutNumber("Voltage_ARM_PID",( pid_Angle.Calculate(units::degree_t{Trough_Encoder.GetAbsolutePosition()})));
 frc::SmartDashboard::PutNumber("Voltage_ARM_MOtor",(m_AngleMotor.GetMotorVoltage().GetValueAsDouble()));
 
 
@@ -93,7 +82,7 @@ frc::SmartDashboard::PutNumber("Voltage_ARM_MOtor",(m_AngleMotor.GetMotorVoltage
 
 void Arm::Set_Current() {
 
-    pid_Angle.SetSetpoint(Trough_Encoder.GetAbsolutePosition());
+    pid_Angle.SetGoal(units::degree_t{Trough_Encoder.GetAbsolutePosition()});
     m_AngleMotor.StopMotor();
 }
 
@@ -105,6 +94,8 @@ double Arm::getPivotAngle() {
     return double (m_AngleMotor.GetPosition().GetValue());
 }
 
+
+/*
 bool Arm::atSetpoint() {
     return fabs(pid_Angle.GetPositionError()) > 0.01;
-}
+}*/

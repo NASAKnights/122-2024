@@ -152,7 +152,7 @@ const double kSteerD = 0.0;
 } // namespace ModuleConstants
 
 namespace ArmConstants {
-const double kAngleP = 10.0;
+const double kAngleP = 17.5;
 const double kAngleI = 0.1;
 const double kAngleD = 0.1;
 
