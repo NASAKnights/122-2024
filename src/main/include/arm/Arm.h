@@ -1,56 +1,56 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
-
-#include <ctre/phoenix6/CANcoder.hpp>
+#include <frc/Encoder.h>
+#include <frc/controller/ArmFeedforward.h>
 #include <ctre/phoenix6/TalonFX.hpp>
-#include <frc/DigitalInput.h>
+#include <frc2/command/ProfiledPIDSubsystem.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <units/angle.h>
+#include <frc/DutyCycleEncoder.h>
 
 #include "Constants.hpp"
-#include <frc/DutyCycleEncoder.h>
-#include <frc/controller/ProfiledPIDController.h>
 
 
+namespace ArmConstants {
+const double kAngleP = 17.5;
+const double kAngleI = 0.1;
+const double kAngleD = 0.1;
+const auto kArmVelLimit = units::degrees_per_second_t(5.0);
+const auto kArmAccelLimit = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>(10.0);
+const auto kControllerTolerance = units::degree_t(0.5);
+const int kAngleMotorId = 1;
+const int kAbsEncoderId = 1;
+const int kAngleEncoderPulsePerRev = 2048;
+const auto kFFks = units::volt_t(0.18); // volts*s^2/rad
+const auto kFFkg = units::volt_t(2.46); // Volts
+const auto kFFkV = units::unit_t<frc::ArmFeedforward::kv_unit>(0.86); // volts*s/rad
+const auto kFFkA = units::unit_t<frc::ArmFeedforward::ka_unit>(0.18); // volts*s^2/rad
+                    
 
-class Arm : public frc2::SubsystemBase {
+const bool kArmEnableCurrentLimit = true;
+const int kArmContinuousCurrentLimit = 25;
+const int kArmPeakCurrentLimit = 40;
+const double kArmPeakCurrentDuration = 0.1;
+    
+} // namespace ArmConstants
+
+
+/**
+ * A robot arm subsystem that moves with a motion profile.
+ */
+class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
+  using State = frc::TrapezoidProfile<units::degrees>::State;
+
  public:
- Arm();
-
-  void Periodic() override; 
- 
- 
-  void arm_UP();
-  void arm_DOWN();
+  ArmSubsystem();
   void printLog();
-  void set_Arm_Position(float);
-  void Set_Current();
-  void resetPivotEncoder();
-  double getPivotAngle();
-  void InitializePID_ARM();
 
-  //bool atSetpoint();
-
+  void UseOutput(double output, State setpoint) override;
+  units::degree_t GetMeasurement() override;
 
  private:
-  ctre::phoenix6::hardware::TalonFX m_AngleMotor;
-  ctre::phoenix6::configs::TalonFXConfiguration armAngleConfig;
-  ctre::phoenix6::configs::CANcoderConfiguration armEncoderConfig;
-
-  ctre::phoenix6::configs::Slot0Configs armSlot0Configs;
-  ctre::phoenix6::configs::CurrentLimitsConfigs armCurrentLimitConfig;
-  //TODO: Change later to absolute
-  ctre::phoenix6::hardware::CANcoder m_Encoder;
-  frc::ProfiledPIDController<units::degrees> pid_Angle;
-  ctre::phoenix6::controls::VoltageOut voltRequest;
-  frc::DigitalInput rightLimitSwitch {3};
-  frc::DigitalInput leftLimitSwitch {1};
-  frc::DutyCycleEncoder Trough_Encoder {2};	
-  
-  // assume gearing is 1:1
-
+  ctre::phoenix6::hardware::TalonFX m_motor;
+  frc::ArmFeedforward m_feedforward;
+  frc::DutyCycleEncoder m_encoder;	
 
 };

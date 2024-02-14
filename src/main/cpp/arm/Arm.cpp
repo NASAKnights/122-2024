@@ -1,101 +1,73 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+#include <arm/Arm.h>
 
-#include "arm/Arm.h"
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <ctre/phoenix6/core/CoreTalonFX.hpp>
-#include <iostream>
+using State = frc::TrapezoidProfile<units::degrees>::State;
+using degrees_per_second_squared_t = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>;
 
-Arm::Arm() :
-    m_AngleMotor{ArmConstants::kAngleMotorId},
-    m_Encoder{ArmConstants::kAbsEncoderId},
-    pid_Angle{ArmConstants::kAngleP,
-              ArmConstants::kAngleI,
-              ArmConstants::kAngleD,
-              frc::TrapezoidProfile<units::degrees>::Constraints{units::degrees_per_second_t{5}, units::degrees_per_second_squared_t{10}}},
-    voltRequest{units::volt_t {0.0}}
+ArmSubsystem::ArmSubsystem()
+    : frc2::ProfiledPIDSubsystem<units::degrees>(
+          frc::ProfiledPIDController<units::degrees>(ArmConstants::kAngleP,
+            ArmConstants::kAngleI,
+            ArmConstants::kAngleD,
+            frc::TrapezoidProfile<units::degrees>::Constraints(
+                ArmConstants::kArmVelLimit,
+                ArmConstants::kArmAccelLimit))),
+      m_motor(ArmConstants::kAngleMotorId),
+      m_encoder(ArmConstants::kAbsEncoderId),
+      m_feedforward(ArmConstants::kFFks,
+                    ArmConstants::kFFkg,
+                    ArmConstants::kFFkV,
+                    ArmConstants::kFFkA)
 {
-    armSlot0Configs.kP = ArmConstants::kArmP;
-    armSlot0Configs.kI = ArmConstants::kArmI;
-    armSlot0Configs.kD = ArmConstants::kArmD;
-   
+    auto armAngleConfig = ctre::phoenix6::configs::TalonFXConfiguration();
 
-    //voltRequest = ctre::phoenix6::controls::VoltageOut(units::volt_t {0.0});
+    armAngleConfig.CurrentLimits.SupplyCurrentLimitEnable = ArmConstants::kArmEnableCurrentLimit;
+    armAngleConfig.CurrentLimits.SupplyCurrentLimit = ArmConstants::kArmContinuousCurrentLimit;
+    armAngleConfig.CurrentLimits.SupplyCurrentThreshold = ArmConstants::kArmPeakCurrentLimit;
+    armAngleConfig.CurrentLimits.SupplyTimeThreshold = ArmConstants::kArmPeakCurrentDuration;
 
-    armAngleConfig.Slot0 = armSlot0Configs;
 
-    armCurrentLimitConfig.SupplyCurrentLimitEnable = ArmConstants::kArmEnableCurrentLimit;
-    armCurrentLimitConfig.SupplyCurrentLimit = ArmConstants::kArmContinuousCurrentLimit;
-    armCurrentLimitConfig.SupplyCurrentThreshold = ArmConstants::kArmPeakCurrentLimit;
-    armCurrentLimitConfig.SupplyTimeThreshold = ArmConstants::kArmPeakCurrentDuration;
+    m_motor.GetConfigurator().Apply(armAngleConfig);
+    m_motor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
-    armAngleConfig.CurrentLimits = armCurrentLimitConfig;
-    
-    m_AngleMotor.GetConfigurator().Apply(armAngleConfig);
-    m_AngleMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
-    //m_AngleMotor.SetInverted(true);
-    //TODO remove once we have proper encoder
+    m_encoder.SetDistancePerRotation(360);
 
-    pid_Angle.SetTolerance(units::degree_t{0.005*360});
-    m_AngleMotor.SetPosition(units::turn_t{Trough_Encoder.GetAbsolutePosition()});
-           pid_Angle.SetGoal(units::degree_t{0});
-
+    GetController().SetTolerance(ArmConstants::kControllerTolerance);
+    // Start arm in neutral position
+    SetGoal(State{units::degree_t(20.0), 0_rad_per_s});
 }
 
-// This method will be called once per scheduler run
-void Arm::Periodic() {
-   
-   printLog();
-   m_AngleMotor.SetPosition(units::turn_t{Trough_Encoder.GetAbsolutePosition()}); 
-   
+void ArmSubsystem::UseOutput(double output, State setpoint) {
+  // Calculate the feedforward from the sepoint
+  units::volt_t feedforward =
+      m_feedforward.Calculate(setpoint.position, setpoint.velocity);
 
-}
-/*
-0.2654 real 
-2.8 value we use 
-0.56 UP
-*/
-
-
- //0.1111
-
-void Arm:: set_Arm_Position(float des__Angle){
-           pid_Angle.Calculate(units::degree_t{Trough_Encoder.GetAbsolutePosition()});
-           pid_Angle.SetGoal(units::degree_t{des__Angle});
-          if (!pid_Angle.AtGoal())
-          { 
-            m_AngleMotor.SetControl(voltRequest.WithOutput(units::volt_t {pid_Angle.Calculate(units::degree_t{Trough_Encoder.GetAbsolutePosition()})}));
-          }
-          else m_AngleMotor.StopMotor();
-}
-    
-void Arm::printLog(){
-  
-frc::SmartDashboard::PutNumber("ARM_enc_ABS",Trough_Encoder.GetAbsolutePosition()*360);   
-frc::SmartDashboard::PutNumber("Error_ARM_PID",(pid_Angle.GetPositionError().value()));
-frc::SmartDashboard::PutNumber("Voltage_ARM_PID",( pid_Angle.Calculate(units::degree_t{Trough_Encoder.GetAbsolutePosition()})));
-frc::SmartDashboard::PutNumber("Voltage_ARM_MOtor",(m_AngleMotor.GetMotorVoltage().GetValueAsDouble()));
-
-
+  // Output will be 0 if disabled.
+  if(output < 1e-6)
+  {
+    m_motor.SetVoltage(units::volt_t{0.0});
+    //TODO: set brake
+  }
+  else
+  {
+    //TODO: unset brake
+    //TODO: maybe only move if brake is unset
+    // Add the feedforward to the PID output to get the motor output
+    m_motor.SetVoltage(units::volt_t{output} + feedforward);
+  }
 }
 
-void Arm::Set_Current() {
-
-    pid_Angle.SetGoal(units::degree_t{Trough_Encoder.GetAbsolutePosition()});
-    m_AngleMotor.StopMotor();
+void ArmSubsystem::printLog()
+{
+    frc::SmartDashboard::PutNumber("ARM_enc_ABS", m_encoder.GetAbsolutePosition());   
+    frc::SmartDashboard::PutNumber("Error_ARM_PID", (GetController().GetPositionError().value()));
+    frc::SmartDashboard::PutNumber("Voltage_ARM_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
+    frc::SmartDashboard::PutNumber("Voltage_ARM_Motor", (m_motor.GetMotorVoltage().GetValueAsDouble()));
 }
 
-void Arm::resetPivotEncoder() {
-    m_AngleMotor.SetPosition(units::turn_t{0.0});
+units::degree_t ArmSubsystem::GetMeasurement() {
+  return units::radian_t{m_encoder.GetDistance()};
+
 }
-
-double Arm::getPivotAngle() {
-    return double (m_AngleMotor.GetPosition().GetValue());
-}
-
-
-/*
-bool Arm::atSetpoint() {
-    return fabs(pid_Angle.GetPositionError()) > 0.01;
-}*/

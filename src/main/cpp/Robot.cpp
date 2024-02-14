@@ -130,40 +130,30 @@ void Robot::BindCommands() {
       .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
         return m_swerveDrive.ResetHeading();
       })))); // TODO assign as test
-/*a
-  frc2::JoystickButton(&m_operatorController, 1)
-    .OnTrue(ArmDown(&_arm).ToPtr());
-*/
 
   frc2::JoystickButton(&m_driverController, 2).WhileTrue(frc2::RunCommand(
       [this] {
         //108
-        arm.set_Arm_Position(0.30*360);
+        arm.SetGoal(units::degree_t(0.3*360));
+        arm.Enable();
       },
       {&arm}).ToPtr()
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([&] {
-        return arm.Set_Current();
+        return arm.Disable();
       },
       {&arm}).ToPtr()));
 
   frc2::JoystickButton(&m_driverController, 3).WhileTrue(frc2::RunCommand(
       [this] {
         //54
-        arm.set_Arm_Position(0.15*360);
+        arm.SetGoal(units::degree_t(0.15*360));
+        arm.Enable();
       },
       {&arm}).ToPtr()
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([&] {
-        return arm.Set_Current();
+        return arm.Disable();
       },
-      {&arm}).ToPtr())); 
-
-  
-
-  
-
-      
-
-
+      {&arm}).ToPtr()));
 
 }
 /**
@@ -176,7 +166,7 @@ frc2::CommandPtr Robot::GetAutonomousCommand() {
 }
 
 void Robot::DisabledPeriodic() {
-  arm.Set_Current();
+  arm.Disable();
 }
 
 /**
