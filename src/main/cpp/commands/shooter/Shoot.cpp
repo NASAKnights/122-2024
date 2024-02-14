@@ -10,34 +10,57 @@
 // Shooter shoooter;
 // Indexer indexing;
 
+
 double rampSpeedDeadzone = 10;
 double rampSpeedLower = ShooterConstants::motorRampSpeed - rampSpeedDeadzone;
 
-shoot::shoot(Shooter* _shooter, Indexer* _indexer):
+Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake):
   shoooter{_shooter},
-  indexing{_indexer}
-{
-  // Use addRequirements() here to declare subsystem dependencies.
-  shoooter = _shooter;
-  indexing = _indexer;
-}
+  indexing{_indexer},
+  intake{_intake}
+{}
 
 // Called when the command is initially scheduled.
-void shoot::Initialize() {}
+void Shoot::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void shoot::Execute() { 
+void Shoot::Execute() { 
   //TODO: ADD CONSTANT FOR MOTOR SPEED CHECK
-  if(indexing->getIndex()) {
-    while(shoooter->getSpeed() < rampSpeedLower) { shoooter->shoot(); }
-    shoooter->shoot();
+  switch (m_state)
+  {
+  case SPINUP:
+  {
+    shoooter->Shoot();
+    if(shoooter->getSpeed() > rampSpeedLower)
+    {
+      m_state = SHOOTING;
+    }
+    break;
   }
+  case SHOOTING:
+  {
+    intake->runIntake();
+    shoooter->Shoot();
+    break;
+  }
+  default:
+  {
+    break;
+  }
+  }
+
 }
 
 // Called once the command ends or is interrupted.
-void shoot::End(bool interrupted) { shoooter->stopShooter(); }
+void Shoot::End(bool interrupted) 
+{ 
+  shoooter->stopShooter();
+  intake->stopIntake();
+
+  m_state = SPINUP;
+}
 
 // Returns true when the command should end.
-bool shoot::IsFinished() {
+bool Shoot::IsFinished() {
   return false;
 }

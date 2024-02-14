@@ -9,9 +9,9 @@
 // Intake intake;
 // Shooter shooter;
 
-intakeTake::intakeTake(Intake* _intake, Shooter* _shoot):
+intakeTake::intakeTake(Intake* _intake, Indexer* _indexer):
   intake{_intake},
-  shooter{_shoot}
+  indexer{_indexer}
 {
   // Use addRequirements() here to declare subsystem dependencies.
   // intake = _intake;
@@ -23,8 +23,21 @@ void intakeTake::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void intakeTake::Execute() { 
-  if(!shooter->isRunning()){ intake->runIntake(); }
-
+  if(indexer->hasNote()){
+    m_state = IDLE;
+  }
+  switch (m_state) {
+    case MOVING:
+    {
+      intake->runIntake();
+      break;
+    }
+    case IDLE:
+    {
+      intake->stopIntake();
+      break;
+    }
+  }
 }
 
 // Called once the command ends or is interrupted.

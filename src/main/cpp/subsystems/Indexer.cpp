@@ -9,6 +9,6 @@ Indexer::Indexer() = default;
 // This method will be called once per scheduler run
 void Indexer::Periodic() {}
 
-bool Indexer::getIndex() {
+bool Indexer::hasNote() {
     return limitSwitch.Get();
 }

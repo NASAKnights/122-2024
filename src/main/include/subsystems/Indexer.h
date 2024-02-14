@@ -16,7 +16,7 @@ class Indexer : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
-  bool getIndex();
+  bool hasNote();
   void moveIndexer();
 
  private:

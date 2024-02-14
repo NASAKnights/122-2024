@@ -8,6 +8,14 @@
 #include <frc2/command/CommandHelper.h>
 #include <subsystems/Shooter.h>
 #include <subsystems/Indexer.h>
+#include <subsystems/Intake.h>
+
+enum ShooterState
+{
+  SPINUP,
+  SHOOTING,
+  DONE
+};
 
 /**
  * An example command.
@@ -16,10 +24,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class shoot
-    : public frc2::CommandHelper<frc2::Command, shoot> {
+class Shoot
+    : public frc2::CommandHelper<frc2::Command, Shoot> {
  public:
-  shoot(Shooter*, Indexer*);
+  Shoot(Shooter*, Indexer*, Intake*);
 
   void Initialize() override;
 
@@ -32,4 +40,7 @@ class shoot
   private:
     Shooter* shoooter;
     Indexer* indexing;
+    Intake* intake;
+    
+    ShooterState m_state;
 };

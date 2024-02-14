@@ -10,7 +10,7 @@ Shooter::Shooter() { /*yes*/ }
 
 void Shooter::Periodic() {}
 
-void Shooter::shoot() {
+void Shooter::Shoot() {
     m_shooterMotor.Set(0.1);
 }
 

@@ -8,6 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 #include <subsystems/Intake.h>
 #include <subsystems/Shooter.h>
+#include <subsystems/Indexer.h>
 
 /**
  * An example command.
@@ -16,10 +17,16 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
+enum IntakeState
+{
+  MOVING,
+  IDLE
+};
+
 class intakeTake
     : public frc2::CommandHelper<frc2::Command, intakeTake> {
  public:
-  intakeTake(Intake* _intake, Shooter* _shooter);
+  intakeTake(Intake* _intake, Indexer* _indexer);
 
   void Initialize() override;
 
@@ -32,4 +39,7 @@ class intakeTake
 private:
   Intake* intake;
   Shooter* shooter;
+  Indexer* indexer;
+
+  IntakeState m_state;
 };
