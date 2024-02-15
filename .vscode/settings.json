@@ -18,6 +18,7 @@
   "files.associations": {
     "array": "cpp",
     "*.inc": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "bitset": "cpp"
   }
 }

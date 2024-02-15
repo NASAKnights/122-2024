@@ -9,6 +9,7 @@
 #include <frc/DutyCycleEncoder.h>
 
 #include "Constants.hpp"
+#include <frc/Servo.h>
 
 
 namespace ArmConstants {
@@ -44,6 +45,9 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
  public:
   ArmSubsystem();
   void printLog();
+  void arm_Brake_In();
+  bool arm_Brake_Out();
+
 
   void UseOutput(double output, State setpoint) override;
   units::degree_t GetMeasurement() override;
@@ -52,5 +56,6 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   ctre::phoenix6::hardware::TalonFX m_motor;
   frc::ArmFeedforward m_feedforward;
   frc::DutyCycleEncoder m_encoder;	
+  frc::Servo Linear{3};
 
 };

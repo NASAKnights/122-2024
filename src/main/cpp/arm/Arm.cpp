@@ -19,7 +19,8 @@ ArmSubsystem::ArmSubsystem()
       m_feedforward(ArmConstants::kFFks,
                     ArmConstants::kFFkg,
                     ArmConstants::kFFkV,
-                    ArmConstants::kFFkA)
+                    ArmConstants::kFFkA),
+    Linear{3}
 {
     auto armAngleConfig = ctre::phoenix6::configs::TalonFXConfiguration();
 
@@ -48,15 +49,29 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
   if(output < 1e-6)
   {
     m_motor.SetVoltage(units::volt_t{0.0});
-    //TODO: set brake
+    arm_Brake_In();
   }
   else
-  {
-    //TODO: unset brake
-    //TODO: maybe only move if brake is unset
+  { 
+     if(arm_Brake_Out() == true){
     // Add the feedforward to the PID output to get the motor output
     m_motor.SetVoltage(units::volt_t{output} + feedforward);
+    }
   }
+}
+
+void  ArmSubsystem::arm_Brake_In()
+{
+   Linear.Set(0);
+   
+   
+}
+
+bool  ArmSubsystem::arm_Brake_Out()
+{
+   Linear.Set(0.5);
+
+  return true
 }
 
 void ArmSubsystem::printLog()
