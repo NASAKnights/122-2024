@@ -68,6 +68,6 @@ void ArmSubsystem::printLog()
 }
 
 units::degree_t ArmSubsystem::GetMeasurement() {
-  return units::radian_t{m_encoder.GetDistance()};
+  return units::degree_t{m_encoder.GetDistance()};
 
 }

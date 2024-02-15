@@ -21,17 +21,17 @@ const auto kControllerTolerance = units::degree_t(0.5);
 const int kAngleMotorId = 1;
 const int kAbsEncoderId = 1;
 const int kAngleEncoderPulsePerRev = 2048;
-const auto kFFks = units::volt_t(0.18); // volts*s^2/rad
+const auto kFFks = units::volt_t(0.18); // Volts static (motor)
 const auto kFFkg = units::volt_t(2.46); // Volts
 const auto kFFkV = units::unit_t<frc::ArmFeedforward::kv_unit>(0.86); // volts*s/rad
 const auto kFFkA = units::unit_t<frc::ArmFeedforward::ka_unit>(0.18); // volts*s^2/rad
-                    
+
 
 const bool kArmEnableCurrentLimit = true;
-const int kArmContinuousCurrentLimit = 25;
-const int kArmPeakCurrentLimit = 40;
+const int kArmContinuousCurrentLimit = 35;
+const int kArmPeakCurrentLimit = 60;
 const double kArmPeakCurrentDuration = 0.1;
-    
+
 } // namespace ArmConstants
 
 
