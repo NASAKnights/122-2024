@@ -7,6 +7,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <units/angle.h>
 #include <frc/DutyCycleEncoder.h>
+#include <ctre/phoenix6/Pigeon2.hpp>
+
 
 #include "Constants.hpp"
 #include <frc/Servo.h>
@@ -47,6 +49,7 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   void printLog();
   void arm_Brake_In();
   bool arm_Brake_Out();
+  void get_pigeon();
 
 
   void UseOutput(double output, State setpoint) override;
@@ -56,6 +59,9 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   ctre::phoenix6::hardware::TalonFX m_motor;
   frc::ArmFeedforward m_feedforward;
   frc::DutyCycleEncoder m_encoder;	
-  frc::Servo Linear{3};
+  frc::Servo Linear;
+  ctre::phoenix6::hardware::Pigeon2 arm_pigeon{9, "NKCANivore"};
+;
+
 
 };
