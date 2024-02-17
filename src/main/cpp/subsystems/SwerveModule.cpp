@@ -88,6 +88,7 @@ SwerveModule::SwerveModule(int driveMotorID, int steerMotorID,
   m_steerEncoder.GetConfigurator().Apply(CANcoderConfig);
 
   m_driveMotor.SetPosition(units::turn_t{0});
+  ResetDriveEncoders();
 
   if constexpr (frc::RobotBase::IsSimulation()) {
     m_simTimer.Start();
@@ -140,9 +141,9 @@ void SwerveModule::SetDesiredState(frc::SwerveModuleState state) {
   auto steerRequest = controls::PositionVoltage{0_tr}.WithSlot(0);
   auto driveRequest = controls::VelocityVoltage{0_tps}.WithSlot(0);
   m_steerMotor.SetControl(steerRequest.WithPosition(state.angle.Radians()));
+  
   // m_steerMotor.SetControl(steerRequest.WithPosition(units::degree_t{45}));
-  frc::SmartDashboard::PutNumber("/Conversion", kDriveGearRatio);
-  frc::SmartDashboard::PutNumber(std::to_string(m_id) + "/Desired angle", state.angle.Degrees().value());
+  
   m_driveMotor.SetControl(
       driveRequest.WithVelocity(state.speed / kDriveConversion));
 

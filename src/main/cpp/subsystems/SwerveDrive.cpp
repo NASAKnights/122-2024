@@ -81,9 +81,9 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
   frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
   frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
 
-  frc::SmartDashboard::PutNumber("drive/x meters", odometry.GetPose().X().value());
-  frc::SmartDashboard::PutNumber("drive/y meters", odometry.GetPose().Y().value());
-  frc::SmartDashboard::PutNumber("drive/rotation degrees", odometry.GetPose().Rotation().Degrees().value());
+  // frc::SmartDashboard::PutNumber("drive/x meters", odometry.GetPose().X().value());
+  // frc::SmartDashboard::PutNumber("drive/y meters", odometry.GetPose().Y().value());
+  // frc::SmartDashboard::PutNumber("drive/rotation degrees", odometry.GetPose().Rotation().Degrees().value());
 }
 
 void SwerveDrive::SetFast() {}

@@ -15,19 +15,19 @@
 
 
 namespace ArmConstants {
-const double kAngleP = 17.5;
-const double kAngleI = 0.1;
-const double kAngleD = 0.1;
-const auto kArmVelLimit = units::degrees_per_second_t(5.0);
-const auto kArmAccelLimit = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>(10.0);
+const double kAngleP = 0.75;
+const double kAngleI = 0.0;
+const double kAngleD = 0.005;
+const auto kArmVelLimit = units::degrees_per_second_t(50.0);
+const auto kArmAccelLimit = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>(50.0);
 const auto kControllerTolerance = units::degree_t(0.5);
 const int kAngleMotorId = 1;
 const int kAbsEncoderId = 1;
 const int kAngleEncoderPulsePerRev = 2048;
 const auto kFFks = units::volt_t(0.18); // Volts static (motor)
-const auto kFFkg = units::volt_t(2.46); // Volts
-const auto kFFkV = units::unit_t<frc::ArmFeedforward::kv_unit>(0.86); // volts*s/rad
-const auto kFFkA = units::unit_t<frc::ArmFeedforward::ka_unit>(0.18); // volts*s^2/rad
+const auto kFFkg = units::volt_t(1.15); // Volts
+const auto kFFkV = units::unit_t<frc::ArmFeedforward::kv_unit>(2.26); // volts*s/rad
+const auto kFFkA = units::unit_t<frc::ArmFeedforward::ka_unit>(0.06); // volts*s^2/rad
 
 
 const bool kArmEnableCurrentLimit = true;
@@ -49,8 +49,7 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   void printLog();
   void arm_Brake_In();
   bool arm_Brake_Out();
-  void get_pigeon();
-
+  // void get_pigeon();
 
   void UseOutput(double output, State setpoint) override;
   units::degree_t GetMeasurement() override;
@@ -60,7 +59,7 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   frc::ArmFeedforward m_feedforward;
   frc::DutyCycleEncoder m_encoder;	
   frc::Servo Linear;
-  ctre::phoenix6::hardware::Pigeon2 arm_pigeon{9, "NKCANivore"};
+  // ctre::phoenix6::hardware::Pigeon2 arm_pigeon{9, "NKCANivore"};
 ;
 
 

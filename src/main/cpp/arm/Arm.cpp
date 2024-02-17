@@ -8,7 +8,8 @@ using degrees_per_second_squared_t = units::unit_t<units::compound_unit<units::a
 
 ArmSubsystem::ArmSubsystem()
     : frc2::ProfiledPIDSubsystem<units::degrees>(
-          frc::ProfiledPIDController<units::degrees>(ArmConstants::kAngleP,
+          frc::ProfiledPIDController<units::degrees>(
+            ArmConstants::kAngleP,
             ArmConstants::kAngleI,
             ArmConstants::kAngleD,
             frc::TrapezoidProfile<units::degrees>::Constraints(
@@ -20,8 +21,8 @@ ArmSubsystem::ArmSubsystem()
                     ArmConstants::kFFkg,
                     ArmConstants::kFFkV,
                     ArmConstants::kFFkA),
-    Linear{3},
-    arm_pigeon{9, "NKCANivore"}
+    Linear{3}
+    // arm_pigeon{9, "NKCANivore"}
 {
     auto armAngleConfig = ctre::phoenix6::configs::TalonFXConfiguration();
 
@@ -40,7 +41,7 @@ ArmSubsystem::ArmSubsystem()
     GetController().SetTolerance(ArmConstants::kControllerTolerance);
     // Start arm in neutral position
     SetGoal(State{units::degree_t(20.0), 0_rad_per_s});
-    arm_pigeon.Reset();
+    // arm_pigeon.Reset();
 }
 
 void ArmSubsystem::UseOutput(double output, State setpoint) {
@@ -49,17 +50,19 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
       m_feedforward.Calculate(setpoint.position, setpoint.velocity);
 
   // Output will be 0 if disabled.
-  if(output < 1e-6)
+  frc::SmartDashboard::PutNumber("Actual output", output);
+  frc::SmartDashboard::PutNumber("Actual feed", feedforward.value());
+  if(fabs(output) < 1e-6)
   {
     m_motor.SetVoltage(units::volt_t{0.0});
-    arm_Brake_In();
+    // arm_Brake_In();
   }
   else
   { 
-     if(arm_Brake_Out() == false){
+    //  if(arm_Brake_Out() == false){
     // Add the feedforward to the PID output to get the motor output
     m_motor.SetVoltage(units::volt_t{output} + feedforward);
-    }
+    // }
   }
 }
 
@@ -67,28 +70,29 @@ void  ArmSubsystem::arm_Brake_In()
 {
    Linear.Set(0);
    
-   
 }
 
 bool  ArmSubsystem::arm_Brake_Out()
 {
-   Linear.Set(0.5);
+  Linear.Set(0.5);
 
   return true;
 }
 
-void ArmSubsystem::get_pigeon(){
-    arm_pigeon.GetAccumGyroY();
-}
+// void ArmSubsystem::get_pigeon(){
+//     arm_pigeon.GetAccumGyroY();
+// }
 
 void ArmSubsystem::printLog()
 {
-    frc::SmartDashboard::PutNumber("ARM_ENC_ABS", m_encoder.GetAbsolutePosition());   
-    frc::SmartDashboard::PutNumber("ARM_PID_Error", (GetController().GetPositionError().value()));
+    frc::SmartDashboard::PutNumber("ARM_ENC_ABS", m_encoder.GetAbsolutePosition() * 360.0);   
+    // frc::SmartDashboard::PutNumber("ARM_PID_Error", (GetController().GetPositionError().value()));
+    frc::SmartDashboard::PutNumber("ARM_encoderDist", (GetMeasurement().value()));
     frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
-    frc::SmartDashboard::PutNumber("ARM_Motor_Voltage", (m_motor.GetMotorVoltage().GetValueAsDouble()));
-    frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAccumGyroY().GetValueAsDouble());
-    frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAngle());
+    // frc::SmartDashboard::PutNumber("ARM_Motor_Voltage", (m_motor.GetMotorVoltage().GetValueAsDouble()));
+    frc::SmartDashboard::PutNumber("ARM_setpoint", GetController().GetSetpoint().position.value());
+    // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAccumGyroY().GetValueAsDouble());
+    // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAngle());
 
 
 
@@ -96,5 +100,4 @@ void ArmSubsystem::printLog()
 
 units::degree_t ArmSubsystem::GetMeasurement() {
   return units::degree_t{m_encoder.GetDistance()};
-
 }
