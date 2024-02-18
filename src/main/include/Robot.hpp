@@ -11,6 +11,7 @@
 #include <frc2/command/RunCommand.h>
 
 #include "subsystems/SwerveDrive.hpp"
+#include "arm/Arm.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -38,6 +39,7 @@ private:
 
   // Subsystems
   SwerveDrive m_swerveDrive;
+  ArmSubsystem arm;
 
   // PS4 controllers
   frc::Joystick m_driverController{DriveConstants::kDriverPort};

@@ -12,6 +12,7 @@
 #include "commands/TrajectoryFollower.hpp"
 #include "frc2/command/InstantCommand.h"
 #include "util/NKTrajectoryManager.hpp"
+#include <arm/Arm.h>
 
 Robot::Robot() { this->CreateRobot(); }
 
@@ -37,7 +38,6 @@ void Robot::RobotPeriodic() {
  */
 void Robot::DisabledInit() {}
 
-void Robot::DisabledPeriodic() {}
 
 /**
  * This autonomous runs the autonomous command selected by your {@link
@@ -66,7 +66,9 @@ void Robot::TeleopInit() {
 /**
  * This function is called periodically during operator control.
  */
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+  arm.Periodic();
+}
 
 /**
  * This function is called periodically during test mode.
@@ -104,8 +106,6 @@ void Robot::CreateRobot() {
         frc::SmartDashboard::PutNumber("Joystick/Right X Axis", rightXAxis);
         m_swerveDrive.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
             -leftXAxis * DriveConstants::kMaxTranslationalVelocity,
-            // units::meters_per_second_t{0}, 
-            // units::radians_per_second_t{0},
             -leftYAxis * DriveConstants::kMaxTranslationalVelocity,
             -rightXAxis * DriveConstants::kMaxRotationalVelocity,
             m_swerveDrive.GetHeading()));
@@ -115,6 +115,9 @@ void Robot::CreateRobot() {
   // Configure the button bindings
   BindCommands();
   m_swerveDrive.ResetHeading();
+
+  //Intialize Arm Subsystem 
+
 
   frc::SmartDashboard::PutNumber("Voltage", 0.0);
 }
@@ -127,8 +130,34 @@ void Robot::BindCommands() {
       .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
         return m_swerveDrive.ResetHeading();
       })))); // TODO assign as test
-}
 
+  frc2::JoystickButton(&m_driverController, 2).OnTrue(frc2::InstantCommand(
+      [this] {
+        //108
+        arm.SetGoal(units::degree_t(0.3*360));
+        arm.Enable();
+      },
+      {&arm}).ToPtr()
+      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+        // arm.SetGoal(units::degree_t(arm.GetMeasurement()));
+        arm.Disable();
+      },
+      {&arm}).ToPtr()));
+
+  frc2::JoystickButton(&m_driverController, 3).OnTrue(frc2::InstantCommand(
+      [this] {
+        //54
+        arm.SetGoal(units::degree_t(0.1*360));
+        arm.Enable();
+      },
+      {&arm}).ToPtr()
+      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+        // arm.SetGoal(units::degree_t(arm.GetMeasurement()));
+        arm.Disable();
+      },
+      {&arm}).ToPtr()));
+
+}
 /**
  * Returns the Autonomous Command
  */
@@ -136,6 +165,11 @@ frc2::CommandPtr Robot::GetAutonomousCommand() {
   return TrajectoryFollower(&m_swerveDrive,
                             &NKTrajectoryManager::GetTrajectory("NewPath"))
       .ToPtr();
+  // return frc2::InstantCommand().ToPtr();
+}
+
+void Robot::DisabledPeriodic() {
+  arm.Disable();
 }
 
 /**
@@ -151,8 +185,8 @@ void Robot::UpdateDashboard() {
   frc::SmartDashboard::PutNumber("Swerve Drive Heading",
                                  m_swerveDrive.GetHeading().Degrees().value());
   // m_swerveDrive.PrintNetworkTableValues();
+  arm.printLog();
 }
-
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif
