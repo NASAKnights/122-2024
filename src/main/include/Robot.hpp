@@ -11,6 +11,7 @@
 #include <frc2/command/RunCommand.h>
 
 #include "subsystems/SwerveDrive.hpp"
+#include "arm/Arm.h"
 #include "commands/shooter/shoot.h"
 #include "commands/intake/intakeTake.h"
 
@@ -40,6 +41,7 @@ private:
 
   // Subsystems
   SwerveDrive m_swerveDrive;
+  ArmSubsystem arm;
 
   Shooter m_shooter;
   Indexer m_indexer;

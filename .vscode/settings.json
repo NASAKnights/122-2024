@@ -16,7 +16,15 @@
   },
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
   "files.associations": {
-    "*.inc": "cpp"
+    "array": "cpp",
+    "*.inc": "cpp",
+    "iostream": "cpp",
+    "bitset": "cpp",
+    "any": "cpp",
+    "memory": "cpp",
+    "random": "cpp",
+    "future": "cpp",
+    "optional": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }
