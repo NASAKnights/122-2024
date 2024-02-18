@@ -66,13 +66,15 @@ const units::meters_per_second_t kMaxTranslationalVelocity{1.5};
 const units::radians_per_second_t kMaxRotationalVelocity{2};
 const bool kIsFieldRelative = true;
 
-const frc::Rotation2d kFrontLeftOffset{-units::degree_t{103}}; // module 1
+const frc::Rotation2d kFrontLeftOffset{-units::degree_t{-40}}; // module 1
 const frc::Rotation2d kFrontRightOffset{
-    -units::degree_t{-40 - 2.5}}; // 139.658 // 139.658 // module 2
+    -units::degree_t{75}}; // module 2
 const frc::Rotation2d kBackLeftOffset{
-    -units::degree_t{157 + 3.6}}; // module 3
+    -units::degree_t{74}}; // module 3
 const frc::Rotation2d kBackRightOffset{
-    -units::degree_t{82 + 3}}; // 265.517 // -93.867 // module 4
+    -units::degree_t{178}}; // 265.517 // -93.867 // module 4
+
+// baby swerve, fl 103, fr 42.5, bl 160.6, br 85
 
 const frc::Translation2d kFrontLeftPosition =
     frc::Translation2d(units::meter_t{kTrackwidthMeters / 2.0},
