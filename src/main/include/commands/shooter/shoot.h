@@ -17,13 +17,6 @@ enum ShooterState
   DONE
 };
 
-/**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
- */
 class Shoot
     : public frc2::CommandHelper<frc2::Command, Shoot> {
  public:

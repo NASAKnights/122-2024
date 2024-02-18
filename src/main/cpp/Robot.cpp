@@ -16,9 +16,9 @@
 Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit() {
-  Shooter m_shooter = Shooter();
-  Indexer m_indexer = Indexer();
-  Intake m_intake = Intake();
+  // Shooter m_shooter = Shooter();
+  // Indexer m_indexer = Indexer();
+  // Intake m_intake = Intake();
 };
 
 /**
@@ -134,11 +134,36 @@ void Robot::BindCommands() {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
   
-  frc2::JoystickButton(&m_driverController, 2)
-      .OnTrue(Shoot(&m_shooter, &m_indexer, &m_intake).ToPtr()); 
+  frc2::JoystickButton(&m_operatorController, 2)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake).ToPtr()); 
 
-    frc2::JoystickButton(&m_driverController, 3)
-      .OnTrue(intakeTake(&m_intake, &m_indexer).ToPtr());
+    frc2::JoystickButton(&m_operatorController, 3)
+      .WhileTrue(intakeTake(&m_intake, &m_indexer).ToPtr());
+
+  // frc2::JoystickButton(&m_operatorController, 2)
+  //   .OnTrue(frc2::RunCommand([this] {
+  //     m_shooter.Shoot();
+  //   },{&m_shooter}).ToPtr())
+  //   .OnFalse(frc2::InstantCommand([this] {
+  //     return m_shooter.stopShooter();
+  //   }, {&m_shooter}).ToPtr());;
+
+  // frc2::JoystickButton(&m_operatorController, 3)
+  //   .OnTrue(frc2::RunCommand([this] {
+  //     m_intake.runIntake();
+  //   },{&m_intake}).ToPtr())
+  //   .OnFalse(frc2::InstantCommand([this] {
+  //     return m_intake.stopIntake();
+  //   }, {&m_intake}).ToPtr());
+
+  frc2::JoystickButton(&m_operatorController, 4)
+    .OnTrue(frc2::RunCommand([this] {
+      m_intake.runIntakeReverse();
+    },{&m_intake}).ToPtr())
+    .OnFalse(frc2::InstantCommand([this] {
+      return m_intake.stopIntake();
+    }, {&m_intake}).ToPtr());
+
 }
 
 /**
@@ -162,6 +187,7 @@ void Robot::UpdateDashboard() {
           DriveConstants::kMaxTranslationalVelocity.value());
   frc::SmartDashboard::PutNumber("Swerve Drive Heading",
                                  m_swerveDrive.GetHeading().Degrees().value());
+  frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
   // m_swerveDrive.PrintNetworkTableValues();
 }
 

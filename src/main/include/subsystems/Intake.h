@@ -6,6 +6,10 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
+#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>
+
+using namespace ctre::phoenix::motorcontrol;
+
 
 class Intake : public frc2::SubsystemBase {
  public:
@@ -20,10 +24,12 @@ class Intake : public frc2::SubsystemBase {
   void runIntakeReverse();
   void stopIntake();
 
-  bool isThereChurro();
+  void intakeIndex();
+
+  // bool isThereChurro();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  ctre::phoenix6::hardware::TalonFX m_intakeMotor{6};
+  ctre::phoenix::motorcontrol::can::TalonSRX m_intakeMotor;
 };

@@ -21,7 +21,9 @@ Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake):
 {}
 
 // Called when the command is initially scheduled.
-void Shoot::Initialize() {}
+void Shoot::Initialize() {
+  m_state = SPINUP;
+}
 
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() { 
@@ -31,7 +33,7 @@ void Shoot::Execute() {
   case SPINUP:
   {
     shoooter->Shoot();
-    if(shoooter->getSpeed() > rampSpeedLower)
+    if(fabs(shoooter->getSpeed()) >= ((5600.0/60.0) * 0.6))
     {
       m_state = SHOOTING;
     }
@@ -39,7 +41,7 @@ void Shoot::Execute() {
   }
   case SHOOTING:
   {
-    intake->runIntake();
+    intake->intakeIndex();
     shoooter->Shoot();
     break;
   }
@@ -57,7 +59,7 @@ void Shoot::End(bool interrupted)
   shoooter->stopShooter();
   intake->stopIntake();
 
-  m_state = SPINUP;
+  m_state = DONE;
 }
 
 // Returns true when the command should end.

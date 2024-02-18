@@ -4,22 +4,28 @@
 
 #include "subsystems/Intake.h"
 
-Intake::Intake() {
-    // m_intakeMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake)
+Intake::Intake() :
+    m_intakeMotor(8)
+{
+
 }
 
 void Intake::Periodic() {/*IDK what I should put here *yet*/}
 
 void Intake::runIntake() {
     //Makes the intake do the funny :3
-    m_intakeMotor.Set(0.1);
+    m_intakeMotor.Set(ControlMode::PercentOutput, 0.65);
+}
+
+void Intake::intakeIndex() {
+    m_intakeMotor.Set(ControlMode::PercentOutput, 0.5);
 }
 
 void Intake::runIntakeReverse() {
     //runIntake but reverse, makes the intake do the funny but in reverse.
-    m_intakeMotor.Set(-0.1);
+    m_intakeMotor.Set(ControlMode::PercentOutput, -0.65);
 }
 
 void Intake::stopIntake() {
-    m_intakeMotor.Set(0);
+    m_intakeMotor.Set(ControlMode::PercentOutput, 0.0);
 }

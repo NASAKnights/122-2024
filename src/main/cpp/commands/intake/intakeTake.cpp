@@ -19,7 +19,9 @@ intakeTake::intakeTake(Intake* _intake, Indexer* _indexer):
 }
 
 // Called when the command is initially scheduled.
-void intakeTake::Initialize() {}
+void intakeTake::Initialize() {
+  m_state = MOVING;
+}
 
 // Called repeatedly when this Command is scheduled to run
 void intakeTake::Execute() { 
@@ -41,7 +43,10 @@ void intakeTake::Execute() {
 }
 
 // Called once the command ends or is interrupted.
-void intakeTake::End(bool interrupted) { intake->stopIntake(); }
+void intakeTake::End(bool interrupted) { 
+  intake->stopIntake(); 
+  m_state = IDLE;
+}
 
 // Returns true when the command should end.
 bool intakeTake::IsFinished() {

@@ -4,7 +4,9 @@
 
 #include "subsystems/Indexer.h"
 
-Indexer::Indexer() = default;
+Indexer::Indexer() : limitSwitch(2) {
+
+}
 
 // This method will be called once per scheduler run
 void Indexer::Periodic() {}
