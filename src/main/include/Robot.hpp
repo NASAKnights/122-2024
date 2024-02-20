@@ -14,6 +14,7 @@
 #include "arm/Arm.h"
 #include "commands/shooter/shoot.h"
 #include "commands/intake/intakeTake.h"
+#include "arm/Arm.h"
 
 class Robot : public frc::TimedRobot {
 public:

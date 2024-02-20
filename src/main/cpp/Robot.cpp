@@ -12,7 +12,6 @@
 #include "commands/TrajectoryFollower.hpp"
 #include "frc2/command/InstantCommand.h"
 #include "util/NKTrajectoryManager.hpp"
-#include <arm/Arm.h>
 
 Robot::Robot() { this->CreateRobot(); }
 

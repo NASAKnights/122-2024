@@ -17,6 +17,7 @@
 #include <units/math.h>
 #include <units/time.h>
 #include <units/velocity.h>
+#include <frc/trajectory/Trajectory.h>
 
 #include "SDSModuleType.hpp"
 
@@ -161,9 +162,10 @@ inline double calculateAxis(double axis, double deadband) {
     return 0.0;
   }
 }
+}
+
+namespace FieldConstants {
+const frc::Rotation2d angleTolerance(units::degree_t(5));
+}
 
 } // namespace MathUtilNK
-
-namespace ShooterConstants {
-const double motorRampSpeed = 5000; 
-}
