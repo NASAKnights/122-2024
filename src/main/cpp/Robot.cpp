@@ -16,7 +16,10 @@
 
 Robot::Robot() { this->CreateRobot(); }
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() 
+{
+
+};
 
 /**
  * This function is called every 20 ms, no matter the mode. Use
@@ -67,7 +70,8 @@ void Robot::TeleopInit() {
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
-  arm.Periodic();
+  // arm.Periodic();
+
 }
 
 /**
@@ -115,6 +119,9 @@ void Robot::CreateRobot() {
   // Configure the button bindings
   BindCommands();
   m_swerveDrive.ResetHeading();
+  AddPeriodic([this] {
+        arm.Periodic();
+      }, 5_ms, 1_ms);
 
   //Intialize Arm Subsystem 
 
@@ -127,14 +134,29 @@ void Robot::CreateRobot() {
  */
 void Robot::BindCommands() {
   frc2::JoystickButton(&m_driverController, 1)
-      .OnTrue(frc2::CommandPtr((frc2::InstantCommand([this] {
+      .OnTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
         return m_swerveDrive.ResetHeading();
-      })))); // TODO assign as test
+      }))); // TODO assign as test
+  
+  frc2::JoystickButton(&m_operatorController, 6)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake).ToPtr()); 
+
+    frc2::JoystickButton(&m_operatorController, 3)
+      .WhileTrue(intakeTake(&m_intake, &m_indexer).ToPtr());
+
+  frc2::JoystickButton(&m_operatorController, 4)
+    .OnTrue(frc2::RunCommand([this] {
+      m_intake.runIntakeReverse();
+    },{&m_intake}).ToPtr())
+    .OnFalse(frc2::InstantCommand([this] {
+      return m_intake.stopIntake();
+    }, {&m_intake}).ToPtr());
+
 
   frc2::JoystickButton(&m_driverController, 2).OnTrue(frc2::InstantCommand(
       [this] {
         //108
-        arm.SetGoal(units::degree_t(0.3*360));
+        arm.SetGoal(units::degree_t(120)); //108
         arm.Enable();
       },
       {&arm}).ToPtr()
@@ -147,7 +169,7 @@ void Robot::BindCommands() {
   frc2::JoystickButton(&m_driverController, 3).OnTrue(frc2::InstantCommand(
       [this] {
         //54
-        arm.SetGoal(units::degree_t(0.1*360));
+        arm.SetGoal(units::degree_t(70)); //42.5
         arm.Enable();
       },
       {&arm}).ToPtr()
@@ -184,6 +206,7 @@ void Robot::UpdateDashboard() {
           DriveConstants::kMaxTranslationalVelocity.value());
   frc::SmartDashboard::PutNumber("Swerve Drive Heading",
                                  m_swerveDrive.GetHeading().Degrees().value());
+  frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
   // m_swerveDrive.PrintNetworkTableValues();
   arm.printLog();
 }

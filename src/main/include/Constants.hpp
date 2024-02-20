@@ -68,7 +68,7 @@ const bool kIsFieldRelative = true;
 
 const frc::Rotation2d kFrontLeftOffset{-units::degree_t{-40}}; // module 1
 const frc::Rotation2d kFrontRightOffset{
-    -units::degree_t{75}}; // module 2s
+    -units::degree_t{75}}; // module 2
 const frc::Rotation2d kBackLeftOffset{
     -units::degree_t{74}}; // module 3
 const frc::Rotation2d kBackRightOffset{
@@ -164,4 +164,6 @@ inline double calculateAxis(double axis, double deadband) {
 
 } // namespace MathUtilNK
 
-
+namespace ShooterConstants {
+const double motorRampSpeed = 5000; 
+}

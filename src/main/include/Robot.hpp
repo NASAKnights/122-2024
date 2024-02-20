@@ -12,6 +12,8 @@
 
 #include "subsystems/SwerveDrive.hpp"
 #include "arm/Arm.h"
+#include "commands/shooter/shoot.h"
+#include "commands/intake/intakeTake.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -40,6 +42,10 @@ private:
   // Subsystems
   SwerveDrive m_swerveDrive;
   ArmSubsystem arm;
+
+  Shooter m_shooter;
+  Indexer m_indexer;
+  Intake m_intake;
 
   // PS4 controllers
   frc::Joystick m_driverController{DriveConstants::kDriverPort};
