@@ -14,7 +14,7 @@ void Intake::Periodic() {/*IDK what I should put here *yet*/}
 
 void Intake::runIntake() {
     //Makes the intake do the funny :3
-    m_intakeMotor.Set(ControlMode::PercentOutput, 0.65);
+    m_intakeMotor.Set(ControlMode::PercentOutput, 0.85);
 }
 
 void Intake::intakeIndex() {
@@ -23,7 +23,7 @@ void Intake::intakeIndex() {
 
 void Intake::runIntakeReverse() {
     //runIntake but reverse, makes the intake do the funny but in reverse.
-    m_intakeMotor.Set(ControlMode::PercentOutput, -0.65);
+    m_intakeMotor.Set(ControlMode::PercentOutput, -0.85);
 }
 
 void Intake::stopIntake() {

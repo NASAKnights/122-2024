@@ -14,7 +14,7 @@ ArmSubsystem::ArmSubsystem()
             ArmConstants::kAngleD,
             frc::TrapezoidProfile<units::degrees>::Constraints(
                 ArmConstants::kArmVelLimit,
-                ArmConstants::kArmAccelLimit))),
+                ArmConstants::kArmAccelLimit), 5_ms)),
       m_motor(ArmConstants::kAngleMotorId),
       m_encoder(ArmConstants::kAbsEncoderId),
       m_feedforward(ArmConstants::kFFks,
@@ -24,6 +24,7 @@ ArmSubsystem::ArmSubsystem()
     Linear{3}
     // arm_pigeon{9, "NKCANivore"}
 {
+    
     auto armAngleConfig = ctre::phoenix6::configs::TalonFXConfiguration();
 
     armAngleConfig.CurrentLimits.SupplyCurrentLimitEnable = ArmConstants::kArmEnableCurrentLimit;
@@ -36,6 +37,7 @@ ArmSubsystem::ArmSubsystem()
     m_motor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
     m_encoder.SetDistancePerRotation(360);
+    // m_encoder.SetPositionOffset(0.2);
     Linear.SetBounds(units::time::microsecond_t{2.0}, units::time::microsecond_t{1.8}, units::time::microsecond_t {1.5},  units::time::microsecond_t{1.2},  units::time::microsecond_t{1.0});
 
     GetController().SetTolerance(ArmConstants::kControllerTolerance);
@@ -83,11 +85,15 @@ bool  ArmSubsystem::arm_Brake_Out()
 //     arm_pigeon.GetAccumGyroY();
 // }
 
+// void ArmSubsystem::SetGoal(Distance_t setpoint) {
+
+// }
+
 void ArmSubsystem::printLog()
 {
-    frc::SmartDashboard::PutNumber("ARM_ENC_ABS", m_encoder.GetAbsolutePosition() * 360.0);   
-    // frc::SmartDashboard::PutNumber("ARM_PID_Error", (GetController().GetPositionError().value()));
-    frc::SmartDashboard::PutNumber("ARM_encoderDist", (GetMeasurement().value()));
+    frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value());   
+    frc::SmartDashboard::PutNumber("ARM_PID_Error", (GetController().GetPositionError().value()));
+    // frc::SmartDashboard::PutNumber("ARM_ff", (m_feedforward.Calculate()));
     frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
     // frc::SmartDashboard::PutNumber("ARM_Motor_Voltage", (m_motor.GetMotorVoltage().GetValueAsDouble()));
     frc::SmartDashboard::PutNumber("ARM_setpoint", GetController().GetSetpoint().position.value());
@@ -99,5 +105,6 @@ void ArmSubsystem::printLog()
 }
 
 units::degree_t ArmSubsystem::GetMeasurement() {
-  return units::degree_t{m_encoder.GetDistance()};
+  // return units::degree_t{360 * (m_encoder.GetAbsolutePosition())};
+  return units::degree_t{(m_encoder.GetDistance())};
 }

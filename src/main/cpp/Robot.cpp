@@ -16,10 +16,9 @@
 
 Robot::Robot() { this->CreateRobot(); }
 
-void Robot::RobotInit() {
-  // Shooter m_shooter = Shooter();
-  // Indexer m_indexer = Indexer();
-  // Intake m_intake = Intake();
+void Robot::RobotInit() 
+{
+
 };
 
 /**
@@ -71,8 +70,7 @@ void Robot::TeleopInit() {
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
-  arm.Periodic();
-
+  // arm.Periodic();
 
 }
 
@@ -121,6 +119,9 @@ void Robot::CreateRobot() {
   // Configure the button bindings
   BindCommands();
   m_swerveDrive.ResetHeading();
+  AddPeriodic([this] {
+        arm.Periodic();
+      }, 5_ms, 1_ms);
 
   //Intialize Arm Subsystem 
 
@@ -137,27 +138,11 @@ void Robot::BindCommands() {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
   
-  frc2::JoystickButton(&m_operatorController, 2)
+  frc2::JoystickButton(&m_operatorController, 6)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake).ToPtr()); 
 
     frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(intakeTake(&m_intake, &m_indexer).ToPtr());
-
-  // frc2::JoystickButton(&m_operatorController, 2)
-  //   .OnTrue(frc2::RunCommand([this] {
-  //     m_shooter.Shoot();
-  //   },{&m_shooter}).ToPtr())
-  //   .OnFalse(frc2::InstantCommand([this] {
-  //     return m_shooter.stopShooter();
-  //   }, {&m_shooter}).ToPtr());;
-
-  // frc2::JoystickButton(&m_operatorController, 3)
-  //   .OnTrue(frc2::RunCommand([this] {
-  //     m_intake.runIntake();
-  //   },{&m_intake}).ToPtr())
-  //   .OnFalse(frc2::InstantCommand([this] {
-  //     return m_intake.stopIntake();
-  //   }, {&m_intake}).ToPtr());
 
   frc2::JoystickButton(&m_operatorController, 4)
     .OnTrue(frc2::RunCommand([this] {
@@ -171,7 +156,7 @@ void Robot::BindCommands() {
   frc2::JoystickButton(&m_driverController, 2).OnTrue(frc2::InstantCommand(
       [this] {
         //108
-        arm.SetGoal(units::degree_t(0.3*360));
+        arm.SetGoal(units::degree_t(120)); //108
         arm.Enable();
       },
       {&arm}).ToPtr()
@@ -184,7 +169,7 @@ void Robot::BindCommands() {
   frc2::JoystickButton(&m_driverController, 3).OnTrue(frc2::InstantCommand(
       [this] {
         //54
-        arm.SetGoal(units::degree_t(0.1*360));
+        arm.SetGoal(units::degree_t(70)); //42.5
         arm.Enable();
       },
       {&arm}).ToPtr()

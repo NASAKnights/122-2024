@@ -8,6 +8,7 @@
 #include <units/angle.h>
 #include <frc/DutyCycleEncoder.h>
 #include <ctre/phoenix6/Pigeon2.hpp>
+#include <units/time.h>
 
 
 #include "Constants.hpp"
@@ -15,13 +16,13 @@
 
 
 namespace ArmConstants {
-const double kAngleP = 0.75;
+const double kAngleP = 0.43;
 const double kAngleI = 0.0;
-const double kAngleD = 0.005;
-const auto kArmVelLimit = units::degrees_per_second_t(50.0);
-const auto kArmAccelLimit = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>(50.0);
+const double kAngleD = 0.001;
+const auto kArmVelLimit = units::degrees_per_second_t(90.0);
+const auto kArmAccelLimit = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>(90.0);
 const auto kControllerTolerance = units::degree_t(0.5);
-const int kAngleMotorId = 1;
+const int kAngleMotorId = 5;
 const int kAbsEncoderId = 1;
 const int kAngleEncoderPulsePerRev = 2048;
 const auto kFFks = units::volt_t(0.18); // Volts static (motor)
@@ -49,6 +50,7 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   void printLog();
   void arm_Brake_In();
   bool arm_Brake_Out();
+  // void SetGoal(units::unit_t<class Distance> setpoint) override;
   // void get_pigeon();
 
   void UseOutput(double output, State setpoint) override;
