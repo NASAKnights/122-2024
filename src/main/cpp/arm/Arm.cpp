@@ -37,7 +37,8 @@ ArmSubsystem::ArmSubsystem()
 
     m_encoder.SetDistancePerRotation(360);
     // m_encoder.SetPositionOffset(0.2);
-    Linear.SetBounds(units::time::microsecond_t{1100}, units::time::microsecond_t{100}, units::time::microsecond_t {1500},  units::time::microsecond_t{0},  units::time::microsecond_t{1050});
+    Linear.SetBounds(units::time::microsecond_t{1090}, units::time::microsecond_t{100}, units::time::microsecond_t {1000},  units::time::microsecond_t{0},  units::time::microsecond_t{1050});
+  
     //Make pigeon kind of absolut
     arm_pigeon.SetYaw(units::angle::degree_t{m_encoder.GetDistance()});
     
@@ -45,6 +46,8 @@ ArmSubsystem::ArmSubsystem()
     // Start arm in neutral position
     SetGoal(State{units::degree_t(20.0), 0_rad_per_s});
     // arm_pigeon.Reset();
+
+     frc::SmartDashboard::PutNumber("Angle",100);
 
     //Linear.SetSpeed()
 }
@@ -60,13 +63,15 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
   if(fabs(output) < 1e-6)
   {
     m_motor.SetVoltage(units::volt_t{0.0});
-    // arm_Brake_In();
+    
+     arm_Brake_In();
   }
   else
   { 
     //  if(arm_Brake_Out() == false){
     // Add the feedforward to the PID output to get the motor output
     m_motor.SetVoltage(units::volt_t{output} + feedforward);
+    arm_Brake_Out();
     // }
   }
 }

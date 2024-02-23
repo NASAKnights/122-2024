@@ -39,7 +39,9 @@ void Robot::RobotPeriodic() {
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {}
+void Robot::DisabledInit() {
+  arm.arm_Brake_Out();
+}
 
 
 /**
@@ -137,22 +139,14 @@ void Robot::BindCommands() {
       .OnTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
-  // Just for Test
-  frc2::JoystickButton(&m_driverController, 2)
-      .OnTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
-        return arm.arm_Brake_In();
-      })));
-  frc2::JoystickButton(&m_driverController, 3)
-      .OnTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
-        return  arm.arm_Brake_Out();
-      })));
+  
   
 
   frc2::JoystickButton(&m_operatorController, 6)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake).ToPtr()); 
-/*
+
     frc2::JoystickButton(&m_operatorController, 3)
-      .WhileTrue(intakeTake(&m_intake, &m_indexer).ToPtr());*/
+      .WhileTrue(intakeTake(&m_intake, &m_indexer).ToPtr());
 
   frc2::JoystickButton(&m_operatorController, 4)
     .OnTrue(frc2::RunCommand([this] {
@@ -162,7 +156,6 @@ void Robot::BindCommands() {
       return m_intake.stopIntake();
     }, {&m_intake}).ToPtr());
 
-/*
   frc2::JoystickButton(&m_driverController, 2).OnTrue(frc2::InstantCommand(
       [this] {
         //108
@@ -173,13 +166,14 @@ void Robot::BindCommands() {
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
         // arm.SetGoal(units::degree_t(arm.GetMeasurement()));
         arm.Disable();
+
       },
       {&arm}).ToPtr()));
 
   frc2::JoystickButton(&m_driverController, 3).OnTrue(frc2::InstantCommand(
       [this] {
         //54
-       // arm.SetGoal(units::degree_t(40)); //42.5
+        //arm.SetGoal(units::degree_t(60)); //42.5
         arm.Enable();
       },
       {&arm}).ToPtr()
@@ -188,7 +182,7 @@ void Robot::BindCommands() {
         arm.Disable();
       },
       {&arm}).ToPtr()));
-*/
+
 }
 /**
  * Returns the Autonomous Command
@@ -219,7 +213,7 @@ void Robot::UpdateDashboard() {
   frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
   // m_swerveDrive.PrintNetworkTableValues();
   arm.printLog();
-  float ARM_Angle =  frc::SmartDashboard::GetNumber("Angle",120);
+  float ARM_Angle =  frc::SmartDashboard::GetNumber("Angle",100);
   arm.SetGoal(units::degree_t{ARM_Angle});
 }
 #ifndef RUNNING_FRC_TESTS

@@ -18,7 +18,7 @@
 namespace ArmConstants {
 const double kAngleP = 0.43;
 const double kAngleI = 0.0;
-const double kAngleD = 0.001;
+const double kAngleD = 0.0001;
 const auto kArmVelLimit = units::degrees_per_second_t(90.0);
 const auto kArmAccelLimit = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>(90.0);
 const auto kControllerTolerance = units::degree_t(0.5);
