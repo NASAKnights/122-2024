@@ -40,7 +40,7 @@ void Robot::RobotPeriodic() {
  * robot is disabled.
  */
 void Robot::DisabledInit() {
-  arm.arm_Brake_Out();
+  
 }
 
 
@@ -74,6 +74,10 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
   // arm.Periodic();
 
+}
+
+void Robot::TeleopExit() {
+  arm.arm_Brake_Out();
 }
 
 /**
@@ -129,6 +133,7 @@ void Robot::CreateRobot() {
 
 
   frc::SmartDashboard::PutNumber("Voltage", 0.0);
+  
 }
 
 /**
@@ -214,6 +219,7 @@ void Robot::UpdateDashboard() {
   // m_swerveDrive.PrintNetworkTableValues();
   arm.printLog();
   float ARM_Angle =  frc::SmartDashboard::GetNumber("Angle",100);
+  
   arm.SetGoal(units::degree_t{ARM_Angle});
 }
 #ifndef RUNNING_FRC_TESTS

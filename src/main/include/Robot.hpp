@@ -30,6 +30,7 @@ public:
   void AutonomousPeriodic() override;
   void TeleopInit() override;
   void TeleopPeriodic() override;
+  void TeleopExit() override;
   void TestPeriodic() override;
   void SimulationInit() override;
   void SimulationPeriodic() override;
