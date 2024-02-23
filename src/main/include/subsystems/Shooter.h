@@ -11,7 +11,7 @@
 class Shooter : public frc2::SubsystemBase {
  public:
   Shooter();
-
+  int ARM_speed;
   void Periodic() override;
 
   void Shoot();
@@ -22,6 +22,7 @@ class Shooter : public frc2::SubsystemBase {
   bool isRunning();
 
  private:
+  
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   ctre::phoenix6::hardware::TalonFX m_shooterMotorMain{6};

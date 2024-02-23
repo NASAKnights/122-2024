@@ -30,11 +30,13 @@ const auto kFFkg = units::volt_t(1.15); // Volts
 const auto kFFkV = units::unit_t<frc::ArmFeedforward::kv_unit>(2.26); // volts*s/rad
 const auto kFFkA = units::unit_t<frc::ArmFeedforward::ka_unit>(0.06); // volts*s^2/rad
 
-
 const bool kArmEnableCurrentLimit = true;
 const int kArmContinuousCurrentLimit = 35;
 const int kArmPeakCurrentLimit = 60;
 const double kArmPeakCurrentDuration = 0.1;
+
+
+
 
 } // namespace ArmConstants
 
@@ -49,20 +51,21 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   ArmSubsystem();
   void printLog();
   void arm_Brake_In();
-  bool arm_Brake_Out();
+  void arm_Brake_Out();
   // void SetGoal(units::unit_t<class Distance> setpoint) override;
   // void get_pigeon();
+ 
 
   void UseOutput(double output, State setpoint) override;
   units::degree_t GetMeasurement() override;
-
- private:
+  float steps = 130; 
+  private:
   ctre::phoenix6::hardware::TalonFX m_motor;
   frc::ArmFeedforward m_feedforward;
   frc::DutyCycleEncoder m_encoder;	
-  frc::Servo Linear;
-  // ctre::phoenix6::hardware::Pigeon2 arm_pigeon{9, "NKCANivore"};
-;
+  ctre::phoenix6::hardware::Pigeon2 arm_pigeon{9, "NKCANivore"};
+  float ARM_Angle;
+  frc::PWM Linear;
 
 
 };

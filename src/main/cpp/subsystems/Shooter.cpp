@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/Shooter.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 namespace ShooterConstants {
     const double kShootP = 0.2;
@@ -18,8 +19,7 @@ namespace ShooterConstants {
         ctre::phoenix6::signals::NeutralModeValue::Brake; 
 }
 
-
-Shooter::Shooter() :
+    Shooter::Shooter() :
     m_follower(m_shooterMotorMain.GetDeviceID(), false),
     velocityControl(units::turns_per_second_t {0.0})
 { 
@@ -54,11 +54,15 @@ Shooter::Shooter() :
 
 }
 
-void Shooter::Periodic() {}
+void Shooter::Periodic() {
+
+    int ARM_speed = frc::SmartDashboard::GetNumber("Speed",0);
+}
+
 
 void Shooter::Shoot() {
     m_shooterMotorMain.SetControl(
-        velocityControl.WithVelocity(units::turns_per_second_t {-(5600.0 / 60.0)*0.6 }));
+    velocityControl.WithVelocity(units::turns_per_second_t {ARM_speed} ));
     running = true;
 }
 

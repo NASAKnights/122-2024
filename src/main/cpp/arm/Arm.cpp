@@ -21,7 +21,7 @@ ArmSubsystem::ArmSubsystem()
                     ArmConstants::kFFkg,
                     ArmConstants::kFFkV,
                     ArmConstants::kFFkA),
-    Linear{3}
+    Linear{1}
     // arm_pigeon{9, "NKCANivore"}
 {
     
@@ -32,18 +32,21 @@ ArmSubsystem::ArmSubsystem()
     armAngleConfig.CurrentLimits.SupplyCurrentThreshold = ArmConstants::kArmPeakCurrentLimit;
     armAngleConfig.CurrentLimits.SupplyTimeThreshold = ArmConstants::kArmPeakCurrentDuration;
 
-
     m_motor.GetConfigurator().Apply(armAngleConfig);
     m_motor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
     m_encoder.SetDistancePerRotation(360);
     // m_encoder.SetPositionOffset(0.2);
-    Linear.SetBounds(units::time::microsecond_t{2.0}, units::time::microsecond_t{1.8}, units::time::microsecond_t {1.5},  units::time::microsecond_t{1.2},  units::time::microsecond_t{1.0});
-
+    Linear.SetBounds(units::time::microsecond_t{1100}, units::time::microsecond_t{100}, units::time::microsecond_t {1500},  units::time::microsecond_t{0},  units::time::microsecond_t{1050});
+    //Make pigeon kind of absolut
+    arm_pigeon.SetYaw(units::angle::degree_t{m_encoder.GetDistance()});
+    
     GetController().SetTolerance(ArmConstants::kControllerTolerance);
     // Start arm in neutral position
     SetGoal(State{units::degree_t(20.0), 0_rad_per_s});
     // arm_pigeon.Reset();
+
+    //Linear.SetSpeed()
 }
 
 void ArmSubsystem::UseOutput(double output, State setpoint) {
@@ -68,17 +71,17 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
   }
 }
 
-void  ArmSubsystem::arm_Brake_In()
-{
-   Linear.Set(0);
-   
+void  ArmSubsystem::arm_Brake_In(){
+  Linear.SetSpeed(1);
+  frc::SmartDashboard::PutNumber("PWm", steps);   
+
 }
+void	  ArmSubsystem::arm_Brake_Out()
+{ 
+  Linear.SetSpeed(-1);
 
-bool  ArmSubsystem::arm_Brake_Out()
-{
-  Linear.Set(0.5);
+  frc::SmartDashboard::PutNumber("PWm", steps);   
 
-  return true;
 }
 
 // void ArmSubsystem::get_pigeon(){
@@ -97,8 +100,11 @@ void ArmSubsystem::printLog()
     frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
     // frc::SmartDashboard::PutNumber("ARM_Motor_Voltage", (m_motor.GetMotorVoltage().GetValueAsDouble()));
     frc::SmartDashboard::PutNumber("ARM_setpoint", GetController().GetSetpoint().position.value());
-    // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAccumGyroY().GetValueAsDouble());
-    // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAngle());
+    frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAccumGyroY().GetValueAsDouble());
+    frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAngle());
+    frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_Z",arm_pigeon.GetGravityVectorZ().GetValueAsDouble());
+    frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_Y",arm_pigeon.GetGravityVectorY().GetValueAsDouble());
+    frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_X",arm_pigeon.GetGravityVectorX().GetValueAsDouble());
 
 
 
