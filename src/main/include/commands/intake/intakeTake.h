@@ -9,6 +9,7 @@
 #include <subsystems/Intake.h>
 #include <subsystems/Shooter.h>
 #include <subsystems/Indexer.h>
+#include <arm/Arm.h>
 
 /**
  * An example command.
@@ -26,7 +27,7 @@ enum IntakeState
 class intakeTake
     : public frc2::CommandHelper<frc2::Command, intakeTake> {
  public:
-  intakeTake(Intake* _intake, Indexer* _indexer);
+  intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm);
 
   void Initialize() override;
 
@@ -40,6 +41,7 @@ private:
   Intake* intake;
   Shooter* shooter;
   Indexer* indexer;
+  ArmSubsystem* m_arm;
 
   IntakeState m_state;
 };

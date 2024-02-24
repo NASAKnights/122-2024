@@ -16,12 +16,12 @@
 
 
 namespace ArmConstants {
-const double kAngleP = 0.43;
+const double kAngleP = 0.5;
 const double kAngleI = 0.0;
 const double kAngleD = 0.0001;
 const auto kArmVelLimit = units::degrees_per_second_t(90.0);
 const auto kArmAccelLimit = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>(90.0);
-const auto kControllerTolerance = units::degree_t(0.5);
+const auto kControllerTolerance = units::degree_t(3.0);
 const int kAngleMotorId = 5;
 const int kAbsEncoderId = 1;
 const int kAngleEncoderPulsePerRev = 2048;
@@ -42,7 +42,7 @@ const double kArmPeakCurrentDuration = 0.1;
 
 
 /**
- * A robot arm subsystem that moves with a motion profile.
+ * A robot m_arm subsystem that moves with a motion profile.
  */
 class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   using State = frc::TrapezoidProfile<units::degrees>::State;
@@ -58,7 +58,6 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
 
   void UseOutput(double output, State setpoint) override;
   units::degree_t GetMeasurement() override;
-  float steps = 130; 
   private:
   ctre::phoenix6::hardware::TalonFX m_motor;
   frc::ArmFeedforward m_feedforward;

@@ -72,12 +72,12 @@ void Robot::TeleopInit() {
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
-  // arm.Periodic();
+  // m_arm.Periodic();
 
 }
 
 void Robot::TeleopExit() {
-  arm.arm_Brake_Out();
+  m_arm.arm_Brake_Out();
 }
 
 /**
@@ -122,18 +122,24 @@ void Robot::CreateRobot() {
       },
       {&m_swerveDrive}));
 
+    m_arm.SetDefaultCommand(frc2::RunCommand(
+      [this] {
+        if(m_arm.GetController().GetGoal().position != units::angle::degree_t(70)){
+          m_arm.SetGoal(units::angle::degree_t(70));
+          m_arm.Enable();
+        }
+      },
+      {&m_arm}));
+
   // Configure the button bindings
   BindCommands();
   m_swerveDrive.ResetHeading();
   AddPeriodic([this] {
-        arm.Periodic();
+        m_arm.Periodic();
       }, 5_ms, 1_ms);
 
   //Intialize Arm Subsystem 
-
-
   frc::SmartDashboard::PutNumber("Voltage", 0.0);
-  
 }
 
 /**
@@ -147,11 +153,21 @@ void Robot::BindCommands() {
   
   
 
-  frc2::JoystickButton(&m_operatorController, 6)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake).ToPtr()); 
+  frc2::JoystickButton(&m_operatorController, 6).OnTrue(frc2::InstantCommand(
+      [this] {
+        m_arm.SetGoal(units::degree_t(78));
+        m_arm.Enable();
+      },
+      {&m_arm}).ToPtr()
+      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
+        m_arm.Disable();
+      },
+      {&m_arm}).ToPtr()))
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 100).ToPtr());
 
     frc2::JoystickButton(&m_operatorController, 3)
-      .WhileTrue(intakeTake(&m_intake, &m_indexer).ToPtr());
+      .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr());
 
   frc2::JoystickButton(&m_operatorController, 4)
     .OnTrue(frc2::RunCommand([this] {
@@ -164,29 +180,29 @@ void Robot::BindCommands() {
   frc2::JoystickButton(&m_driverController, 2).OnTrue(frc2::InstantCommand(
       [this] {
         //108
-        arm.SetGoal(units::degree_t(120)); //108
-        arm.Enable();
+        m_arm.SetGoal(units::degree_t(120)); //108
+        m_arm.Enable();
       },
-      {&arm}).ToPtr()
+      {&m_arm}).ToPtr()
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        // arm.SetGoal(units::degree_t(arm.GetMeasurement()));
-        arm.Disable();
+        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
+        m_arm.Disable();
 
       },
-      {&arm}).ToPtr()));
+      {&m_arm}).ToPtr()));
 
   frc2::JoystickButton(&m_driverController, 3).OnTrue(frc2::InstantCommand(
       [this] {
         //54
-        //arm.SetGoal(units::degree_t(60)); //42.5
-        arm.Enable();
+        //m_arm.SetGoal(units::degree_t(60)); //42.5
+        m_arm.Enable();
       },
-      {&arm}).ToPtr()
+      {&m_arm}).ToPtr()
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        // arm.SetGoal(units::degree_t(arm.GetMeasurement()));
-        arm.Disable();
+        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
+        m_arm.Disable();
       },
-      {&arm}).ToPtr()));
+      {&m_arm}).ToPtr()));
 
 }
 /**
@@ -200,7 +216,7 @@ frc2::CommandPtr Robot::GetAutonomousCommand() {
 }
 
 void Robot::DisabledPeriodic() {
-  arm.Disable();
+  m_arm.Disable();
 }
 
 /**
@@ -217,10 +233,10 @@ void Robot::UpdateDashboard() {
                                  m_swerveDrive.GetHeading().Degrees().value());
   frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
   // m_swerveDrive.PrintNetworkTableValues();
-  arm.printLog();
-  float ARM_Angle =  frc::SmartDashboard::GetNumber("Angle",100);
+  m_arm.printLog();
+  float ARM_Angle =  frc::SmartDashboard::GetNumber("Angle(Nuh uh)",100);
   
-  arm.SetGoal(units::degree_t{ARM_Angle});
+  // m_arm.SetGoal(units::degree_t{ARM_Angle});
 }
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }

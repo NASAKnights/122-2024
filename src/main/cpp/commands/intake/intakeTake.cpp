@@ -6,21 +6,24 @@
 #include "subsystems/Intake.h"
 #include "subsystems/Shooter.h"
 
-// Intake intake;
-// Shooter shooter;
-
-intakeTake::intakeTake(Intake* _intake, Indexer* _indexer):
+intakeTake::intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm):
   intake{_intake},
-  indexer{_indexer}
+  indexer{_indexer},
+  m_arm{_arm}
 {
   // Use addRequirements() here to declare subsystem dependencies.
   // intake = _intake;
   // shooter = _shoot;
+  AddRequirements(indexer);
+  AddRequirements(intake);
+  AddRequirements(m_arm);
 }
 
 // Called when the command is initially scheduled.
 void intakeTake::Initialize() {
   m_state = MOVING;
+  m_arm->SetGoal(units::angle::degree_t(37));
+  m_arm->Enable();
 }
 
 // Called repeatedly when this Command is scheduled to run

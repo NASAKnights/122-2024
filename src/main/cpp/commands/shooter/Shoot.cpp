@@ -10,15 +10,16 @@
 // Shooter shoooter;
 // Indexer indexing;
 
-
-double rampSpeedDeadzone = 10;
-double rampSpeedLower = ShooterConstants::motorRampSpeed - rampSpeedDeadzone;
-
-Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake):
+Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem* m_arm, double _shootSpeed):
   shoooter{_shooter},
   indexing{_indexer},
-  intake{_intake}
-{}
+  intake{_intake},
+  shootSpeed{_shootSpeed}
+{ 
+  AddRequirements(indexing);
+  AddRequirements(intake);
+  AddRequirements(m_arm);
+}
 
 // Called when the command is initially scheduled.
 void Shoot::Initialize() {
@@ -32,8 +33,8 @@ void Shoot::Execute() {
   {
   case SPINUP:
   {
-    shoooter->Shoot();
-    if(fabs(shoooter->getSpeed()) >= ((5600.0/60.0) * 0.6))
+    shoooter->Shoot(shootSpeed);//angle is 78
+    if(shoooter->atSetpoint())
     {
       m_state = SHOOTING;
     }
@@ -42,7 +43,7 @@ void Shoot::Execute() {
   case SHOOTING:
   {
     intake->intakeIndex();
-    shoooter->Shoot();
+    shoooter->Shoot(shootSpeed);
     break;
   }
   default:

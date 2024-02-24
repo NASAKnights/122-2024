@@ -11,15 +11,16 @@
 class Shooter : public frc2::SubsystemBase {
  public:
   Shooter();
-  int ARM_speed;
   void Periodic() override;
 
-  void Shoot();
+  void Shoot(double shootSpeed);
   void stopShooter();
 
   double getSpeed();
+  double getShuffleGoal();
 
   bool isRunning();
+  bool atSetpoint();
 
  private:
   
@@ -32,4 +33,5 @@ class Shooter : public frc2::SubsystemBase {
   ctre::phoenix6::controls::VelocityVoltage velocityControl;
 
   bool running = false;
+  int SHOOT_speed;
 };

@@ -44,26 +44,29 @@ namespace ShooterConstants {
 
     shooterConfig.CurrentLimits = shootCurrentLimitConfig;
     m_shooterMotorMain.SetNeutralMode(ShooterConstants::kShootMotorNeutral);
-    m_shooterMotorMain.SetInverted(false);
+    // m_shooterMotorMain.SetInverted(false);
     m_shooterMotorFollow.SetNeutralMode(ShooterConstants::kShootMotorNeutral);
 
     m_shooterMotorMain.GetConfigurator().Apply(shooterConfig);
 
     m_shooterMotorFollow.SetControl(m_follower);
 
-
+    // frc::SmartDashboard::PutNumber("Shooter Speed", 50);
+    
 }
 
 void Shooter::Periodic() {
-
-    int ARM_speed = frc::SmartDashboard::GetNumber("Speed",0);
+    // SHOOT_speed = frc::SmartDashboard::GetNumber("Shooter Speed", 0);
 }
 
 
-void Shooter::Shoot() {
+void Shooter::Shoot(double shootSpeed) {
+    frc::SmartDashboard::PutNumber("Shooter Velocity", m_shooterMotorMain.GetVelocity().GetValue().value());
+
     m_shooterMotorMain.SetControl(
-    velocityControl.WithVelocity(units::turns_per_second_t {ARM_speed} ));
+    velocityControl.WithVelocity(units::turns_per_second_t {shootSpeed}));
     running = true;
+    SHOOT_speed = shootSpeed;
 }
 
 void Shooter::stopShooter() {
@@ -74,6 +77,17 @@ void Shooter::stopShooter() {
 
 double Shooter::getSpeed() {
     return double {m_shooterMotorMain.GetVelocity().GetValue()};
+}
+
+double Shooter::getShuffleGoal() {
+    return SHOOT_speed;
+}
+
+bool Shooter::atSetpoint() {
+    if(fabs(getSpeed()) >= fabs(SHOOT_speed)){
+        return true;
+    }
+    return false;
 }
 
 bool Shooter::isRunning() {

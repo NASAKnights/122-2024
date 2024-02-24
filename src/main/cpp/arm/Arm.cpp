@@ -37,14 +37,14 @@ ArmSubsystem::ArmSubsystem()
 
     m_encoder.SetDistancePerRotation(360);
     // m_encoder.SetPositionOffset(0.2);
-    Linear.SetBounds(units::time::microsecond_t{1090}, units::time::microsecond_t{100}, units::time::microsecond_t {1000},  units::time::microsecond_t{0},  units::time::microsecond_t{1050});
+    Linear.SetBounds(units::time::microsecond_t{1060}, units::time::microsecond_t{1060}, units::time::microsecond_t {0},  units::time::microsecond_t{0},  units::time::microsecond_t{1045});
   
     //Make pigeon kind of absolut
     arm_pigeon.SetYaw(units::angle::degree_t{m_encoder.GetDistance()});
     
     GetController().SetTolerance(ArmConstants::kControllerTolerance);
-    // Start arm in neutral position
-    SetGoal(State{units::degree_t(20.0), 0_rad_per_s});
+    // Start m_arm in neutral position
+    SetGoal(State{units::degree_t(80.0), 0_rad_per_s});
     // arm_pigeon.Reset();
 
      frc::SmartDashboard::PutNumber("Angle",100);
@@ -60,7 +60,7 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
   // Output will be 0 if disabled.
   frc::SmartDashboard::PutNumber("Actual output", output);
   frc::SmartDashboard::PutNumber("Actual feed", feedforward.value());
-  if(fabs(output) < 1e-6)
+  if(fabs(output) < 1e-6 || GetController().AtGoal())
   {
     m_motor.SetVoltage(units::volt_t{0.0});
     
@@ -78,15 +78,10 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
 
 void  ArmSubsystem::arm_Brake_In(){
   Linear.SetSpeed(1);
-  frc::SmartDashboard::PutNumber("PWm", steps);   
-
 }
 void	  ArmSubsystem::arm_Brake_Out()
 { 
   Linear.SetSpeed(-1);
-
-  frc::SmartDashboard::PutNumber("PWm", steps);   
-
 }
 
 // void ArmSubsystem::get_pigeon(){

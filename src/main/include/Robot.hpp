@@ -42,7 +42,7 @@ private:
 
   // Subsystems
   SwerveDrive m_swerveDrive;
-  ArmSubsystem arm;
+  ArmSubsystem m_arm;
 
   Shooter m_shooter;
   Indexer m_indexer;
