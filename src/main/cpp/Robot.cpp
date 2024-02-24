@@ -111,9 +111,9 @@ void Robot::CreateRobot() {
         auto rightXAxis =
             MathUtilNK::calculateAxis(m_driverController.GetRawAxis(2),
                                       DriveConstants::kDefaultAxisDeadband);
-        frc::SmartDashboard::PutNumber("Joystick/Left X Axis", leftXAxis);
-        frc::SmartDashboard::PutNumber("Joystick/Left Y Axis", leftYAxis);
-        frc::SmartDashboard::PutNumber("Joystick/Right X Axis", rightXAxis);
+        // frc::SmartDashboard::PutNumber("Joystick/Left X Axis", leftXAxis);
+        // frc::SmartDashboard::PutNumber("Joystick/Left Y Axis", leftYAxis);
+        // frc::SmartDashboard::PutNumber("Joystick/Right X Axis", rightXAxis);
         m_swerveDrive.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
             -leftXAxis * DriveConstants::kMaxTranslationalVelocity,
             -leftYAxis * DriveConstants::kMaxTranslationalVelocity,
@@ -124,10 +124,7 @@ void Robot::CreateRobot() {
 
     m_arm.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        if(m_arm.GetController().GetGoal().position != units::angle::degree_t(70)){
-          m_arm.SetGoal(units::angle::degree_t(70));
-          m_arm.Enable();
-        }
+        m_arm.handle_Setpoint(units::degree_t(70));
       },
       {&m_arm}));
 
@@ -138,8 +135,6 @@ void Robot::CreateRobot() {
         m_arm.Periodic();
       }, 5_ms, 1_ms);
 
-  //Intialize Arm Subsystem 
-  frc::SmartDashboard::PutNumber("Voltage", 0.0);
 }
 
 /**
@@ -150,21 +145,13 @@ void Robot::BindCommands() {
       .OnTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
-  
-  
 
-  frc2::JoystickButton(&m_operatorController, 6).OnTrue(frc2::InstantCommand(
-      [this] {
-        m_arm.SetGoal(units::degree_t(78));
-        m_arm.Enable();
-      },
-      {&m_arm}).ToPtr()
-      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+  frc2::JoystickButton(&m_operatorController, 6).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
         // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
         m_arm.Disable();
       },
       {&m_arm}).ToPtr()))
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 100).ToPtr());
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, -100, 78).ToPtr());
 
     frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr());
@@ -180,14 +167,12 @@ void Robot::BindCommands() {
   frc2::JoystickButton(&m_driverController, 2).OnTrue(frc2::InstantCommand(
       [this] {
         //108
-        m_arm.SetGoal(units::degree_t(120)); //108
-        m_arm.Enable();
+        m_arm.handle_Setpoint(units::degree_t(120)); //108
+     
       },
       {&m_arm}).ToPtr()
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
         m_arm.Disable();
-
       },
       {&m_arm}).ToPtr()));
 
@@ -223,20 +208,18 @@ void Robot::DisabledPeriodic() {
  * Updates the data on the dashboard
  */
 void Robot::UpdateDashboard() {
-  frc::SmartDashboard::PutNumber("driver X", m_driverController.GetX());
-  frc::SmartDashboard::PutNumber(
-      "adjusted X",
-      MathUtilNK::calculateAxis(m_driverController.GetX(),
-                                DriveConstants::kDefaultAxisDeadband) *
-          DriveConstants::kMaxTranslationalVelocity.value());
-  frc::SmartDashboard::PutNumber("Swerve Drive Heading",
-                                 m_swerveDrive.GetHeading().Degrees().value());
+  // frc::SmartDashboard::PutNumber("driver X", m_driverController.GetX());
+  // frc::SmartDashboard::PutNumber(
+  //     "adjusted X",
+  //     MathUtilNK::calculateAxis(m_driverController.GetX(),
+  //                               DriveConstants::kDefaultAxisDeadband) *
+  //         DriveConstants::kMaxTranslationalVelocity.value());
+  // frc::SmartDashboard::PutNumber("Swerve Drive Heading",
+  //                                m_swerveDrive.GetHeading().Degrees().value());
   frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();
-  float ARM_Angle =  frc::SmartDashboard::GetNumber("Angle(Nuh uh)",100);
   
-  // m_arm.SetGoal(units::degree_t{ARM_Angle});
 }
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }

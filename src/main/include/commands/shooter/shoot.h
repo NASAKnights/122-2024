@@ -21,7 +21,7 @@ enum ShooterState
 class Shoot
     : public frc2::CommandHelper<frc2::Command, Shoot> {
  public:
-  Shoot(Shooter*, Indexer*, Intake*, ArmSubsystem*, double shootSpeed);
+  Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem* _arm, double _shootSpeed, double _shootAngle);
 
   void Initialize() override;
 
@@ -35,8 +35,10 @@ class Shoot
     Shooter* shoooter;
     Indexer* indexing;
     Intake* intake;
+    ArmSubsystem* arm;
 
     double shootSpeed;
+    double shootAngle;
     
     ShooterState m_state;
 };

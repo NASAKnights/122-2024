@@ -22,7 +22,7 @@ intakeTake::intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm):
 // Called when the command is initially scheduled.
 void intakeTake::Initialize() {
   m_state = MOVING;
-  m_arm->SetGoal(units::angle::degree_t(37));
+  m_arm->SetGoal(units::angle::degree_t(38.5));
   m_arm->Enable();
 }
 

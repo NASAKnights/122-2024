@@ -84,7 +84,8 @@ double Shooter::getShuffleGoal() {
 }
 
 bool Shooter::atSetpoint() {
-    if(fabs(getSpeed()) >= fabs(SHOOT_speed)){
+    if(fabs(getSpeed() - SHOOT_speed) < 10.0) // Rot/s
+    {
         return true;
     }
     return false;
