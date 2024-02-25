@@ -98,6 +98,9 @@ void ArmSubsystem::printLog()
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_X",arm_pigeon.GetGravityVectorX().GetValueAsDouble());
     double linearServoMax =  frc::SmartDashboard::GetNumber("linearServoMax",1200);
     double linearServoDiff = frc::SmartDashboard::GetNumber("linearServoDiff", 80);
+    frc::SmartDashboard::PutNumber("Brake Time", (frc::GetTime() - time_brake_released).value());
+    frc::SmartDashboard::PutNumber("Arm State", m_ArmState);
+    
     Linear.SetBounds(units::time::microsecond_t{linearServoMax}, units::time::microsecond_t{0}, units::time::microsecond_t {0},  units::time::microsecond_t{0},  units::time::microsecond_t{linearServoMax-linearServoDiff});
 
 }
@@ -119,7 +122,7 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
   {
   case ArmConstants::BRAKED:
   {
-    if ((frc::GetTime() - time_brake_released).value() > 0.5)
+    if ((frc::GetTime() - time_brake_released).value() > 0.2)
     {
       m_ArmState = ArmConstants::MOVING;
       Enable();
@@ -129,7 +132,7 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
   case ArmConstants::MOVING:
   {
     if((GetController().GetGoal().position - GetMeasurement()) <
-           units::angle::degree_t(5))
+           units::angle::degree_t(1))
     {
       arm_Brake_In();
       m_ArmState = ArmConstants::MOVING;

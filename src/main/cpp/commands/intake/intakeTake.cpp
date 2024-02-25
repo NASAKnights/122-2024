@@ -22,8 +22,7 @@ intakeTake::intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm):
 // Called when the command is initially scheduled.
 void intakeTake::Initialize() {
   m_state = MOVING;
-  m_arm->SetGoal(units::angle::degree_t(38.5));
-  m_arm->Enable();
+  m_arm->handle_Setpoint(units::angle::degree_t(38.5));
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -31,6 +30,8 @@ void intakeTake::Execute() {
   if(indexer->hasNote()){
     m_state = IDLE;
   }
+  m_arm->handle_Setpoint(units::angle::degree_t(38.5));
+
   switch (m_state) {
     case MOVING:
     {
