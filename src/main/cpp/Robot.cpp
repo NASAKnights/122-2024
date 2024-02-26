@@ -13,6 +13,7 @@
 #include "frc2/command/InstantCommand.h"
 #include "util/NKTrajectoryManager.hpp"
 #include <arm/Arm.h>
+#include <autos/Auto.h>
 
 Robot::Robot() { this->CreateRobot(); }
 
@@ -66,6 +67,8 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
+  m_arm.arm_Brake_In();
+
 }
 
 /**
@@ -100,6 +103,9 @@ void Robot::SimulationPeriodic() {}
  */
 void Robot::CreateRobot() {
   // Initialize all of your commands and subsystems here
+      frc::SmartDashboard::PutNumber("ARM_Angel",100);
+      frc::SmartDashboard::PutNumber("ARM_Speed",-120);
+
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this] {
         auto leftXAxis =
@@ -124,7 +130,7 @@ void Robot::CreateRobot() {
 
     m_arm.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        m_arm.handle_Setpoint(units::degree_t(70));
+        m_arm.handle_Setpoint(units::degree_t(ARM_Angel));
       },
       {&m_arm}));
 
@@ -151,7 +157,14 @@ void Robot::BindCommands() {
         m_arm.Disable();
       },
       {&m_arm}).ToPtr()))
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, -100, 78).ToPtr());
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, ARM_Speed, ARM_Angel).ToPtr());
+
+  frc2::JoystickButton(&m_operatorController, 5).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
+        m_arm.Disable();
+      },
+      {&m_arm}).ToPtr()))
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, -15, 145).ToPtr());
 
     frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr());
@@ -194,14 +207,23 @@ void Robot::BindCommands() {
  * Returns the Autonomous Command
  */
 frc2::CommandPtr Robot::GetAutonomousCommand() {
-  return TrajectoryFollower(&m_swerveDrive,
-                            &NKTrajectoryManager::GetTrajectory("NewPath"))
-      .ToPtr();
-  // return frc2::InstantCommand().ToPtr();
+  // return TrajectoryFollower(&m_swerveDrive,
+  //                           &NKTrajectoryManager::GetTrajectory(autoName))
+  //     .ToPtr();
+  return Auto(&m_swerveDrive, &m_shooter, &m_indexer, &m_intake, &m_arm, 1)
+            .ToPtr();
 }
 
 void Robot::DisabledPeriodic() {
   m_arm.Disable();
+
+  if(autoColor.Get()){
+    autoName = 1;
+  }
+  else{
+    autoName = 2;
+  }
+  frc::SmartDashboard::PutNumber("Auto", autoName);
 }
 
 /**
@@ -217,6 +239,9 @@ void Robot::UpdateDashboard() {
   // frc::SmartDashboard::PutNumber("Swerve Drive Heading",
   //                                m_swerveDrive.GetHeading().Degrees().value());
   frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
+   ARM_Angel = frc::SmartDashboard::GetNumber("ARM_Angel",100);
+   ARM_Speed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
+
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();
   

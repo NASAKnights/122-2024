@@ -6,6 +6,8 @@
 #include "subsystems/Shooter.h"
 #include "subsystems/Indexer.h"
 #include "Constants.hpp"
+#include <frc/smartdashboard/SmartDashboard.h>
+
 
 // Shooter shoooter;
 // Indexer indexing;
@@ -25,6 +27,9 @@ Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem
 
 // Called when the command is initially scheduled.
 void Shoot::Initialize() {
+   
+  shootSpeed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
+  shootAngle = frc::SmartDashboard::GetNumber("ARM_Angel",100);
   m_state = SPINUP;
 }
 
@@ -37,7 +42,7 @@ void Shoot::Execute() {
   {
     shoooter->Shoot(shootSpeed);//angle is 78
     arm->handle_Setpoint(units::angle::degree_t(shootAngle));
-    if(shoooter->atSetpoint() && arm->GetController().AtGoal())
+    if(shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE)
     {
       m_state = SHOOTING;
     }

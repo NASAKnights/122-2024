@@ -60,6 +60,8 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   void handle_Setpoint(units::angle::degree_t);
   // void get_pigeon();
   units::time::second_t time_brake_released;
+    ArmConstants::ArmState m_ArmState;
+
 
   void UseOutput(double output, State setpoint) override;
   units::degree_t GetMeasurement() override;
@@ -70,6 +72,5 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   ctre::phoenix6::hardware::Pigeon2 arm_pigeon{9, "NKCANivore"};
   float ARM_Angle;
   frc::PWM Linear;
-  ArmConstants::ArmState m_ArmState;
 
 };

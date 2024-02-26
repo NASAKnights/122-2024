@@ -48,6 +48,13 @@ private:
   Indexer m_indexer;
   Intake m_intake;
 
+  double autoName = 0;
+  double ARM_Angel = 100;
+  double ARM_Speed = -120;
+
+
+  frc::DigitalInput autoColor{9};
+
   // PS4 controllers
   frc::Joystick m_driverController{DriveConstants::kDriverPort};
   frc::Joystick m_operatorController{DriveConstants::kOperatorPort};

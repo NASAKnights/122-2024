@@ -61,16 +61,16 @@ const auto kTrackwidthMeters = 0.4_m;
 const auto kWheelbaseMeters = 0.4_m;
 
 const double kDefaultAxisDeadband = 0.15;
-const units::meters_per_second_t kMaxTranslationalVelocity{1.5};
+const units::meters_per_second_t kMaxTranslationalVelocity{2};
 
-const units::radians_per_second_t kMaxRotationalVelocity{2};
+const units::radians_per_second_t kMaxRotationalVelocity{3};
 const bool kIsFieldRelative = true;
 
 const frc::Rotation2d kFrontLeftOffset{-units::degree_t{-40}}; // module 1
 const frc::Rotation2d kFrontRightOffset{
     -units::degree_t{75}}; // module 2
 const frc::Rotation2d kBackLeftOffset{
-    -units::degree_t{74}}; // module 3
+    -units::degree_t{74-24}}; // module 3
 const frc::Rotation2d kBackRightOffset{
     -units::degree_t{178}}; // 265.517 // -93.867 // module 4
 
@@ -121,7 +121,7 @@ const bool kSteerMotorInverted = true;
 const auto kDriveMotorNeutral =
     ctre::phoenix6::signals::NeutralModeValue::Brake;
 const auto kSteerMotorNeutral =
-    ctre::phoenix6::signals::NeutralModeValue::Coast; // set back to brake to be
+    ctre::phoenix6::signals::NeutralModeValue::Brake; // set back to brake to be
                                                       // amazing
 const bool kEncoderInverted = false;
 
