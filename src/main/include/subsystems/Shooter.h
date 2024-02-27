@@ -7,6 +7,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/DigitalInput.h>
+#include <rev/CANSparkMax.h>
 
 class Shooter : public frc2::SubsystemBase {
  public:
@@ -23,14 +24,14 @@ class Shooter : public frc2::SubsystemBase {
   bool atSetpoint();
 
  private:
-  
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-  ctre::phoenix6::hardware::TalonFX m_shooterMotorMain{6};
-  ctre::phoenix6::hardware::TalonFX m_shooterMotorFollow{7};
-  ctre::phoenix6::controls::Follower m_follower;
 
-  ctre::phoenix6::controls::VelocityVoltage velocityControl;
+  rev::CANSparkMax m_shootMotorTop;
+  rev::CANSparkMax m_shootMotorBot;
+  rev::SparkMaxPIDController m_shootPIDTop = m_shootMotorTop.GetPIDController();
+  rev::SparkMaxPIDController m_shootPIDBot = m_shootMotorBot.GetPIDController();
+
+  rev::SparkMaxRelativeEncoder m_shootEncoderTop = m_shootMotorTop.GetEncoder();
+  rev::SparkMaxRelativeEncoder m_shootEncoderBot = m_shootMotorBot.GetEncoder();
 
   bool running = false;
   int SHOOT_speed;

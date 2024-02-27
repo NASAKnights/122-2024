@@ -6,7 +6,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 namespace ShooterConstants {
-    const double kShootP = 0.2;
+    const double kShootP = 0.02;
     const double kShootI = 0.0;
     const double kShootD = 0.0;
     const double kShootS = 0.02496863326;
@@ -19,40 +19,30 @@ namespace ShooterConstants {
         ctre::phoenix6::signals::NeutralModeValue::Brake; 
 }
 
-    Shooter::Shooter() :
-    m_follower(m_shooterMotorMain.GetDeviceID(), false),
-    velocityControl(units::turns_per_second_t {0.0})
+Shooter::Shooter() :
+    m_shootMotorTop{6, rev::CANSparkMaxLowLevel::MotorType::kBrushless},
+    m_shootMotorBot{7, rev::CANSparkMaxLowLevel::MotorType::kBrushless}
 { 
     
-    ctre::phoenix6::configs::TalonFXConfiguration shooterConfig{};
+    m_shootPIDTop.SetP(ShooterConstants::kShootP);
+    m_shootPIDTop.SetI(ShooterConstants::kShootI);
+    m_shootPIDTop.SetD(ShooterConstants::kShootD);
+    m_shootPIDBot.SetP(ShooterConstants::kShootP);
+    m_shootPIDBot.SetI(ShooterConstants::kShootI);
+    m_shootPIDBot.SetD(ShooterConstants::kShootD);
 
-    ctre::phoenix6::configs::Slot0Configs shootSlot0Configs{};
-    shootSlot0Configs.kP = ShooterConstants::kShootP;
-    shootSlot0Configs.kI = ShooterConstants::kShootI;
-    shootSlot0Configs.kD = ShooterConstants::kShootD;
-    shootSlot0Configs.kS = ShooterConstants::kShootS;
-    shootSlot0Configs.kV = ShooterConstants::kShootV;
-    shootSlot0Configs.kA = ShooterConstants::kShootA;
+    m_shootMotorTop.SetSecondaryCurrentLimit(35);
+    m_shootMotorBot.SetSecondaryCurrentLimit(35);
+
+    m_shootMotorTop.SetSmartCurrentLimit(30);
+    m_shootMotorBot.SetSmartCurrentLimit(30);
     
-    shooterConfig.Slot0 = shootSlot0Configs;
+    m_shootMotorTop.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    m_shootMotorBot.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
 
-    ctre::phoenix6::configs::CurrentLimitsConfigs shootCurrentLimitConfig{};
-    shootCurrentLimitConfig.SupplyCurrentLimitEnable = true;
-    shootCurrentLimitConfig.SupplyCurrentLimit = 35;
-    shootCurrentLimitConfig.SupplyCurrentThreshold = 40;
-    shootCurrentLimitConfig.SupplyTimeThreshold = 0.1;
-
-    shooterConfig.CurrentLimits = shootCurrentLimitConfig;
-    m_shooterMotorMain.SetNeutralMode(ShooterConstants::kShootMotorNeutral);
-    // m_shooterMotorMain.SetInverted(false);
-    m_shooterMotorFollow.SetNeutralMode(ShooterConstants::kShootMotorNeutral);
-
-    m_shooterMotorMain.GetConfigurator().Apply(shooterConfig);
-
-    m_shooterMotorFollow.SetControl(m_follower);
-
-    // frc::SmartDashboard::PutNumber("Shooter Speed", 50);
+    m_shootMotorBot.SetInverted(true);
     
+
 }
 
 void Shooter::Periodic() {
@@ -61,22 +51,27 @@ void Shooter::Periodic() {
 
 
 void Shooter::Shoot(double shootSpeed) {
-    frc::SmartDashboard::PutNumber("Shooter Velocity", m_shooterMotorMain.GetVelocity().GetValue().value());
-
-    m_shooterMotorMain.SetControl(
-    velocityControl.WithVelocity(units::turns_per_second_t {shootSpeed}));
+    frc::SmartDashboard::PutNumber("Shooter Velocity", m_shootEncoderTop.GetVelocity());
+    // m_shootPIDTop.SetReference(shootSpeed, rev::CANSparkBase::ControlType::kVelocity);
+    // m_shootPIDBot.SetReference(shootSpeed, rev::CANSparkBase::ControlType::kVelocity);
+    m_shootMotorTop.Set(-0.72);
+    m_shootMotorBot.Set(0.7);
+    
     running = true;
     SHOOT_speed = shootSpeed;
 }
 
 void Shooter::stopShooter() {
-    m_shooterMotorMain.SetControl(
-        velocityControl.WithVelocity(units::turns_per_second_t {0.0}));
+
+    m_shootMotorTop.Set(0.0);
+    m_shootMotorBot.Set(0.0);
+    
     running = false;
 }
 
 double Shooter::getSpeed() {
-    return double {m_shooterMotorMain.GetVelocity().GetValue()};
+    // return double {m_shooterMotorMain.GetVelocity().GetValue()};
+    return m_shootEncoderTop.GetVelocity();
 }
 
 double Shooter::getShuffleGoal() {

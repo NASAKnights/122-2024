@@ -86,12 +86,17 @@ private:
   // ----------------------
 
   nt::NetworkTableInstance networkTableInst;
-  std::string_view ntName = "camera_based_pose";
+  
+  std::string_view baseLink1 = "base_link_1";
+  std::string_view baseLink2 = "base_link_2";
+  std::string_view baseLink = "base_link";
   std::shared_ptr<nt::NetworkTable> poseTable;
   nt::DoubleArraySubscriber ntPoseSubscribe;
+  nt::DoubleArraySubscriber baseLink1Subscribe;
+  nt::DoubleArraySubscriber baseLink2Subscribe;
   frc::Quaternion rotation_q; //w, x, y, z
   frc::SwerveDrivePoseEstimator<4> m_poseEstimator;
 
   nt::DoubleArrayPublisher ntPosePublisher;
-  nt::DoubleArrayTopic ntPoseTopic;
+  
 };

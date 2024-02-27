@@ -46,10 +46,12 @@ SwerveDrive::SwerveDrive()
   networkTableInst.StartServer();
 
   poseTable = networkTableInst.GetTable("ROS2Bridge");
-  ntPoseSubscribe = poseTable->GetDoubleArrayTopic(ntName).Subscribe(
+  baseLink1Subscribe = poseTable->GetDoubleArrayTopic(baseLink1).Subscribe(
+      {}, {.periodic = 0.01, .sendAll = true});
+  baseLink2Subscribe = poseTable->GetDoubleArrayTopic(baseLink2).Subscribe(
       {}, {.periodic = 0.01, .sendAll = true});
 
-  ntPosePublisher = ntPoseTopic.Publish();
+  ntPosePublisher = poseTable->GetDoubleArrayTopic(baseLink).Publish();
 }
 
 // This method will be called once per scheduler run
