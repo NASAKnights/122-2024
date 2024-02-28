@@ -51,19 +51,20 @@ SwerveDrive::SwerveDrive()
   baseLink2Subscribe = poseTable->GetDoubleArrayTopic(baseLink2).Subscribe(
       {}, {.periodic = 0.01, .sendAll = true});
 
-  ntPosePublisher = poseTable->GetDoubleArrayTopic(baseLink).Publish();
+  baseLinkPublisher = poseTable->GetDoubleArrayTopic(baseLink).Publish();
 }
 
 // This method will be called once per scheduler run
 void SwerveDrive::Periodic() {
   // getCameraResults();
   // sensor fusion? EKF (eek kinda fun) (extended Kalman filter)
-  // publishOdometry(odometry.GetPose());
-
+  PublishOdometry(odometry.GetPose());
+  UpdatePoseEstimate();
+  
   PrintNetworkTableValues();
 
   frc::SmartDashboard::PutNumber("Heading", GetHeading().Degrees().value());
-  UpdateOdometry();
+  // UpdateOdometry();
 
 }
 
@@ -147,11 +148,27 @@ void SwerveDrive::SetReference(frc::Pose2d desiredPose) {
 //--------------------------------------------
 
 void SwerveDrive::UpdatePoseEstimate() {
-  auto result = ntPoseSubscribe.GetAtomic();
+  auto result1 = baseLink1Subscribe.GetAtomic();
+  auto result2 = baseLink2Subscribe.GetAtomic();
   // auto time = result.time; // time stamp
 
-  if (result.value.size() > 0) {
-    auto compressedResults = result.value;
+  if (result1.value.size() > 0) {
+    auto compressedResults = result1.value;
+    rotation_q = frc::Quaternion(compressedResults.at(6),
+                                     compressedResults.at(3),
+                                     compressedResults.at(4),
+                                     compressedResults.at(5));
+
+    auto posTranslation =frc::Translation3d(units::meter_t{compressedResults.at(0)},
+                           units::meter_t{compressedResults.at(1)},
+                           units::meter_t{compressedResults.at(2)});
+    frc::Pose3d cameraPose = frc::Pose3d(posTranslation, frc::Rotation3d(rotation_q));
+    frc::Pose2d visionMeasurement2d = cameraPose.ToPose2d();
+    m_poseEstimator.AddVisionMeasurement(visionMeasurement2d, 
+                          units::second_t {compressedResults.at(7)});
+  }
+  if (result2.value.size() > 0) {
+    auto compressedResults = result2.value;
     rotation_q = frc::Quaternion(compressedResults.at(6),
                                      compressedResults.at(3),
                                      compressedResults.at(4),
@@ -172,7 +189,7 @@ void SwerveDrive::UpdatePoseEstimate() {
 void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
   double poseDeconstruct[]{double{odometryPose.X()}, double{odometryPose.Y()}};
   int64_t time = nt::Now();
-  ntPosePublisher.Set(poseDeconstruct, time);
+  baseLinkPublisher.Set(poseDeconstruct, time);
 }
 
 void SwerveDrive::PrintNetworkTableValues() {

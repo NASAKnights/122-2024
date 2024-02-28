@@ -91,12 +91,12 @@ private:
   std::string_view baseLink2 = "base_link_2";
   std::string_view baseLink = "base_link";
   std::shared_ptr<nt::NetworkTable> poseTable;
-  nt::DoubleArraySubscriber ntPoseSubscribe;
+  
   nt::DoubleArraySubscriber baseLink1Subscribe;
   nt::DoubleArraySubscriber baseLink2Subscribe;
   frc::Quaternion rotation_q; //w, x, y, z
   frc::SwerveDrivePoseEstimator<4> m_poseEstimator;
 
-  nt::DoubleArrayPublisher ntPosePublisher;
+  nt::DoubleArrayPublisher baseLinkPublisher;
   
 };

@@ -30,9 +30,10 @@ Shooter::Shooter() :
     m_shootPIDBot.SetP(ShooterConstants::kShootP);
     m_shootPIDBot.SetI(ShooterConstants::kShootI);
     m_shootPIDBot.SetD(ShooterConstants::kShootD);
+    // possible setff = 0.39
 
-    m_shootMotorTop.SetSecondaryCurrentLimit(35);
-    m_shootMotorBot.SetSecondaryCurrentLimit(35);
+    // m_shootMotorTop.SetSecondaryCurrentLimit(35);
+    // m_shootMotorBot.SetSecondaryCurrentLimit(35);
 
     m_shootMotorTop.SetSmartCurrentLimit(30);
     m_shootMotorBot.SetSmartCurrentLimit(30);
