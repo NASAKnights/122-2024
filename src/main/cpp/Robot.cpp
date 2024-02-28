@@ -203,6 +203,15 @@ void Robot::BindCommands() {
       },
       {&m_arm}).ToPtr()));
 
+  frc2::JoystickButton(&m_driverController, 4).OnTrue(frc2::InstantCommand(
+    [this] {
+      m_climber.moveMotor();
+    }, {&m_climber}).ToPtr())
+    .OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+        m_climber.stopMotor();
+    },
+      {&m_climber}).ToPtr()));
+
 }
 /**
  * Returns the Autonomous Command

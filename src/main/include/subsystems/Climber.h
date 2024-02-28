@@ -21,6 +21,9 @@ class Climber : public frc2::SubsystemBase {
   void lock();
   void unlock();
 
+  void moveMotor();
+  void stopMotor();
+
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
@@ -28,5 +31,7 @@ class Climber : public frc2::SubsystemBase {
   ctre::phoenix6::hardware::TalonFX climberMotor2;
 
   frc::Servo lockServo;
+
+  ctre::phoenix6::controls::Follower climberFollower;
 
 };

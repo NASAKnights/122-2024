@@ -14,6 +14,7 @@
 #include "arm/Arm.h"
 #include "commands/shooter/shoot.h"
 #include "commands/intake/intakeTake.h"
+#include "subsystems/Climber.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -47,6 +48,7 @@ private:
   Shooter m_shooter;
   Indexer m_indexer;
   Intake m_intake;
+  Climber m_climber;
 
   double autoName = 0;
   double ARM_Angel = 100;
