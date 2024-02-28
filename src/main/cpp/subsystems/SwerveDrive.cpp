@@ -27,11 +27,11 @@ SwerveDrive::SwerveDrive()
                         DriveConstants::kFrontRightPosition,
                         DriveConstants::kBackLeftPosition, 
                         DriveConstants::kBackRightPosition}},
-      odometry{kSwerveKinematics,
-               frc::Rotation2d(units::degree_t{m_pigeon.GetAngle()}),
-               {modules[0].GetPosition(), modules[1].GetPosition(),
-                modules[2].GetPosition(), modules[3].GetPosition()},
-               frc::Pose2d()},
+      // odometry{kSwerveKinematics,
+      //          frc::Rotation2d(units::degree_t{m_pigeon.GetAngle()}),
+      //          {modules[0].GetPosition(), modules[1].GetPosition(),
+      //           modules[2].GetPosition(), modules[3].GetPosition()},
+      //          frc::Pose2d()},
       pidX{0.9, 1e-4, 0}, pidY{0.9, 1e-4, 0}, pidRot{0.15, 0, 0},
       networkTableInst(nt::NetworkTableInstance::GetDefault()),
       m_poseEstimator{
@@ -58,7 +58,8 @@ SwerveDrive::SwerveDrive()
 void SwerveDrive::Periodic() {
   // getCameraResults();
   // sensor fusion? EKF (eek kinda fun) (extended Kalman filter)
-  PublishOdometry(odometry.GetPose());
+  
+  PublishOdometry(m_poseEstimator.GetEstimatedPosition());
   UpdatePoseEstimate();
   
   PrintNetworkTableValues();
@@ -112,13 +113,14 @@ std::array<frc::SwerveModulePosition, 4> SwerveDrive::GetModulePositions() {
 }
 
 void SwerveDrive::ResetPose(frc::Pose2d position) {
-  odometry.ResetPosition(GetHeading(), GetModulePositions(), position);
+  // odometry.ResetPosition(GetHeading(), GetModulePositions(), position);
+  m_poseEstimator.ResetPosition(GetHeading(), GetModulePositions(), position);
 }
 
-frc::Pose2d SwerveDrive::GetPose() { return odometry.GetPose(); }
+frc::Pose2d SwerveDrive::GetPose() { return m_poseEstimator.GetEstimatedPosition(); }
 
 void SwerveDrive::UpdateOdometry() {
-  odometry.Update(GetHeading(), GetModulePositions());
+  // odometry.Update(GetHeading(), GetModulePositions());
 }
 
 void SwerveDrive::InitializePID() {
@@ -187,8 +189,11 @@ void SwerveDrive::UpdatePoseEstimate() {
 }
 
 void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
-  double poseDeconstruct[]{double{odometryPose.X()}, double{odometryPose.Y()}};
-  int64_t time = nt::Now();
+  double time = nt::Now()/(1e6);
+  Eigen::Vector3d odoRotation = Eigen::Vector3d(0.0, 0.0, double(odometryPose.Rotation().Radians()));
+  frc::Quaternion odoPoseQ = frc::Quaternion::FromRotationVector(odoRotation);
+  double poseDeconstruct[]{double{odometryPose.X()}, double{odometryPose.Y()},0.0,
+        odoPoseQ.X(),odoPoseQ.Y(),odoPoseQ.Z(),odoPoseQ.W(), time};
   baseLinkPublisher.Set(poseDeconstruct, time);
 }
 

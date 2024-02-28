@@ -76,7 +76,7 @@ private:
   frc::SwerveDriveKinematics<4> kSwerveKinematics;
 
   frc::ChassisSpeeds speeds;
-  frc::SwerveDriveOdometry<4> odometry;
+  // frc::SwerveDriveOdometry<4> odometry;
 
   frc::PIDController pidX;
   frc::PIDController pidY;
