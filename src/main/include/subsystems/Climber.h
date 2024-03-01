@@ -7,6 +7,14 @@
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/Servo.h>
+#include <frc/DigitalInput.h>
+
+enum ClimberState{
+   UP,
+   DOWN,
+   CLIMBER_DONE
+  };  
+
 
 class Climber : public frc2::SubsystemBase {
  public:
@@ -20,9 +28,11 @@ class Climber : public frc2::SubsystemBase {
   void down();
   void lock();
   void unlock();
-
+  void move_Climber(ClimberState);
+  void Zero();
   void moveMotor();
   void stopMotor();
+  ClimberState m_ClimberState;
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -31,7 +41,7 @@ class Climber : public frc2::SubsystemBase {
   ctre::phoenix6::hardware::TalonFX climberMotor2;
 
   frc::Servo lockServo;
-
+  frc::DigitalInput bottom{2};
   ctre::phoenix6::controls::Follower climberFollower;
 
 };

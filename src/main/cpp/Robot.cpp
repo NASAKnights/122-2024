@@ -135,6 +135,12 @@ void Robot::CreateRobot() {
       },
       {&m_arm}));
 
+    m_arm.SetDefaultCommand(frc2::RunCommand(
+      [this] {
+        m_arm.handle_Setpoint(units::degree_t(ARM_Angel));
+      },
+      {&m_arm}));
+
   // Configure the button bindings
   BindCommands();
   m_swerveDrive.ResetHeading();
@@ -151,6 +157,16 @@ void Robot::BindCommands() {
   frc2::JoystickButton(&m_driverController, 1)
       .OnTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
         return m_swerveDrive.ResetHeading();
+      }))); // TODO assign as test
+
+   frc2::JoystickButton(&m_operatorController, 10)
+      .WhileTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
+        return m_climber.move_Climber(ClimberState::DOWN);
+      }))); // TODO assign as test
+
+    frc2::JoystickButton(&m_operatorController, 11)
+      .WhileTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
+        return m_climber.move_Climber(ClimberState::UP);
       }))); // TODO assign as test
 
   frc2::JoystickButton(&m_operatorController, 6).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
