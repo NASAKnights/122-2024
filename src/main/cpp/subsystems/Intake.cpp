@@ -18,7 +18,7 @@ void Intake::runIntake() {
 }
 
 void Intake::intakeIndex() {
-    m_intakeMotor.Set(ControlMode::PercentOutput, 0.5);
+    m_intakeMotor.Set(ControlMode::PercentOutput, 0.85);
 }
 
 void Intake::runIntakeReverse() {

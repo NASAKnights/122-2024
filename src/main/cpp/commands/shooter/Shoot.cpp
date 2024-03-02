@@ -28,7 +28,7 @@ Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem
 // Called when the command is initially scheduled.
 void Shoot::Initialize() {
    
-  shootSpeed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
+  shootSpeed = std::min(std::fabs(frc::SmartDashboard::GetNumber("ARM_Speed",0.4)), 0.9);
   shootAngle = frc::SmartDashboard::GetNumber("ARM_Angel",100);
   m_state = SPINUP;
 }
@@ -42,15 +42,15 @@ void Shoot::Execute() {
   {
     shoooter->Shoot(shootSpeed);//angle is 78
     arm->handle_Setpoint(units::angle::degree_t(shootAngle));
-    if(shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE)
-    {
-      m_state = SHOOTING;
-    }
+    intake->intakeIndex();
+    // if(shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE)
+    // {
+    //   m_state = SHOOTING;
+    // }
     break;
   }
   case SHOOTING:
   {
-    intake->intakeIndex();
     shoooter->Shoot(shootSpeed);
     break;
   }

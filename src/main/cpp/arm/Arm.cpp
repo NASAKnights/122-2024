@@ -37,7 +37,11 @@ ArmSubsystem::ArmSubsystem()
 
     m_encoder.SetDistancePerRotation(360);
     // m_encoder.SetPositionOffset(0.2);
-    Linear.SetBounds(units::time::microsecond_t{1140}, units::time::microsecond_t{0}, units::time::microsecond_t {0},  units::time::microsecond_t{0},  units::time::microsecond_t{1100});
+    Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
+                    0_ms, 
+                    0_ms,  
+                    0_ms,  
+                    units::time::microsecond_t{ArmConstants::kLinearMin});
   
     //Make pigeon kind of absolut
     arm_pigeon.SetYaw(units::angle::degree_t{m_encoder.GetDistance()});
@@ -98,12 +102,6 @@ void ArmSubsystem::printLog()
     
     frc::SmartDashboard::PutNumber("Brake Time", (frc::GetTime() - time_brake_released).value());
     frc::SmartDashboard::PutNumber("Arm State", m_ArmState);
-    
-    Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearServoMax}, 
-                    units::time::microsecond_t{0}, 
-                    units::time::microsecond_t {0},  
-                    units::time::microsecond_t{0},  
-                    units::time::microsecond_t{ArmConstants::kLinearServoMin});
 
 }
 

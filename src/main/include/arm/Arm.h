@@ -43,8 +43,8 @@ const int kArmContinuousCurrentLimit = 35;
 const int kArmPeakCurrentLimit = 60;
 const double kArmPeakCurrentDuration = 0.1;
 
-const int kLinearServoMax = 1140;
-const int kLinearServoMin = 1100;
+const int kLinearMax = 1140;
+const int kLinearMin = 1100;
 
 } // namespace ArmConstants
 

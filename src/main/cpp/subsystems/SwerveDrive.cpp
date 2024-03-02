@@ -27,11 +27,11 @@ SwerveDrive::SwerveDrive()
                         DriveConstants::kFrontRightPosition,
                         DriveConstants::kBackLeftPosition, 
                         DriveConstants::kBackRightPosition}},
-      odometry{kSwerveKinematics,
-               frc::Rotation2d(units::degree_t{m_pigeon.GetAngle()}),
-               {modules[0].GetPosition(), modules[1].GetPosition(),
-                modules[2].GetPosition(), modules[3].GetPosition()},
-               frc::Pose2d()},
+      // odometry{kSwerveKinematics,
+      //          frc::Rotation2d(units::degree_t{m_pigeon.GetAngle()}),
+      //          {modules[0].GetPosition(), modules[1].GetPosition(),
+      //           modules[2].GetPosition(), modules[3].GetPosition()},
+      //          frc::Pose2d()},
       pidX{0.9, 1e-4, 0}, pidY{0.9, 1e-4, 0}, pidRot{0.15, 0, 0},
       networkTableInst(nt::NetworkTableInstance::GetDefault()),
       m_poseEstimator{
@@ -46,22 +46,26 @@ SwerveDrive::SwerveDrive()
   networkTableInst.StartServer();
 
   poseTable = networkTableInst.GetTable("ROS2Bridge");
-  ntPoseSubscribe = poseTable->GetDoubleArrayTopic(ntName).Subscribe(
+  baseLink1Subscribe = poseTable->GetDoubleArrayTopic(baseLink1).Subscribe(
+      {}, {.periodic = 0.01, .sendAll = true});
+  baseLink2Subscribe = poseTable->GetDoubleArrayTopic(baseLink2).Subscribe(
       {}, {.periodic = 0.01, .sendAll = true});
 
-  ntPosePublisher = ntPoseTopic.Publish();
+  baseLinkPublisher = poseTable->GetDoubleArrayTopic(baseLink).Publish();
 }
 
 // This method will be called once per scheduler run
 void SwerveDrive::Periodic() {
   // getCameraResults();
   // sensor fusion? EKF (eek kinda fun) (extended Kalman filter)
-  // publishOdometry(odometry.GetPose());
-
+  
+  PublishOdometry(m_poseEstimator.GetEstimatedPosition());
+  UpdatePoseEstimate();
+  
   PrintNetworkTableValues();
 
   frc::SmartDashboard::PutNumber("Heading", GetHeading().Degrees().value());
-  UpdateOdometry();
+  // UpdateOdometry();
 
 }
 
@@ -109,13 +113,14 @@ std::array<frc::SwerveModulePosition, 4> SwerveDrive::GetModulePositions() {
 }
 
 void SwerveDrive::ResetPose(frc::Pose2d position) {
-  odometry.ResetPosition(GetHeading(), GetModulePositions(), position);
+  // odometry.ResetPosition(GetHeading(), GetModulePositions(), position);
+  m_poseEstimator.ResetPosition(GetHeading(), GetModulePositions(), position);
 }
 
-frc::Pose2d SwerveDrive::GetPose() { return odometry.GetPose(); }
+frc::Pose2d SwerveDrive::GetPose() { return m_poseEstimator.GetEstimatedPosition(); }
 
 void SwerveDrive::UpdateOdometry() {
-  odometry.Update(GetHeading(), GetModulePositions());
+  // odometry.Update(GetHeading(), GetModulePositions());
 }
 
 void SwerveDrive::InitializePID() {
@@ -145,11 +150,27 @@ void SwerveDrive::SetReference(frc::Pose2d desiredPose) {
 //--------------------------------------------
 
 void SwerveDrive::UpdatePoseEstimate() {
-  auto result = ntPoseSubscribe.GetAtomic();
+  auto result1 = baseLink1Subscribe.GetAtomic();
+  auto result2 = baseLink2Subscribe.GetAtomic();
   // auto time = result.time; // time stamp
 
-  if (result.value.size() > 0) {
-    auto compressedResults = result.value;
+  if (result1.value.size() > 0) {
+    auto compressedResults = result1.value;
+    rotation_q = frc::Quaternion(compressedResults.at(6),
+                                     compressedResults.at(3),
+                                     compressedResults.at(4),
+                                     compressedResults.at(5));
+
+    auto posTranslation =frc::Translation3d(units::meter_t{compressedResults.at(0)},
+                           units::meter_t{compressedResults.at(1)},
+                           units::meter_t{compressedResults.at(2)});
+    frc::Pose3d cameraPose = frc::Pose3d(posTranslation, frc::Rotation3d(rotation_q));
+    frc::Pose2d visionMeasurement2d = cameraPose.ToPose2d();
+    m_poseEstimator.AddVisionMeasurement(visionMeasurement2d, 
+                          units::second_t {compressedResults.at(7)});
+  }
+  if (result2.value.size() > 0) {
+    auto compressedResults = result2.value;
     rotation_q = frc::Quaternion(compressedResults.at(6),
                                      compressedResults.at(3),
                                      compressedResults.at(4),
@@ -168,9 +189,12 @@ void SwerveDrive::UpdatePoseEstimate() {
 }
 
 void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
-  double poseDeconstruct[]{double{odometryPose.X()}, double{odometryPose.Y()}};
-  int64_t time = nt::Now();
-  ntPosePublisher.Set(poseDeconstruct, time);
+  double time = nt::Now()/(1e6);
+  Eigen::Vector3d odoRotation = Eigen::Vector3d(0.0, 0.0, double(odometryPose.Rotation().Radians()));
+  frc::Quaternion odoPoseQ = frc::Quaternion::FromRotationVector(odoRotation);
+  double poseDeconstruct[]{double{odometryPose.X()}, double{odometryPose.Y()},0.0,
+        odoPoseQ.X(),odoPoseQ.Y(),odoPoseQ.Z(),odoPoseQ.W(), time};
+  baseLinkPublisher.Set(poseDeconstruct, time);
 }
 
 void SwerveDrive::PrintNetworkTableValues() {
