@@ -67,7 +67,7 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
-  m_arm.arm_Brake_In();
+  // m_arm.arm_Brake_In();
 
 }
 
@@ -80,7 +80,7 @@ void Robot::TeleopPeriodic() {
 }
 
 void Robot::TeleopExit() {
-  m_arm.arm_Brake_Out();
+  // m_arm.arm_Brake_Out();
 }
 
 /**

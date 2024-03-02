@@ -49,7 +49,8 @@ ArmSubsystem::ArmSubsystem()
     //time_brake_released = frc::GetTime();
     // frc::SmartDashboard::PutNumber("Angle",100);
 
-    //Linear.SetSpeed()
+    //Linear.SetSpeed()%
+    m_ArmState = ArmConstants::BRAKED;
 }
 
 void ArmSubsystem::UseOutput(double output, State setpoint) {
@@ -62,7 +63,7 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
   if(fabs(output) < 1e-6 || GetController().AtGoal())
   {
     m_motor.SetVoltage(units::volt_t{0.0});
-      }
+  }
   else
   { 
     // Add the feedforward to the PID output to get the motor output
@@ -94,12 +95,15 @@ void ArmSubsystem::printLog()
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_Z",arm_pigeon.GetGravityVectorZ().GetValueAsDouble());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_Y",arm_pigeon.GetGravityVectorY().GetValueAsDouble());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_X",arm_pigeon.GetGravityVectorX().GetValueAsDouble());
-    double linearServoMax =  frc::SmartDashboard::GetNumber("linearServoMax",1200);
-    double linearServoDiff = frc::SmartDashboard::GetNumber("linearServoDiff", 80);
+    
     frc::SmartDashboard::PutNumber("Brake Time", (frc::GetTime() - time_brake_released).value());
     frc::SmartDashboard::PutNumber("Arm State", m_ArmState);
     
-    Linear.SetBounds(units::time::microsecond_t{linearServoMax}, units::time::microsecond_t{0}, units::time::microsecond_t {0},  units::time::microsecond_t{0},  units::time::microsecond_t{linearServoMax-linearServoDiff});
+    Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearServoMax}, 
+                    units::time::microsecond_t{0}, 
+                    units::time::microsecond_t {0},  
+                    units::time::microsecond_t{0},  
+                    units::time::microsecond_t{ArmConstants::kLinearServoMin});
 
 }
 
@@ -120,10 +124,13 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
   {
   case ArmConstants::BRAKED:
   {
-    if ((frc::GetTime() - time_brake_released).value() > 0.2)
+    if ((frc::GetTime() - time_brake_released).value() > 0.5)
     {
       m_ArmState = ArmConstants::MOVING;
       Enable();
+    }
+    else {
+      Disable();
     }
   break;
   }
