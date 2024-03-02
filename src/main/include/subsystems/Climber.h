@@ -8,12 +8,15 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/Servo.h>
 #include <frc/DigitalInput.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
-enum ClimberState{
-   UP,
-   DOWN,
-   CLIMBER_DONE
-  };  
+
+enum ResetState {
+  CLIMBER_EXTEND_START,
+  CLIMBER_EXTEND_MOVING,
+  CLIMBER_EXTEND_DONE,
+  CLIMBER_EXTEND_BRAKE_DISENGAGE
+};
 
 
 class Climber : public frc2::SubsystemBase {
@@ -25,14 +28,17 @@ class Climber : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
-  void down();
-  void lock();
-  void unlock();
-  void move_Climber(ClimberState);
-  void Zero();
+  void engage();
+  void disengage();
+  void setAngle(double angle);
+
+  void extend();
+  void retract();
+  
   void moveMotor();
   void stopMotor();
-  ClimberState m_ClimberState;
+  void disableBrake();
+  ResetState m_ClimberState;
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -41,7 +47,11 @@ class Climber : public frc2::SubsystemBase {
   ctre::phoenix6::hardware::TalonFX climberMotor2;
 
   frc::Servo lockServo;
-  frc::DigitalInput bottom{2};
+  frc::DigitalInput botLimit1{5};
+  
   ctre::phoenix6::controls::Follower climberFollower;
+  
+
+  units::time::second_t time_brake_released;
 
 };

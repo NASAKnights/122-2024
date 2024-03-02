@@ -54,6 +54,8 @@ private:
   double ARM_Angel = 100;
   double ARM_Speed = -120;
 
+  double servo_angle = 100;
+
 
   frc::DigitalInput autoColor{9};
 

@@ -81,6 +81,8 @@ void Robot::TeleopPeriodic() {
 
 void Robot::TeleopExit() {
   m_arm.arm_Brake_Out();
+  m_climber.engage();
+  m_climber.disableBrake();
 }
 
 /**
@@ -105,6 +107,7 @@ void Robot::CreateRobot() {
   // Initialize all of your commands and subsystems here
       frc::SmartDashboard::PutNumber("ARM_Angel",100);
       frc::SmartDashboard::PutNumber("ARM_Speed",-120);
+      frc::SmartDashboard::PutNumber("servo_angle",100);
 
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this] {
@@ -129,17 +132,11 @@ void Robot::CreateRobot() {
       {&m_swerveDrive}));
 
 
-    m_arm.SetDefaultCommand(frc2::RunCommand(
-      [this] {
-        m_arm.handle_Setpoint(units::degree_t(ARM_Angel));
-      },
-      {&m_arm}));
-
-    m_arm.SetDefaultCommand(frc2::RunCommand(
-      [this] {
-        m_arm.handle_Setpoint(units::degree_t(ARM_Angel));
-      },
-      {&m_arm}));
+    // m_arm.SetDefaultCommand(frc2::RunCommand(
+    //   [this] {
+    //     m_arm.handle_Setpoint(units::degree_t(ARM_Angel));
+    //   },
+    //   {&m_arm}));
 
   // Configure the button bindings
   BindCommands();
@@ -159,15 +156,30 @@ void Robot::BindCommands() {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
 
-   frc2::JoystickButton(&m_operatorController, 10)
-      .WhileTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
-        return m_climber.move_Climber(ClimberState::DOWN);
-      }))); // TODO assign as test
+  //  frc2::JoystickButton(&m_operatorController, 9)
+  //     .WhileTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
+  //       return m_climber.move_Climber(ClimberState::DOWN);
+  //     }))); // TODO assign as test
 
-    frc2::JoystickButton(&m_operatorController, 11)
-      .WhileTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
-        return m_climber.move_Climber(ClimberState::UP);
-      }))); // TODO assign as test
+    // frc2::JoystickButton(&m_operatorController, 10)
+    //   .WhileTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
+    //     return m_climber.move_Climber(ClimberState::UP);
+    //   }))); // TODO assign as test
+
+  frc2::JoystickButton(&m_operatorController, 9)
+    .WhileTrue(frc2::RunCommand([this] {
+      m_climber.engage();
+      m_climber.retract();
+    }, {&m_climber}).ToPtr());
+  
+  frc2::JoystickButton(&m_operatorController, 10)
+    .OnTrue(frc2::InstantCommand([this] {
+      m_climber.disengage();
+      m_climber.m_ClimberState = CLIMBER_EXTEND_START;
+    }, {&m_climber}).ToPtr())
+    .WhileTrue(frc2::RunCommand([this] {
+      return m_climber.extend();
+    }, {&m_climber}).ToPtr());
 
   frc2::JoystickButton(&m_operatorController, 6).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
         // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
@@ -194,39 +206,14 @@ void Robot::BindCommands() {
       return m_intake.stopIntake();
     }, {&m_intake}).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 2).OnTrue(frc2::InstantCommand(
-      [this] {
-        //108
-        m_arm.handle_Setpoint(units::degree_t(120)); //108
-     
-      },
-      {&m_arm}).ToPtr()
-      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        m_arm.Disable();
-      },
-      {&m_arm}).ToPtr()));
-
-  frc2::JoystickButton(&m_driverController, 3).OnTrue(frc2::InstantCommand(
-      [this] {
-        //54
-        //m_arm.SetGoal(units::degree_t(60)); //42.5
-        m_arm.Enable();
-      },
-      {&m_arm}).ToPtr()
-      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
-        m_arm.Disable();
-      },
-      {&m_arm}).ToPtr()));
-
-  frc2::JoystickButton(&m_driverController, 4).OnTrue(frc2::InstantCommand(
-    [this] {
-      m_climber.moveMotor();
-    }, {&m_climber}).ToPtr())
-    .OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        m_climber.stopMotor();
-    },
-      {&m_climber}).ToPtr()));
+  // frc2::JoystickButton(&m_driverController, 4).OnTrue(frc2::InstantCommand(
+  //   [this] {
+  //     m_climber.moveMotor();
+  //   }, {&m_climber}).ToPtr())
+  //   .OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+  //       m_climber.stopMotor();
+  //   },
+  //     {&m_climber}).ToPtr()));
 
 }
 /**
@@ -267,6 +254,7 @@ void Robot::UpdateDashboard() {
   frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
    ARM_Angel = frc::SmartDashboard::GetNumber("ARM_Angel",100);
    ARM_Speed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
+   servo_angle = frc::SmartDashboard::GetNumber("servo_angle",100);
 
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();

@@ -6,37 +6,40 @@
 Climber::Climber() : 
     climberMotor1(3),
     climberMotor2(4),
-    lockServo(3), // TODO: need to check number
+    lockServo(9), // TODO: need to check number
     climberFollower(climberMotor1.GetDeviceID(), false)
 {
 
     climberMotor2.SetControl(climberFollower);
-    Zero();
-    m_ClimberState = ClimberState::DOWN;
+    // Lift();
+    // m_ClimberState = ClimberState::DOWN;
 
 }
 
 // This method will be called once per scheduler run
-void Climber::Periodic() {}
-
-void Climber::Zero(){
-    while(!bottom.Get()){
-    climberMotor1.Set(-1.0);
-    }
-    climberMotor1.StopMotor();
-    climberMotor1.SetPosition(units::angle::turn_t{0});
+void Climber::Periodic() {
+  frc::SmartDashboard::PutBoolean("Climber at Bot?",botLimit1.Get());
 }
 
-void Climber::down() {
-
+void Climber::engage() {
+  lockServo.SetAngle(30);
 }
 
-void Climber::lock() {
-lockServo.SetAngle(145);
+void Climber::disengage() {
+  lockServo.SetAngle(50);
+  time_brake_released = frc::GetTime();
 }
 
-void Climber::unlock() {
-lockServo.SetAngle(100);
+void Climber::setAngle(double angle) {
+  lockServo.SetAngle(angle);
+}
+
+void Climber::disableBrake() {
+  
+  lockServo.SetOffline();
+  lockServo.SetDisabled(); 
+  lockServo.SetPulseTime(0_ms);
+  
 }
 
 void Climber::moveMotor() {
@@ -48,36 +51,85 @@ void Climber::stopMotor() {
     climberMotor1.Set(0.0);
     // climberMotor2.Set(0.0);
 }
-void Climber::move_Climber(ClimberState movment){
 
-  m_ClimberState == movment;
+void Climber::extend() {
+  switch (m_ClimberState)
+  {
+    case CLIMBER_EXTEND_START:
+    {
+      m_ClimberState = CLIMBER_EXTEND_BRAKE_DISENGAGE;
+      break;
+    }
+    case CLIMBER_EXTEND_BRAKE_DISENGAGE:
+    {
+      if ((frc::GetTime() - time_brake_released).value() > 0.2)
+      {
+        m_ClimberState = CLIMBER_EXTEND_MOVING;
+      }
+      break;
+    }
+    case CLIMBER_EXTEND_MOVING: 
+    {
+      climberMotor1.Set(-0.1);
+      if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 315)
+      {
+        climberMotor1.StopMotor();
+        m_ClimberState = CLIMBER_EXTEND_DONE;
+      }
+    }
+    case CLIMBER_EXTEND_DONE:
+    {
+      engage();
+      break;
+    }
+    default:
+      break;
+  }
+}
 
-switch (m_ClimberState)
-  {
-  case UP:
-  {
-   unlock();
-  if (climberMotor1.GetPosition().GetValueAsDouble() >= 5000)
-  {
-    climberMotor1.StopMotor();
-    m_ClimberState = ClimberState::CLIMBER_DONE;
-  }
-  break;
-  }
-  case DOWN:
-  { lock();
-    Zero();
-  break;
-  }
-  case CLIMBER_DONE:
-  {
-   lock();
-  break;
-  }
-  default:
-    break;
+void Climber::retract(){
+    
+    if (botLimit1.Get()) {
+      climberMotor1.Set(0.1);
+    }
+    else {
+      climberMotor1.StopMotor();
+      climberMotor1.SetPosition(units::angle::turn_t{0}); //TODO: Speed up later/set to position
+    }
 }
-}
+
+
+// void Climber::move_Climber(ClimberState movment){
+
+//  m_ClimberState == movment;
+
+// switch (m_ClimberState)
+//   {
+//     case UP:
+//     {
+//       disengage();
+//       if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 3000)
+//       {
+//         climberMotor1.StopMotor();
+//         m_ClimberState = ClimberState::CLIMBER_DONE;
+//       }
+//       break;
+//     }
+//     case DOWN:
+//     { 
+//       engage();
+//       Lift();
+//       break;
+//     }
+//     case CLIMBER_DONE:
+//     {
+//       engage();
+//       break;
+//     }
+//     default:
+//       break;
+//   }
+// }
 
 
 
