@@ -70,7 +70,7 @@ const frc::Rotation2d kFrontLeftOffset{-units::degree_t{-40}}; // module 1
 const frc::Rotation2d kFrontRightOffset{
     -units::degree_t{75}}; // module 2
 const frc::Rotation2d kBackLeftOffset{
-    -units::degree_t{74-24}}; // module 3
+    -units::degree_t{74-24-24-4}}; // module 3
 const frc::Rotation2d kBackRightOffset{
     -units::degree_t{178}}; // 265.517 // -93.867 // module 4
 

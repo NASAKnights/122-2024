@@ -28,8 +28,8 @@ Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem
 // Called when the command is initially scheduled.
 void Shoot::Initialize() {
    
-  shootSpeed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
-  shootAngle = frc::SmartDashboard::GetNumber("ARM_Angel",100);
+  // shootSpeed = std::min(std::fabs(frc::SmartDashboard::GetNumber("ARM_Speed",0.4)), 0.9);
+  // shootAngle = frc::SmartDashboard::GetNumber("ARM_Angel",100);
   m_state = SPINUP;
 }
 

@@ -55,8 +55,8 @@ void Shooter::Shoot(double shootSpeed) {
     frc::SmartDashboard::PutNumber("Shooter Velocity", m_shootEncoderTop.GetVelocity());
     // m_shootPIDTop.SetReference(shootSpeed, rev::CANSparkBase::ControlType::kVelocity);
     // m_shootPIDBot.SetReference(shootSpeed, rev::CANSparkBase::ControlType::kVelocity);
-    m_shootMotorTop.Set(-0.72);
-    m_shootMotorBot.Set(0.7);
+    m_shootMotorTop.Set(-shootSpeed);
+    m_shootMotorBot.Set(shootSpeed);
     
     running = true;
     SHOOT_speed = shootSpeed;
@@ -80,11 +80,11 @@ double Shooter::getShuffleGoal() {
 }
 
 bool Shooter::atSetpoint() {
-    if(fabs(getSpeed() - SHOOT_speed) < 10.0) // Rot/s
-    {
+    // if(fabs(fabs(getSpeed()) - (SHOOT_speed*11000.0)) < 10.0) // Rpm
+    // {
         return true;
-    }
-    return false;
+    // }
+    // return false;
 }
 
 bool Shooter::isRunning() {

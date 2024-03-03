@@ -33,6 +33,12 @@ SwerveModule::SwerveModule(int driveMotorID, int steerMotorID,
   configs::TalonFXConfiguration steerConfig{};
   configs::CANcoderConfiguration CANcoderConfig{};
 
+  configs::ClosedLoopRampsConfigs driveClosedRamps{};
+  driveClosedRamps.WithVoltageClosedLoopRampPeriod(0.5);
+  driveClosedRamps.WithDutyCycleClosedLoopRampPeriod(0.5);
+  driveClosedRamps.WithTorqueClosedLoopRampPeriod(0.5);
+  driveConfig.ClosedLoopRamps = driveClosedRamps;
+
   CANcoderConfig.MagnetSensor.AbsoluteSensorRange =
       signals::AbsoluteSensorRangeValue::Signed_PlusMinusHalf;
   CANcoderConfig.MagnetSensor.SensorDirection =
@@ -72,6 +78,8 @@ SwerveModule::SwerveModule(int driveMotorID, int steerMotorID,
   // m_driveMotor.SetInverted(kDriveMotorInverted);
   driveConfig.MotorOutput.Inverted = kDriveMotorInverted;
   steerConfig.MotorOutput.Inverted = kSteerMotorInverted;
+
+  
 
   m_steerMotor.SetNeutralMode(kSteerMotorNeutral);
   m_driveMotor.SetNeutralMode(kDriveMotorNeutral);

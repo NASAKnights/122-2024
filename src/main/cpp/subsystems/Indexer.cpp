@@ -4,7 +4,7 @@
 
 #include "subsystems/Indexer.h"
 
-Indexer::Indexer() : limitSwitch(2) {
+Indexer::Indexer() : limitSwitch(2), limitSwitch2(3) {
 
 }
 
@@ -12,5 +12,5 @@ Indexer::Indexer() : limitSwitch(2) {
 void Indexer::Periodic() {}
 
 bool Indexer::hasNote() {
-    return limitSwitch.Get();
+    return (limitSwitch.Get() || limitSwitch2.Get());
 }

@@ -153,19 +153,12 @@ void Robot::BindCommands() {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
 
-  frc2::JoystickButton(&m_operatorController, 6).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
-        m_arm.Disable();
-      },
-      {&m_arm}).ToPtr()))
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, ARM_Speed, ARM_Angel).ToPtr());
+  frc2::JoystickButton(&m_operatorController, 6)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.8, 80).ToPtr()); 
 
-  frc2::JoystickButton(&m_operatorController, 5).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
-        m_arm.Disable();
-      },
-      {&m_arm}).ToPtr()))
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, -15, 80).ToPtr()); // -15, 145
+
+  frc2::JoystickButton(&m_operatorController, 5)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.4, 145).ToPtr()); // -15, 145
 
     frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr());
@@ -178,30 +171,14 @@ void Robot::BindCommands() {
       return m_intake.stopIntake();
     }, {&m_intake}).ToPtr());
 
-  frc2::JoystickButton(&m_driverController, 2).OnTrue(frc2::InstantCommand(
-      [this] {
-        //108
-        m_arm.handle_Setpoint(units::degree_t(120)); //108
-     
-      },
-      {&m_arm}).ToPtr()
-      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        m_arm.Disable();
-      },
-      {&m_arm}).ToPtr()));
 
   frc2::JoystickButton(&m_driverController, 3).OnTrue(frc2::InstantCommand(
       [this] {
-        //54
-        //m_arm.SetGoal(units::degree_t(60)); //42.5
-        m_arm.Enable();
-      },
-      {&m_arm}).ToPtr()
+        frc::SmartDashboard::PutNumber("ARM_Angel", 40);
+      }).ToPtr()
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
-        m_arm.Disable();
-      },
-      {&m_arm}).ToPtr()));
+        frc::SmartDashboard::PutNumber("ARM_Angel", 70);
+      }).ToPtr()));
 
 }
 /**
