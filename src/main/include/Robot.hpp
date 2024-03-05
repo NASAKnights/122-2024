@@ -69,4 +69,5 @@ private:
   void BindCommands();
   frc2::CommandPtr GetAutonomousCommand();
   void UpdateDashboard();
+  void Arm_Position();
 };

@@ -18,6 +18,7 @@
 #include "util/NKTrajectoryManager.hpp"
 #include <arm/Arm.h>
 #include <autos/Auto.h>
+#include <cmath>
 
 Robot::Robot() { this->CreateRobot(); }
 
@@ -243,8 +244,21 @@ void Robot::UpdateDashboard() {
 
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();
+  Arm_Position();
   
 }
+
+void Robot::Arm_Position()
+{  frc::Pose2d blue_Speaker_Pos = frc::Pose2d(0_m  , units::length::meter_t{5.583}, frc::Rotation2d{}); 
+   auto currentPos =m_swerveDrive.GetPose();
+   auto robot2Speaker = currentPos.RelativeTo(blue_Speaker_Pos);
+   float distance = sqrt(robot2Speaker.X().value()*robot2Speaker.X().value()+robot2Speaker.Y().value()*robot2Speaker.Y().value());
+   frc::SmartDashboard::PutNumber("Distance",distance);
+  
+
+
+}
+
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif
