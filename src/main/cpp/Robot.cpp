@@ -194,18 +194,22 @@ void Robot::BindCommands() {
  * Returns the Autonomous Command
  */
 // frc2::CommandPtr Robot::GetAutonomousCommand() {
-//   // return TrajectoryFollower(&m_swerveDrive,
-//   //                           &NKTrajectoryManager::GetTrajectory(autoName))
-//   //     .ToPtr();
-//   // return Auto(&m_swerveDrive, &m_shooter, &m_indexer, &m_intake, &m_arm, 1)
-//   //           .ToPtr();
+//   return TrajectoryFollower(&m_swerveDrive,
+//                             &NKTrajectoryManager::GetTrajectory("Test"))
+//       .ToPtr();
+//   return Auto(&m_swerveDrive, &m_shooter, &m_indexer, &m_intake, &m_arm, 1)
+//             .ToPtr();
 // }
 frc2::CommandPtr Robot::GetAutonomousCommand(){
     // Load the path you want to follow using its name in the GUI
-    auto path = pathplanner::PathPlannerPath::fromPathFile("2NoteAutoBlue");
+    auto path = pathplanner::PathPlannerPath::fromPathFile("MoveForward");
+    m_swerveDrive.ResetPose(path->getPathPoses()[0]);
 
     // Create a path following command using AutoBuilder. This will also trigger event markers.
-    return pathplanner::AutoBuilder::followPath(path);
+    // return pathplanner::AutoBuilder::followPath(path);
+    return pathplanner::PathPlannerAuto("Move").ToPtr();
+
+    // return pathplanner::PathPlannerAuto("2NoteAutoB.auto").ToPtr();
 }
 
 void Robot::DisabledPeriodic() {
@@ -218,7 +222,7 @@ void Robot::DisabledPeriodic() {
     autoName = 2;
   }
   frc::SmartDashboard::PutNumber("Auto", autoName);
-  m_swerveDrive.SetVision();
+  // m_swerveDrive.SetVision();
 }
 
 /**

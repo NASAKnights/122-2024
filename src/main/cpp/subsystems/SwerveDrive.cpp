@@ -56,14 +56,16 @@ SwerveDrive::SwerveDrive()
 
   //Configure Auto Swerve
   pathplanner::AutoBuilder::configureHolonomic(
-        [this](){ return GetPose(); }, // Robot pose supplier
-        [this](frc::Pose2d pose){ ResetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
-        [this](){ return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        [this](frc::ChassisSpeeds speeds){ Drive(speeds); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        [this]() { return this->GetPose();}, // Robot pose supplier
+        [this](frc::Pose2d poseReset){ this->ResetPose(poseReset); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this](){ 
+          frc::SmartDashboard::PutNumber("ac drive/vx", this->GetPose().X().value());
+          return this->getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](frc::ChassisSpeeds speedsRelative){ this->Drive(speedsRelative); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         pathplanner::HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            pathplanner::PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-            pathplanner::PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-            4.5_mps, // Max module speed, in m/s
+            pathplanner::PIDConstants(0.5, 0.0, 0.0), // Translation PID constants
+            pathplanner::PIDConstants(0.5, 0.0, 0.0), // Rotation PID constants
+            0.5_mps, // Max module speed, in m/s
             0.4_m, // Drive base radius in meters. Distance from robot center to furthest module.
             pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here
         ),
@@ -142,8 +144,8 @@ std::array<frc::SwerveModulePosition, 4> SwerveDrive::GetModulePositions() {
 }
 
 void SwerveDrive::ResetPose(frc::Pose2d position) {
-  // odometry.ResetPosition(GetHeading(), GetModulePositions(), position);
-  m_poseEstimator.ResetPosition(GetHeading(), GetModulePositions(), position);
+// odometry.ResetPosition(GetHeading(), GetModulePositions(), position);
+m_poseEstimator.ResetPosition(GetHeading(), GetModulePositions(), position);
 }
 
 frc::Pose2d SwerveDrive::GetPose() { return m_poseEstimator.GetEstimatedPosition(); }
@@ -154,7 +156,6 @@ void SwerveDrive::UpdateOdometry() {
 void SwerveDrive::SetVision(){ 
    
   m_poseEstimator.ResetPosition(m_pigeon.GetRotation2d(), GetModulePositions(), GetVision());
-
   
 }
 
@@ -183,7 +184,11 @@ frc::Pose2d SwerveDrive::GetVision() {
 
 
 frc::ChassisSpeeds SwerveDrive::getRobotRelativeSpeeds() {
-  return speeds;
+  auto temp =  kSwerveKinematics.ToChassisSpeeds({modules[0].GetCurrentState(), modules[1].GetCurrentState(),
+            modules[2].GetCurrentState(), modules[3].GetCurrentState()});
+  
+  
+  return temp;
 }
 
 void SwerveDrive::InitializePID() {

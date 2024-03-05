@@ -9,6 +9,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/RunCommand.h>
+#include <pathplanner/lib/commands/PathPlannerAuto.h>
 
 #include "subsystems/SwerveDrive.hpp"
 #include "arm/Arm.h"

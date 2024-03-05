@@ -25,6 +25,7 @@
 #include <iostream>
 #include <string>
 #include <ctre/phoenix6/Pigeon2.hpp>
+#include <frc2/command/RunCommand.h>
 
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/estimator/PoseEstimator.h>
@@ -58,7 +59,8 @@ public:
 
   std::array<frc::SwerveModulePosition, 4> GetModulePositions();
 
-  void ResetPose(frc::Pose2d);
+  void ResetPose(frc::Pose2d position);
+
   frc::Pose2d GetPose();
 
   void UpdateOdometry();
