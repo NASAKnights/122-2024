@@ -91,7 +91,10 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "valarray": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "xstddef": "cpp",
+    "xtr1common": "cpp",
+    "xutility": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }

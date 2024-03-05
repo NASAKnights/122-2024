@@ -63,7 +63,9 @@ public:
 
   void UpdatePoseEstimate();
   void PublishOdometry(frc::Pose2d);
-  void PrintNetworkTableValues();
+  void PrintNetworkTablseValues();
+  void SetVision();
+  frc::Pose2d GetVision();
 
 private:
   // Components (e.g. motor controllers and sensors) should generally be

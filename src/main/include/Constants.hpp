@@ -127,7 +127,7 @@ const bool kEncoderInverted = false;
 
 const bool kSteerEnableCurrentLimit = true;
 const int kSteerContinuousCurrentLimit = 25;
-const int kSteerPeakCurrentLimit = 40;
+const int kSteerPeakCurrentLimit = 30;
 const double kSteerPeakCurrentDuration = 0.1;
 
 const bool kDriveEnableCurrentLimit = true;

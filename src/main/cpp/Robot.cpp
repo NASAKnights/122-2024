@@ -172,7 +172,7 @@ void Robot::BindCommands() {
     }, {&m_intake}).ToPtr());
 
 
-  frc2::JoystickButton(&m_driverController, 3).OnTrue(frc2::InstantCommand(
+  frc2::JoystickButton(&m_driverController, 6).OnTrue(frc2::InstantCommand(
       [this] {
         frc::SmartDashboard::PutNumber("ARM_Angel", 40);
       }).ToPtr()
@@ -202,6 +202,7 @@ void Robot::DisabledPeriodic() {
     autoName = 2;
   }
   frc::SmartDashboard::PutNumber("Auto", autoName);
+  m_swerveDrive.SetVision();
 }
 
 /**
