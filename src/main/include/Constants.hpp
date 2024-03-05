@@ -61,9 +61,9 @@ const auto kTrackwidthMeters = 0.4_m;
 const auto kWheelbaseMeters = 0.4_m;
 
 const double kDefaultAxisDeadband = 0.15;
-const units::meters_per_second_t kMaxTranslationalVelocity{2};
+const units::meters_per_second_t kMaxTranslationalVelocity{3};
 
-const units::radians_per_second_t kMaxRotationalVelocity{3};
+const units::radians_per_second_t kMaxRotationalVelocity{4};
 const bool kIsFieldRelative = true;
 
 const frc::Rotation2d kFrontLeftOffset{-units::degree_t{-40}}; // module 1

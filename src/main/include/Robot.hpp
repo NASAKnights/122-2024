@@ -50,7 +50,7 @@ private:
   Intake m_intake;
 
   double autoName = 0;
-  double ARM_Angel = 100;
+  double ARM_Angel = 60.0;
   double ARM_Speed = -120;
 
 
