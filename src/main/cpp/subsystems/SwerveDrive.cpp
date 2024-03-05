@@ -3,6 +3,7 @@
 #include "subsystems/SwerveDrive.hpp"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "Constants.hpp"
 
@@ -52,6 +53,33 @@ SwerveDrive::SwerveDrive()
       {}, {.periodic = 0.01, .sendAll = true});
 
   baseLinkPublisher = poseTable->GetDoubleArrayTopic(baseLink).Publish();
+
+  //Configure Auto Swerve
+  pathplanner::AutoBuilder::configureHolonomic(
+        [this](){ return GetPose(); }, // Robot pose supplier
+        [this](frc::Pose2d pose){ ResetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this](){ return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](frc::ChassisSpeeds speeds){ Drive(speeds); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        pathplanner::HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            pathplanner::PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            pathplanner::PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            4.5_mps, // Max module speed, in m/s
+            0.4_m, // Drive base radius in meters. Distance from robot center to furthest module.
+            pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        []() {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            auto alliance = frc::DriverStation::GetAlliance();
+            if (alliance) {
+                return alliance.value() == frc::DriverStation::Alliance::kRed;
+            }
+            return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
 }
 
 // This method will be called once per scheduler run
@@ -90,6 +118,7 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
   // frc::SmartDashboard::PutNumber("drive/rotation degrees", odometry.GetPose().Rotation().Degrees().value());
 }
 
+
 void SwerveDrive::SetFast() {}
 
 void SwerveDrive::SetSlow() {}
@@ -121,6 +150,10 @@ frc::Pose2d SwerveDrive::GetPose() { return m_poseEstimator.GetEstimatedPosition
 
 void SwerveDrive::UpdateOdometry() {
   // odometry.Update(GetHeading(), GetModulePositions());
+}
+
+frc::ChassisSpeeds SwerveDrive::getRobotRelativeSpeeds() {
+  return speeds;
 }
 
 void SwerveDrive::InitializePID() {

@@ -28,7 +28,12 @@
 
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/estimator/PoseEstimator.h>
+#include <frc/DriverStation.h>
 #include <frc/trajectory/constraint/SwerveDriveKinematicsConstraint.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <pathplanner/lib/util/PIDConstants.h>
+#include <pathplanner/lib/util/ReplanningConfig.h>
 
 #include "Constants.hpp"
 #include "SwerveModule.hpp"
@@ -57,6 +62,7 @@ public:
   frc::Pose2d GetPose();
 
   void UpdateOdometry();
+  frc::ChassisSpeeds getRobotRelativeSpeeds();
 
   void InitializePID();
   void SetReference(frc::Pose2d);

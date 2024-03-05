@@ -9,6 +9,10 @@
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
 
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
+
 #include "commands/TrajectoryFollower.hpp"
 #include "frc2/command/InstantCommand.h"
 #include "util/NKTrajectoryManager.hpp"
@@ -19,6 +23,7 @@ Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit() 
 {
+
 
 };
 
@@ -106,6 +111,10 @@ void Robot::CreateRobot() {
       frc::SmartDashboard::PutNumber("ARM_Angel",100);
       frc::SmartDashboard::PutNumber("ARM_Speed",-120);
 
+  
+      pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.8, 80).ToPtr())); // <- This example method returns CommandPtr
+      pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr()));
+
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this] {
         auto leftXAxis =
@@ -172,7 +181,7 @@ void Robot::BindCommands() {
     }, {&m_intake}).ToPtr());
 
 
-  frc2::JoystickButton(&m_driverController, 3).OnTrue(frc2::InstantCommand(
+  frc2::JoystickButton(&m_driverController, 6).OnTrue(frc2::InstantCommand(
       [this] {
         frc::SmartDashboard::PutNumber("ARM_Angel", 40);
       }).ToPtr()
@@ -184,12 +193,19 @@ void Robot::BindCommands() {
 /**
  * Returns the Autonomous Command
  */
-frc2::CommandPtr Robot::GetAutonomousCommand() {
-  // return TrajectoryFollower(&m_swerveDrive,
-  //                           &NKTrajectoryManager::GetTrajectory(autoName))
-  //     .ToPtr();
-  return Auto(&m_swerveDrive, &m_shooter, &m_indexer, &m_intake, &m_arm, 1)
-            .ToPtr();
+// frc2::CommandPtr Robot::GetAutonomousCommand() {
+//   // return TrajectoryFollower(&m_swerveDrive,
+//   //                           &NKTrajectoryManager::GetTrajectory(autoName))
+//   //     .ToPtr();
+//   // return Auto(&m_swerveDrive, &m_shooter, &m_indexer, &m_intake, &m_arm, 1)
+//   //           .ToPtr();
+// }
+frc2::CommandPtr Robot::GetAutonomousCommand(){
+    // Load the path you want to follow using its name in the GUI
+    auto path = pathplanner::PathPlannerPath::fromPathFile("2NoteAutoBlue");
+
+    // Create a path following command using AutoBuilder. This will also trigger event markers.
+    return pathplanner::AutoBuilder::followPath(path);
 }
 
 void Robot::DisabledPeriodic() {
