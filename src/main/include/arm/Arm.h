@@ -24,7 +24,7 @@ enum ArmState{
     DONE
   };  
 
-const double kAngleP = 0.5;
+const double kAngleP = 0.3;
 const double kAngleI = 0.0;
 const double kAngleD = 0.0;//0.0001
 const auto kArmVelLimit = units::degrees_per_second_t(90.0);
@@ -34,7 +34,7 @@ const int kAngleMotorId = 5;
 const int kAbsEncoderId = 1;
 const int kAngleEncoderPulsePerRev = 2048;
 const auto kFFks = units::volt_t(0.18); // Volts static (motor)
-const auto kFFkg = units::volt_t(1.1); // Volts
+const auto kFFkg = units::volt_t(0.25); // Volts
 const auto kFFkV = units::unit_t<frc::ArmFeedforward::kv_unit>(2.26); // volts*s/rad
 const auto kFFkA = units::unit_t<frc::ArmFeedforward::ka_unit>(0.06); // volts*s^2/rad
 
@@ -45,6 +45,12 @@ const double kArmPeakCurrentDuration = 0.1;
 
 const int kLinearMax = 1140;
 const int kLinearMin = 1100;
+
+const double kArmAngleOffset = 40.0;
+const double kArmAngleStarting = 60.0; // With offset 
+const double kArmAngleDriving = 30.0; // With offset
+const double kArmAngleIntake = -1.5; //with offset
+const double kArmAngleShootClose = 40.0; //with offset
 
 } // namespace ArmConstants
 

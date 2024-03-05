@@ -35,6 +35,7 @@ ArmSubsystem::ArmSubsystem()
     m_motor.GetConfigurator().Apply(armAngleConfig);
     m_motor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
+    m_encoder.SetPositionOffset(40.0/360.0);
     m_encoder.SetDistancePerRotation(360);
     // m_encoder.SetPositionOffset(0.2);
     Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
@@ -74,11 +75,11 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
   }
 }
 
-void  ArmSubsystem::arm_Brake_In(){
+void ArmSubsystem::arm_Brake_In(){
   Linear.SetSpeed(1);
   m_ArmState = ArmConstants::BRAKED;
 }
-void	  ArmSubsystem::arm_Brake_Out()
+void ArmSubsystem::arm_Brake_Out()
 { 
   time_brake_released = frc::GetTime();
   Linear.SetSpeed(-1);
@@ -90,7 +91,8 @@ void	  ArmSubsystem::arm_Brake_Out()
 
 void ArmSubsystem::printLog()
 {
-    frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value());   
+    frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value());  
+    
     frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
     frc::SmartDashboard::PutNumber("ARM_setpoint", GetController().GetSetpoint().position.value());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAccumGyroY().GetValueAsDouble());
@@ -102,11 +104,11 @@ void ArmSubsystem::printLog()
     frc::SmartDashboard::PutNumber("Brake Time", (frc::GetTime() - time_brake_released).value());
     frc::SmartDashboard::PutNumber("Arm State", m_ArmState);
     
-    Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
-                    0_ms, 
-                    0_ms, 
-                    0_ms, 
-                    units::time::microsecond_t{ArmConstants::kLinearMin});
+    // Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
+    //                 0_ms, 
+    //                 0_ms, 
+    //                 0_ms, 
+    //                 units::time::microsecond_t{ArmConstants::kLinearMin});
 
 }
 
@@ -137,7 +139,7 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
   case ArmConstants::MOVING:
   {
     if((GetController().GetGoal().position - GetMeasurement()) <
-           units::angle::degree_t(1))
+           units::angle::degree_t(3))
     {
       arm_Brake_In();
       m_ArmState = ArmConstants::MOVING;

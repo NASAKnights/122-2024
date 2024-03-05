@@ -109,7 +109,7 @@ void Robot::SimulationPeriodic() {}
  */
 void Robot::CreateRobot() {
   // Initialize all of your commands and subsystems here
-      frc::SmartDashboard::PutNumber("ARM_Angel",100);
+      frc::SmartDashboard::PutNumber("ARM_Angel",ArmConstants::kArmAngleDriving);
       frc::SmartDashboard::PutNumber("ARM_Speed",-120);
 
   
@@ -164,11 +164,12 @@ void Robot::BindCommands() {
       }))); // TODO assign as test
 
   frc2::JoystickButton(&m_operatorController, 6)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.8, 80).ToPtr()); 
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
+                0.8, ArmConstants::kArmAngleShootClose).ToPtr()); 
 
 
   frc2::JoystickButton(&m_operatorController, 5)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.4, 145).ToPtr()); // -15, 145
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.4, 105).ToPtr()); // -15, 145
 
     frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr());
@@ -184,10 +185,10 @@ void Robot::BindCommands() {
 
   frc2::JoystickButton(&m_driverController, 6).OnTrue(frc2::InstantCommand(
       [this] {
-        frc::SmartDashboard::PutNumber("ARM_Angel", 40);
+        frc::SmartDashboard::PutNumber("ARM_Angel", 0.0);
       }).ToPtr()
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
-        frc::SmartDashboard::PutNumber("ARM_Angel", 70);
+        frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleDriving);
       }).ToPtr()));
 
 }
@@ -239,7 +240,7 @@ void Robot::UpdateDashboard() {
   // frc::SmartDashboard::PutNumber("Swerve Drive Heading",
   //                                m_swerveDrive.GetHeading().Degrees().value());
   frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
-   ARM_Angel = frc::SmartDashboard::GetNumber("ARM_Angel",100);
+   ARM_Angel = frc::SmartDashboard::GetNumber("ARM_Angel",ArmConstants::kArmAngleDriving);
    ARM_Speed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
 
   // m_swerveDrive.PrintNetworkTableValues();
