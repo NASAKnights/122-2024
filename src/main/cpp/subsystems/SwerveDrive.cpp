@@ -90,7 +90,7 @@ void SwerveDrive::Periodic() {
   PublishOdometry(m_poseEstimator.GetEstimatedPosition());
   UpdatePoseEstimate();
   
-  PrintNetworkTableValues();
+  //PrintNetworkTableValues();
 
   frc::SmartDashboard::PutNumber("Heading", GetHeading().Degrees().value());
   // UpdateOdometry();
@@ -151,6 +151,36 @@ frc::Pose2d SwerveDrive::GetPose() { return m_poseEstimator.GetEstimatedPosition
 void SwerveDrive::UpdateOdometry() {
   // odometry.Update(GetHeading(), GetModulePositions());
 }
+void SwerveDrive::SetVision(){ 
+   
+  m_poseEstimator.ResetPosition(m_pigeon.GetRotation2d(), GetModulePositions(), GetVision());
+
+  
+}
+
+frc::Pose2d SwerveDrive::GetVision() {
+  auto result2 = baseLink2Subscribe.GetAtomic();
+  // auto time = result.time; // time stamp
+  if (result2.value.size() > 0) {
+    auto compressedResults = result2.value;
+    rotation_q = frc::Quaternion(compressedResults.at(6),
+                                     compressedResults.at(3),
+                                     compressedResults.at(4),
+                                     compressedResults.at(5));
+
+    auto posTranslation =frc::Translation3d(units::meter_t{compressedResults.at(0)},
+                           units::meter_t{compressedResults.at(1)},
+                           units::meter_t{compressedResults.at(2)});
+    frc::Pose3d cameraPose = frc::Pose3d(posTranslation, frc::Rotation3d(rotation_q));
+    frc::Pose2d visionMeasurement2d = cameraPose.ToPose2d();
+    return  visionMeasurement2d;
+  }
+  else{
+
+    return frc::Pose2d{};
+  }
+}
+
 
 frc::ChassisSpeeds SwerveDrive::getRobotRelativeSpeeds() {
   return speeds;
@@ -229,8 +259,9 @@ void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
         odoPoseQ.X(),odoPoseQ.Y(),odoPoseQ.Z(),odoPoseQ.W(), time};
   baseLinkPublisher.Set(poseDeconstruct, time);
 }
-
+/*
 void SwerveDrive::PrintNetworkTableValues() {
   // TODO: write print function :3
   
 }
+*/

@@ -218,6 +218,7 @@ void Robot::DisabledPeriodic() {
     autoName = 2;
   }
   frc::SmartDashboard::PutNumber("Auto", autoName);
+  m_swerveDrive.SetVision();
 }
 
 /**
