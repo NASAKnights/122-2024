@@ -19,6 +19,7 @@
 #include <arm/Arm.h>
 #include <autos/Auto.h>
 #include <cmath>
+#include <commands/shooter/SmartShoot.h>
 
 Robot::Robot() { this->CreateRobot(); }
 
@@ -164,9 +165,8 @@ void Robot::BindCommands() {
       }))); // TODO assign as test
 
   frc2::JoystickButton(&m_operatorController, 6)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
-                0.8, ArmConstants::kArmAngleShootClose).ToPtr()); 
-
+      .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
+                0.8, &m_swerveDrive).ToPtr()); 
 
   frc2::JoystickButton(&m_operatorController, 5)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.4, 105).ToPtr()); // -15, 145
@@ -245,21 +245,44 @@ void Robot::UpdateDashboard() {
 
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();
-  Arm_Position();
   
 }
-
+/*
 void Robot::Arm_Position()
 {  frc::Pose2d blue_Speaker_Pos = frc::Pose2d(0_m  , units::length::meter_t{5.583}, frc::Rotation2d{}); 
    auto currentPos =m_swerveDrive.GetPose();
    auto robot2Speaker = currentPos.RelativeTo(blue_Speaker_Pos);
    float distance = sqrt(robot2Speaker.X().value()*robot2Speaker.X().value()+robot2Speaker.Y().value()*robot2Speaker.Y().value());
    frc::SmartDashboard::PutNumber("Distance",distance);
-  
-
-
+   //Make into feet
+   distance = distance * 3,28084;
+   int i = distance/3;
+   switch(i)
+   {
+   case 0:
+   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+  //m_arm.handle_Setpoint(units::angle::degree_t{40});
+    break;
+   case 1:
+   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+   // m_arm.handle_Setpoint(units::angle::degree_t{50});
+   break;
+   case 2:
+   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+  //m_arm.handle_Setpoint(units::angle::degree_t{40});
+    break;
+    case 3:
+   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+  //m_arm.handle_Setpoint(units::angle::degree_t{40});
+    break;
+    case 4:
+   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+  //m_arm.handle_Setpoint(units::angle::degree_t{40});
+    break;
+   }
 }
 
+*/
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif
