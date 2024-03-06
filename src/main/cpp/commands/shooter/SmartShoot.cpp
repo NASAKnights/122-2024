@@ -83,7 +83,7 @@ void SmartShoot::Arm_Position()
    float distance = sqrt(robot2Speaker.X().value()*robot2Speaker.X().value()+robot2Speaker.Y().value()*robot2Speaker.Y().value());
    frc::SmartDashboard::PutNumber("Distance",distance);
    //Make into feet
-   distance = (distance+1.5) * 3.28084 ;
+   distance = (distance) * 3.28084 ;
    int i = distance/3;
    switch(i)
    {

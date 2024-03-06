@@ -245,10 +245,11 @@ void Robot::UpdateDashboard() {
 
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();
+  Arm_Position_Log();
   
 }
-/*
-void Robot::Arm_Position()
+
+void Robot::Arm_Position_Log()
 {  frc::Pose2d blue_Speaker_Pos = frc::Pose2d(0_m  , units::length::meter_t{5.583}, frc::Rotation2d{}); 
    auto currentPos =m_swerveDrive.GetPose();
    auto robot2Speaker = currentPos.RelativeTo(blue_Speaker_Pos);
@@ -260,29 +261,38 @@ void Robot::Arm_Position()
    switch(i)
    {
    case 0:
-   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+   frc::SmartDashboard::PutNumber("Distance_TEST",i);
   //m_arm.handle_Setpoint(units::angle::degree_t{40});
     break;
    case 1:
-   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+   frc::SmartDashboard::PutNumber("Distance_TEST",i);
    // m_arm.handle_Setpoint(units::angle::degree_t{50});
    break;
    case 2:
-   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+   frc::SmartDashboard::PutNumber("Distance_TEST",i);
   //m_arm.handle_Setpoint(units::angle::degree_t{40});
     break;
     case 3:
-   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+   frc::SmartDashboard::PutNumber("Distance_TEST",i);
   //m_arm.handle_Setpoint(units::angle::degree_t{40});
     break;
     case 4:
-   frc::SmartDashboard::PutNumber("DIStance_TEST",i);
+   frc::SmartDashboard::PutNumber("Distance_TEST",i);
+  //m_arm.handle_Setpoint(units::angle::degree_t{40});
+    case 5:
+   frc::SmartDashboard::PutNumber("Distance_TEST",i);
+  //m_arm.handle_Setpoint(units::angle::degree_t{40});
+    case 6:
+   frc::SmartDashboard::PutNumber("Distance_TEST",i);
+  //m_arm.handle_Setpoint(units::angle::degree_t{40});
+    case 7:
+   frc::SmartDashboard::PutNumber("Distance_TEST",i);
   //m_arm.handle_Setpoint(units::angle::degree_t{40});
     break;
    }
 }
 
-*/
+
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }
 #endif
