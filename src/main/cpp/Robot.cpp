@@ -112,7 +112,7 @@ void Robot::CreateRobot() {
       frc::SmartDashboard::PutNumber("ARM_Speed",-120);
 
   
-      pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.8, 80).ToPtr())); // <- This example method returns CommandPtr
+      pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.8, ArmConstants::kArmAngleShootClose).ToPtr())); // <- This example method returns CommandPtr
       pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr()));
 
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
@@ -208,7 +208,7 @@ frc2::CommandPtr Robot::GetAutonomousCommand(){
 
     // Create a path following command using AutoBuilder. This will also trigger event markers.
     // return pathplanner::AutoBuilder::followPath(path);
-    return pathplanner::PathPlannerAuto("Move").ToPtr();
+    return pathplanner::PathPlannerAuto("2NoteSpeakerRun").ToPtr();
 
     // return pathplanner::PathPlannerAuto("2NoteAutoB.auto").ToPtr();
 }
