@@ -61,7 +61,7 @@ const auto kTrackwidthMeters = 0.4_m;
 const auto kWheelbaseMeters = 0.4_m;
 
 const double kDefaultAxisDeadband = 0.15;
-const units::meters_per_second_t kMaxTranslationalVelocity{3};
+const units::meters_per_second_t kMaxTranslationalVelocity{4.5};
 
 const units::radians_per_second_t kMaxRotationalVelocity{4};
 const bool kIsFieldRelative = true;

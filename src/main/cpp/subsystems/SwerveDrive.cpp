@@ -63,8 +63,8 @@ SwerveDrive::SwerveDrive()
           return this->getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         [this](frc::ChassisSpeeds speedsRelative){ this->Drive(speedsRelative); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         pathplanner::HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            pathplanner::PIDConstants(0.5, 0.0, 0.0), // Translation PID constants
-            pathplanner::PIDConstants(0.5, 0.0, 0.0), // Rotation PID constants
+            pathplanner::PIDConstants(5, 0.0, 0.0), // Translation PID constants
+            pathplanner::PIDConstants(5, 0.0, 0.0), // Rotation PID constants
             0.5_mps, // Max module speed, in m/s
             0.4_m, // Drive base radius in meters. Distance from robot center to furthest module.
             pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here

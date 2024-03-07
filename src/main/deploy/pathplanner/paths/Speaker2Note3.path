@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.276424687256444,
-        "y": 5.545953474318579
+        "x": 1.8620527983644335,
+        "y": 4.191177359692234
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.37050825298914,
-        "y": 4.128628829521057
+        "x": 2.274106896417898,
+        "y": 4.191619398774716
       },
       "prevControl": {
-        "x": 1.3109971509013816,
-        "y": 4.132650253238494
+        "x": 1.6763742165696431,
+        "y": 4.191619398774716
       },
       "nextControl": {
-        "x": 2.807242866481172,
-        "y": 4.126971182961751
+        "x": 2.5144035394943036,
+        "y": 4.191619398774716
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 5.545953474318579
       },
       "prevControl": {
-        "x": 2.5688718340806123,
-        "y": 5.549360858912709
+        "x": 1.376424687256444,
+        "y": 5.545953474318579
       },
       "nextControl": null,
       "isLocked": false,
@@ -63,7 +63,30 @@
             {
               "type": "wait",
               "data": {
-                "waitTime": 3.0
+                "waitTime": 2.0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 1.05,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "a_shoot"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.0
               }
             }
           ]
@@ -72,7 +95,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0

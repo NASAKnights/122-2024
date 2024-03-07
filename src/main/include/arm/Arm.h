@@ -47,7 +47,7 @@ const int kLinearMax = 1140;
 const int kLinearMin = 1100;
 
 const double kArmAngleOffset = 40.0;
-const double kArmAngleStarting = 60.0; // With offset 
+const double kArmAngleStarting = 75.0; // With offset 
 const double kArmAngleDriving = 30.0; // With offset
 const double kArmAngleIntake = -1.5; //with offset
 const double kArmAngleShootClose = 40.0; //with offset

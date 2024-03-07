@@ -6,8 +6,9 @@
 
 Intake::Intake() :
     m_intakeMotor(8)
-{
-
+{   
+    m_intakeMotor.ConfigVoltageCompSaturation(12);
+    m_intakeMotor.EnableVoltageCompensation(true);
 }
 
 void Intake::Periodic() {/*IDK what I should put here *yet*/}

@@ -162,6 +162,14 @@ void Robot::BindCommands() {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
 
+  frc2::JoystickButton(&m_driverController, 9).OnTrue(frc2::InstantCommand(
+      [this] {
+        frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleStarting);
+      }).ToPtr()
+      ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+        frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleDriving);
+      }).ToPtr()));
+
   frc2::JoystickButton(&m_operatorController, 6)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
                 0.8, ArmConstants::kArmAngleShootClose).ToPtr()); 
@@ -203,12 +211,12 @@ void Robot::BindCommands() {
 // }
 frc2::CommandPtr Robot::GetAutonomousCommand(){
     // Load the path you want to follow using its name in the GUI
-    auto path = pathplanner::PathPlannerPath::fromPathFile("MoveForward");
-    m_swerveDrive.ResetPose(path->getPathPoses()[0]);
+    // auto path = pathplanner::PathPlannerPath::fromPathFile("MoveForward");
+    // m_swerveDrive.ResetPose(path->getPathPoses()[0]);
 
     // Create a path following command using AutoBuilder. This will also trigger event markers.
     // return pathplanner::AutoBuilder::followPath(path);
-    return pathplanner::PathPlannerAuto("2NoteSpeakerRun").ToPtr();
+    return pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
 
     // return pathplanner::PathPlannerAuto("2NoteAutoB.auto").ToPtr();
 }
