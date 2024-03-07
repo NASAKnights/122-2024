@@ -257,7 +257,7 @@ void Robot::Arm_Position_Log()
    frc::SmartDashboard::PutNumber("Distance",distance);
    //Make into feet
    distance = distance * 3,28084;
-   int i = distance/3;
+   int i = distance/1.5;
    switch(i)
    {
    case 0:
