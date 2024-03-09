@@ -7,22 +7,27 @@
 #include "subsystems/Indexer.h"
 #include "Constants.hpp"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "subsystems/LEDController.h"
 
 
 // Shooter shoooter;
 // Indexer indexing;
 
-Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem* _arm, double _shootSpeed, double _shootAngle):
+Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, 
+          Intake* _intake, ArmSubsystem* _arm, LEDController* led_controller,
+          double _shootSpeed, double _shootAngle) : 
   shoooter{_shooter},
   indexing{_indexer},
   intake{_intake},
   arm{_arm},
   shootSpeed{_shootSpeed},
-  shootAngle{_shootAngle}
+  shootAngle{_shootAngle},
+  m_led_control{led_controller}
 { 
   AddRequirements(indexing);
   AddRequirements(intake);
   AddRequirements(arm);
+  AddRequirements(m_led_control);
 }
 
 // Called when the command is initially scheduled.
@@ -40,6 +45,8 @@ void Shoot::Execute() {
   {
   case SPINUP:
   {
+    m_led_control->m_shooterState = LED_SPIN_UP;
+    m_led_control->HandleShooterState();
     shoooter->Shoot(shootSpeed);//angle is 78
     arm->handle_Setpoint(units::angle::degree_t(shootAngle));
     if(shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE)
@@ -50,6 +57,7 @@ void Shoot::Execute() {
   }
   case SHOOTING:
   {
+    m_led_control->m_shooterState = LED_SHOOTING;
     intake->intakeIndex();
     shoooter->Shoot(shootSpeed);
     break;
@@ -67,7 +75,6 @@ void Shoot::End(bool interrupted)
 { 
   shoooter->stopShooter();
   intake->stopIntake();
-
   m_state = DONE;
 }
 

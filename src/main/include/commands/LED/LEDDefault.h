@@ -6,11 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <subsystems/Intake.h>
-#include <subsystems/Shooter.h>
-#include <subsystems/Indexer.h>
-#include <arm/Arm.h>
-#include <subsystems/LEDController.h>
+#include "subsystems/LEDController.h"
 
 /**
  * An example command.
@@ -19,16 +15,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-enum IntakeState
-{
-  MOVING,
-  IDLE
-};
-
-class intakeTake
-    : public frc2::CommandHelper<frc2::Command, intakeTake> {
+class LEDDefault
+    : public frc2::CommandHelper<frc2::Command, LEDDefault> {
  public:
-  intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm, LEDController* led_controller);
+  LEDDefault(LEDController* controller);
 
   void Initialize() override;
 
@@ -39,11 +29,5 @@ class intakeTake
   bool IsFinished() override;
 
 private:
-  Intake* intake;
-  Shooter* shooter;
-  Indexer* indexer;
-  ArmSubsystem* m_arm;
-  LEDController* m_led_control;
-
-  IntakeState m_state;
+ LEDController* m_LEDController;
 };

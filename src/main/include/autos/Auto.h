@@ -9,6 +9,7 @@
 #include <subsystems/SwerveDrive.hpp>
 #include "util/NKTrajectoryManager.hpp"
 #include <commands/shooter/shoot.h>
+#include "subsystems/LEDController.h"
 
 #include "commands/TrajectoryFollower.hpp"
 
@@ -17,5 +18,9 @@ class Auto
                                  Auto> {
  public:
   Auto(SwerveDrive* m_swerve, Shooter* shooter, Indexer* indexer, Intake* intaker,
-            ArmSubsystem* armer, int autoName);
+            ArmSubsystem* armer, int autoName, LEDController* led_controller);
+
+    private:
+
+    LEDController* m_led_control;
 };

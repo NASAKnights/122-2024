@@ -9,6 +9,7 @@
 #include <subsystems/Shooter.h>
 #include <subsystems/Indexer.h>
 #include <subsystems/Intake.h>
+#include <subsystems/LEDController.h>
 #include <arm/Arm.h>
 
 enum ShooterState
@@ -21,7 +22,9 @@ enum ShooterState
 class Shoot
     : public frc2::CommandHelper<frc2::Command, Shoot> {
  public:
-  Shoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem* _arm, double _shootSpeed, double _shootAngle);
+  Shoot(Shooter* _shooter, Indexer* _indexer, 
+      Intake* _intake, ArmSubsystem* _arm, LEDController* led_controller,
+      double _shootSpeed, double _shootAngle);
 
   void Initialize() override;
 
@@ -36,6 +39,7 @@ class Shoot
     Indexer* indexing;
     Intake* intake;
     ArmSubsystem* arm;
+    LEDController* m_led_control;
 
     double shootSpeed;
     double shootAngle;

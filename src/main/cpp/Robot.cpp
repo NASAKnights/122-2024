@@ -24,7 +24,6 @@ Robot::Robot() { this->CreateRobot(); }
 void Robot::RobotInit() 
 {
 
-
 };
 
 /**
@@ -110,10 +109,9 @@ void Robot::CreateRobot() {
   // Initialize all of your commands and subsystems here
       frc::SmartDashboard::PutNumber("ARM_Angel",ArmConstants::kArmAngleDriving);
       frc::SmartDashboard::PutNumber("ARM_Speed",-120);
-
   
-      pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.8, ArmConstants::kArmAngleShootClose).ToPtr())); // <- This example method returns CommandPtr
-      pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr()));
+      pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, ArmConstants::kArmAngleShootClose).ToPtr())); // <- This example method returns CommandPtr
+      pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(intakeTake(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr()));
 
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this] {
@@ -143,7 +141,11 @@ void Robot::CreateRobot() {
         m_arm.handle_Setpoint(units::degree_t(ARM_Angel));
       },
       {&m_arm}));
-
+    m_LED_Controller.SetDefaultCommand(frc2::RunCommand(
+      [this] {
+        m_LED_Controller.DefaultAnimation();
+      },
+      {&m_LED_Controller}));
   // Configure the button bindings
   BindCommands();
   m_swerveDrive.ResetHeading();
@@ -171,15 +173,16 @@ void Robot::BindCommands() {
       }).ToPtr()));
 
   frc2::JoystickButton(&m_operatorController, 6)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm,  &m_LED_Controller,
                 0.8, ArmConstants::kArmAngleShootClose).ToPtr()); 
 
 
   frc2::JoystickButton(&m_operatorController, 5)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 0.4, 105).ToPtr()); // -15, 145
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
+                0.4, 105).ToPtr()); // -15, 145
 
     frc2::JoystickButton(&m_operatorController, 3)
-      .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr());
+      .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr());
 
   frc2::JoystickButton(&m_operatorController, 4)
     .OnTrue(frc2::RunCommand([this] {
@@ -210,25 +213,25 @@ void Robot::BindCommands() {
 //             .ToPtr();
 // }
 frc2::CommandPtr Robot::GetAutonomousCommand(){
-    // Load the path you want to follow using its name in the GUI
-    // auto path = pathplanner::PathPlannerPath::fromPathFile("MoveForward");
-    // m_swerveDrive.ResetPose(path->getPathPoses()[0]);
-
-    // Create a path following command using AutoBuilder. This will also trigger event markers.
-    // return pathplanner::AutoBuilder::followPath(path);
+  
+  if(autoColor.Get())
+  {
     return pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
-
-    // return pathplanner::PathPlannerAuto("2NoteAutoB.auto").ToPtr();
+  }
+  else{
+    return pathplanner::PathPlannerAuto("Move").ToPtr();
+  }
 }
 
 void Robot::DisabledPeriodic() {
   m_arm.Disable();
-
   if(autoColor.Get()){
     autoName = 1;
+    m_LED_Controller.candle.SetLEDs(255,0,0,0,0,8);
   }
   else{
     autoName = 2;
+    m_LED_Controller.candle.SetLEDs(0,255,0,0,0,8);
   }
   frc::SmartDashboard::PutNumber("Auto", autoName);
   // m_swerveDrive.SetVision();

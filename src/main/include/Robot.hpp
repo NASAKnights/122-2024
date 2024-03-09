@@ -15,6 +15,7 @@
 #include "arm/Arm.h"
 #include "commands/shooter/shoot.h"
 #include "commands/intake/intakeTake.h"
+#include "subsystems/LEDController.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -48,6 +49,7 @@ private:
   Shooter m_shooter;
   Indexer m_indexer;
   Intake m_intake;
+  LEDController m_LED_Controller;
 
   double autoName = 0;
   double ARM_Angel = 60.0;

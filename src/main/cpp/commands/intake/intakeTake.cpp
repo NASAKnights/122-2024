@@ -6,10 +6,11 @@
 #include "subsystems/Intake.h"
 #include "subsystems/Shooter.h"
 
-intakeTake::intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm):
+intakeTake::intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm, LEDController* led_controller):
   intake{_intake},
   indexer{_indexer},
-  m_arm{_arm}
+  m_arm{_arm},
+  m_led_control{led_controller}
 {
   // Use addRequirements() here to declare subsystem dependencies.
   // intake = _intake;
@@ -17,6 +18,7 @@ intakeTake::intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm):
   AddRequirements(indexer);
   AddRequirements(intake);
   AddRequirements(m_arm);
+  AddRequirements(m_led_control);
 }
 
 // Called when the command is initially scheduled.
@@ -36,11 +38,15 @@ void intakeTake::Execute() {
     case MOVING:
     {
       intake->runIntake();
+      m_led_control->m_intakeState = NO_NOTE;
+      m_led_control->HandleIntakeState();
       break;
     }
     case IDLE:
     {
       intake->stopIntake();
+      m_led_control->m_intakeState = NOTE;
+      m_led_control->HandleIntakeState();
       break;
     }
   }

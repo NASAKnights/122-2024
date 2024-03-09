@@ -9,19 +9,20 @@
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 Auto::Auto(SwerveDrive* m_swerve,
             Shooter* shooter, Indexer* indexer, Intake* intaker,
-            ArmSubsystem* armer, int autoName) {
+            ArmSubsystem* armer, int autoName, LEDController* led_controller)
+            {
   // Add your commands here, e.g.
   // AddCommands(FooCommand{}, BarCommand{});
   switch(autoName){
   case 1:
     AddCommands(
-      TrajectoryFollower(m_swerve, &NKTrajectoryManager::GetTrajectory("Red_Near_Loading"))),
-      Shoot(shooter, indexer, intaker, armer, 120, 78);
+      TrajectoryFollower(m_swerve, &NKTrajectoryManager::GetTrajectory("Red_Near_Loading")),
+      Shoot(shooter, indexer, intaker, armer, led_controller, 120, 78));
     break;
   case 2:
     AddCommands(
-      TrajectoryFollower(m_swerve, &NKTrajectoryManager::GetTrajectory("Blue_Near_Loading"))),
-      Shoot(shooter, indexer, intaker, armer, 120, 78);
+      TrajectoryFollower(m_swerve, &NKTrajectoryManager::GetTrajectory("Blue_Near_Loading")),
+      Shoot(shooter, indexer, intaker, armer, led_controller, 120, 78));
       break;
   }
 }
