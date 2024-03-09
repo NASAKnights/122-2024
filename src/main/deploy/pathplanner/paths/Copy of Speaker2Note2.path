@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8620527983644335,
-        "y": 4.191177359692234
+        "x": 2.276424687256444,
+        "y": 5.545953474318579
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.274106896417898,
-        "y": 4.191619398774716
+        "x": 2.3,
+        "y": 5.545953474318579
       },
       "prevControl": {
-        "x": 1.6763742165696431,
-        "y": 4.191619398774716
+        "x": 2.1999999999999997,
+        "y": 5.545953474318579
       },
       "nextControl": {
-        "x": 2.5144035394943036,
-        "y": 4.191619398774716
+        "x": 2.3499999999999996,
+        "y": 5.545953474318579
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 5.545953474318579
       },
       "prevControl": {
-        "x": 1.376424687256444,
-        "y": 5.545953474318579
+        "x": 2.5688718340806123,
+        "y": 5.549360858912709
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,11 +45,23 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.65,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0,
       "command": {
         "type": "race",
         "data": {
@@ -63,7 +75,7 @@
             {
               "type": "wait",
               "data": {
-                "waitTime": 2.0
+                "waitTime": 1.1
               }
             }
           ]
@@ -72,7 +84,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.05,
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "race",
         "data": {
@@ -106,7 +118,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Blue",
+  "folder": "Red",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

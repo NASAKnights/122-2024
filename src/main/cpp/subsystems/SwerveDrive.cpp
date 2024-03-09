@@ -76,7 +76,8 @@ SwerveDrive::SwerveDrive()
 
             auto alliance = frc::DriverStation::GetAlliance();
             if (alliance) {
-                return alliance.value() == frc::DriverStation::Alliance::kRed;
+                return false;
+                //return alliance.value() == frc::DriverStation::Alliance::kRed;
             }
             return false;
         },
