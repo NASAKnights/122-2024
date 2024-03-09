@@ -19,6 +19,7 @@
 #include <arm/Arm.h>
 #include <autos/Auto.h>
 
+
 Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit() 
@@ -85,6 +86,8 @@ void Robot::TeleopPeriodic() {
 
 void Robot::TeleopExit() {
   m_arm.arm_Brake_Out();
+  m_climber.engage();
+  m_climber.disableBrake();
 }
 
 /**
@@ -172,6 +175,19 @@ void Robot::BindCommands() {
         frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleDriving);
       }).ToPtr()));
 
+  frc2::JoystickButton(&m_operatorController, 9)
+    .WhileTrue(Retract(&m_climber).ToPtr());
+  
+  frc2::JoystickButton(&m_operatorController, 10)
+        .WhileTrue(Extend(&m_climber).ToPtr());
+
+  frc2::JoystickButton(&m_operatorController, 6).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+        // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
+        m_arm.Disable();
+      },
+      {&m_arm}).ToPtr()))
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, ARM_Speed, ARM_Angel).ToPtr());
+
   frc2::JoystickButton(&m_operatorController, 6)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm,  &m_LED_Controller,
                 0.8, ArmConstants::kArmAngleShootClose).ToPtr()); 
@@ -256,6 +272,7 @@ void Robot::UpdateDashboard() {
   frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
    ARM_Angel = frc::SmartDashboard::GetNumber("ARM_Angel",ArmConstants::kArmAngleDriving);
    ARM_Speed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
+   servo_angle = frc::SmartDashboard::GetNumber("servo_angle",100);
 
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();

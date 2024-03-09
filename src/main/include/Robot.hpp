@@ -14,8 +14,13 @@
 #include "subsystems/SwerveDrive.hpp"
 #include "arm/Arm.h"
 #include "commands/shooter/shoot.h"
+#include "commands//Retract.h"
+#include "commands//Extend.h"
+
+
 #include "commands/intake/intakeTake.h"
 #include "subsystems/LEDController.h"
+#include "subsystems/Climber.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -50,10 +55,13 @@ private:
   Indexer m_indexer;
   Intake m_intake;
   LEDController m_LED_Controller;
+  Climber m_climber;
 
   double autoName = 0;
   double ARM_Angel = 60.0;
   double ARM_Speed = -120;
+
+  double servo_angle = 100;
 
 
   frc::DigitalInput autoColor{9};
