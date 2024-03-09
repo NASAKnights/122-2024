@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2991794154609702,
-        "y": 5.5768617000416905
+        "x": 0.48594960471170945,
+        "y": 2.424042934023368
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2991794154609702,
-        "y": 5.5768617000416905
+        "x": 0.48594960471170945,
+        "y": 2.424042934023368
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.502624772470449,
-        "y": 6.181346709486769
+        "x": 2.498397613982728,
+        "y": 2.424042934023368
       },
       "prevControl": {
-        "x": 3.502624772470449,
-        "y": 6.181346709486769
+        "x": 2.498397613982728,
+        "y": 2.424042934023368
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,47 +35,19 @@
       "name": "New Event Marker",
       "waypointRelativePos": 0.4,
       "command": {
-        "type": "sequential",
+        "type": "deadline",
         "data": {
           "commands": [
             {
               "type": "wait",
               "data": {
-                "waitTime": 1.0
+                "waitTime": 2.0
               }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.75,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
+            },
             {
-              "type": "wait",
+              "type": "named",
               "data": {
-                "waitTime": 1.0
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 1.0
+                "name": "a_shoot"
               }
             }
           ]
@@ -97,7 +69,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 0.3299144699742819,
     "velocity": 0
   },
   "useDefaultConstraints": false
