@@ -162,7 +162,7 @@ void Robot::BindCommands() {
     .WhileTrue(Retract(&m_climber).ToPtr());
   
   frc2::JoystickButton(&m_operatorController, 10)
-        .WhileTrue(Retract(&m_climber).ToPtr());
+        .WhileTrue(Extend(&m_climber).ToPtr());
 
   frc2::JoystickButton(&m_operatorController, 6).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
         // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
