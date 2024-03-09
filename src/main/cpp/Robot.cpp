@@ -216,9 +216,13 @@ frc2::CommandPtr Robot::GetAutonomousCommand(){
   
   if(autoColor.Get())
   {
+    auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
+    m_swerveDrive.ResetPose(start);
     return pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
   }
   else{
+    auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
+    m_swerveDrive.ResetPose(start);
     return pathplanner::PathPlannerAuto("Move").ToPtr();
   }
 }
