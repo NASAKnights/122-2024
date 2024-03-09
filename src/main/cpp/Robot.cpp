@@ -141,7 +141,7 @@ void Robot::CreateRobot() {
         m_arm.handle_Setpoint(units::degree_t(ARM_Angel));
       },
       {&m_arm}));
-    m_LED_Controller.SetDefaultCommand(frc2::RunCommand(
+    m_LED_Controller.SetDefaultCommand(frc2::InstantCommand(
       [this] {
         m_LED_Controller.DefaultAnimation();
       },
