@@ -15,6 +15,7 @@
 #include <arm/Arm.h>
 #include <autos/Auto.h>
 
+
 Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit() 
@@ -156,30 +157,12 @@ void Robot::BindCommands() {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
 
-  //  frc2::JoystickButton(&m_operatorController, 9)
-  //     .WhileTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
-  //       return m_climber.move_Climber(ClimberState::DOWN);
-  //     }))); // TODO assign as test
-
-    // frc2::JoystickButton(&m_operatorController, 10)
-    //   .WhileTrue(frc2::CommandPtr(frc2::InstantCommand([this] {
-    //     return m_climber.move_Climber(ClimberState::UP);
-    //   }))); // TODO assign as test
 
   frc2::JoystickButton(&m_operatorController, 9)
-    .WhileTrue(frc2::RunCommand([this] {
-      m_climber.engage();
-      m_climber.retract();
-    }, {&m_climber}).ToPtr());
+    .WhileTrue(Retract(&m_climber).ToPtr());
   
   frc2::JoystickButton(&m_operatorController, 10)
-    .OnTrue(frc2::InstantCommand([this] {
-      m_climber.disengage();
-      m_climber.m_ClimberState = CLIMBER_EXTEND_START;
-    }, {&m_climber}).ToPtr())
-    .WhileTrue(frc2::RunCommand([this] {
-      return m_climber.extend();
-    }, {&m_climber}).ToPtr());
+        .WhileTrue(Retract(&m_climber).ToPtr());
 
   frc2::JoystickButton(&m_operatorController, 6).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
         // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));

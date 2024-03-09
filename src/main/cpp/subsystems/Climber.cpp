@@ -19,6 +19,9 @@ Climber::Climber() :
 // This method will be called once per scheduler run
 void Climber::Periodic() {
   frc::SmartDashboard::PutBoolean("Climber at Bot?",botLimit1.Get());
+/* if (!botLimit1.Get()) {
+      climberMotor1.Set(0.0);
+    }*/
 }
 
 void Climber::engage() {
@@ -26,7 +29,7 @@ void Climber::engage() {
 }
 
 void Climber::disengage() {
-  lockServo.SetAngle(50);
+  lockServo.SetAngle(45);
   time_brake_released = frc::GetTime();
 }
 
@@ -73,7 +76,8 @@ void Climber::extend() {
       climberMotor1.Set(-0.1);
       if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 315)
       {
-        climberMotor1.StopMotor();
+        //climberMotor1.StopMotor();
+        climberMotor1.Set(0);
         m_ClimberState = CLIMBER_EXTEND_DONE;
       }
     }
@@ -93,7 +97,9 @@ void Climber::retract(){
       climberMotor1.Set(0.1);
     }
     else {
-      climberMotor1.StopMotor();
+      frc::SmartDashboard::PutBoolean("Climber",true);
+      //climberMotor1.StopMotor();
+      climberMotor1.Set(0);
       climberMotor1.SetPosition(units::angle::turn_t{0}); //TODO: Speed up later/set to position
     }
 }
