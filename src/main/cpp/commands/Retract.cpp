@@ -9,7 +9,7 @@
 Retract::Retract(Climber* _climber):
     climber{_climber}
 {
-
+  AddRequirements(climber);
 }
 
 // Called when the command is initially scheduled.
@@ -17,13 +17,13 @@ void Retract::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void Retract::Execute() {
-
-
   climber->retract();
 }
 
 // Called once the command ends or is interrupted.
-void Retract::End(bool interrupted) {}
+void Retract::End(bool interrupted) {
+  climber->stopMotor();
+}
 
 // Returns true when the command should end.
 bool Retract::IsFinished() {

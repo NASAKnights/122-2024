@@ -19,6 +19,7 @@ Climber::Climber() :
 // This method will be called once per scheduler run
 void Climber::Periodic() {
   frc::SmartDashboard::PutBoolean("Climber at Bot?",botLimit1.Get());
+  frc::SmartDashboard::PutNumber("Climber State",m_ClimberState);
 /* if (!botLimit1.Get()) {
       climberMotor1.Set(0.0);
     }*/
@@ -38,11 +39,9 @@ void Climber::setAngle(double angle) {
 }
 
 void Climber::disableBrake() {
-  
   lockServo.SetOffline();
-  lockServo.SetDisabled(); 
-  lockServo.SetPulseTime(0_ms);
-  
+  lockServo.SetDisabled();
+  lockServo.SetPulseTime(0_ms);  
 }
 
 void Climber::moveMotor() {
@@ -61,6 +60,7 @@ void Climber::extend() {
     case CLIMBER_EXTEND_START:
     {
       m_ClimberState = CLIMBER_EXTEND_BRAKE_DISENGAGE;
+      disengage();
       break;
     }
     case CLIMBER_EXTEND_BRAKE_DISENGAGE:

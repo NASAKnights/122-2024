@@ -159,7 +159,7 @@ void Robot::BindCommands() {
 
 
   frc2::JoystickButton(&m_operatorController, 9)
-    .WhileTrue(Retract(&m_climber).ToPtr());
+    .WhileTrue(Extend(&m_climber).ToPtr());
   
   frc2::JoystickButton(&m_operatorController, 10)
         .WhileTrue(Retract(&m_climber).ToPtr());
@@ -178,7 +178,7 @@ void Robot::BindCommands() {
       {&m_arm}).ToPtr()))
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, -15, 80).ToPtr()); // -15, 145
 
-    frc2::JoystickButton(&m_operatorController, 3)
+  frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm).ToPtr());
 
   frc2::JoystickButton(&m_operatorController, 4)

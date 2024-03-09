@@ -14,6 +14,7 @@
 #include "arm/Arm.h"
 #include "commands/shooter/shoot.h"
 #include "commands//Retract.h"
+#include "commands/Extend.h"
 
 #include "commands/intake/intakeTake.h"
 #include "subsystems/Climber.h"
