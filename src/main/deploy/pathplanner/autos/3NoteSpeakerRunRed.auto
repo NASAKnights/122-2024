@@ -1,0 +1,56 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 15.33,
+      "y": 5.537554731751458
+    },
+    "rotation": 178.96704689196463
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "a_shoot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker2Note2RED"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Speaker2Note3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Speaker2Note1"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
