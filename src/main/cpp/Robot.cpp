@@ -199,8 +199,8 @@ void Robot::BindCommands() {
                 0.8, ArmConstants::kArmAngleShootClose).ToPtr()); 
   frc2::JoystickButton(&m_operatorController, 5)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                0.8, 57).ToPtr()); 
-
+                0.8, 57).ToPtr());
+ 
 //AMP
   /*frc2::JoystickButton(&m_operatorController, 5)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
