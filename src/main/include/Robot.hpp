@@ -50,6 +50,7 @@ private:
   // Subsystems
   SwerveDrive m_swerveDrive;
   ArmSubsystem m_arm;
+  
 
   Shooter m_shooter;
   Indexer m_indexer;
@@ -79,4 +80,5 @@ private:
   void BindCommands();
   frc2::CommandPtr GetAutonomousCommand();
   void UpdateDashboard();
+  void Arm_Position_Log();
 };
