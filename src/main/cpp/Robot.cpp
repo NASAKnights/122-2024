@@ -113,7 +113,7 @@ void Robot::CreateRobot() {
       frc::SmartDashboard::PutNumber("ARM_Angel",ArmConstants::kArmAngleDriving);
       frc::SmartDashboard::PutNumber("ARM_Speed",-120);
   
-      pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, ArmConstants::kArmAngleShootClose).ToPtr())); // <- This example method returns CommandPtr
+      pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, ArmConstants::kArmAngleShootClose+1).ToPtr())); // <- This example method returns CommandPtr
       pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(intakeTake(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr()));
 
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
@@ -167,6 +167,15 @@ void Robot::BindCommands() {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
 
+
+
+      //TODO Remove later
+
+      frc2::JoystickButton(&m_operatorController, 5)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
+                0.8, 50).ToPtr()); 
+
+
   frc2::JoystickButton(&m_driverController, 9).OnTrue(frc2::InstantCommand(
       [this] {
         frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleStarting);
@@ -186,17 +195,17 @@ void Robot::BindCommands() {
         m_arm.Disable();
       },
       {&m_arm}).ToPtr()))
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, ARM_Speed, ARM_Angel).ToPtr());
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, ARM_Speed, ARM_Angel).ToPtr());
 
   frc2::JoystickButton(&m_operatorController, 6)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm,  &m_LED_Controller,
                 0.8, ArmConstants::kArmAngleShootClose).ToPtr()); 
 
-
-  frc2::JoystickButton(&m_operatorController, 5)
+//AMP
+  /*frc2::JoystickButton(&m_operatorController, 5)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
                 0.4, 105).ToPtr()); // -15, 145
-
+*/
     frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr());
 

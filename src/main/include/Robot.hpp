@@ -64,7 +64,7 @@ private:
   double servo_angle = 100;
 
 
-  frc::DigitalInput autoColor{9};
+  frc::DigitalInput autoColor{1};
 
   // PS4 controllers
   frc::Joystick m_driverController{DriveConstants::kDriverPort};

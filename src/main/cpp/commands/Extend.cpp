@@ -9,7 +9,8 @@
 Extend::Extend(Climber* _climber):
     climber{_climber}
 {
-
+AddRequirements(climber);
+climber->m_ClimberState = CLIMBER_EXTEND_START; 
 }
 
 // Called when the command is initially scheduled.
@@ -23,7 +24,11 @@ void Extend::Execute() {
 }
 
 // Called once the command ends or is interrupted.
-void Extend::End(bool interrupted) {}
+void Extend::End(bool interrupted) {
+
+
+  climber->stopMotor();
+}
 
 // Returns true when the command should end.
 bool Extend::IsFinished() {

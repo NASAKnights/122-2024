@@ -9,6 +9,7 @@
 Retract::Retract(Climber* _climber):
     climber{_climber}
 {
+AddRequirements(climber);
 
 }
 
@@ -23,7 +24,12 @@ void Retract::Execute() {
 }
 
 // Called once the command ends or is interrupted.
-void Retract::End(bool interrupted) {}
+void Retract::End(bool interrupted) {
+
+
+    climber->stopMotor();
+
+}
 
 // Returns true when the command should end.
 bool Retract::IsFinished() {

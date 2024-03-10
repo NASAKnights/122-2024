@@ -35,7 +35,7 @@ ArmSubsystem::ArmSubsystem()
     m_motor.GetConfigurator().Apply(armAngleConfig);
     m_motor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
-    m_encoder.SetPositionOffset(40.0/360.0);
+    m_encoder.SetPositionOffset(ArmConstants::kArmAngleOffset/360.0);
     m_encoder.SetDistancePerRotation(360);
     // m_encoder.SetPositionOffset(0.2);
     Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
@@ -92,17 +92,17 @@ void ArmSubsystem::arm_Brake_Out()
 void ArmSubsystem::printLog()
 {
     frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value());  
-    
+    /*
     frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
-    frc::SmartDashboard::PutNumber("ARM_setpoint", GetController().GetSetpoint().position.value());
+    frc::SmartDashboard::PutNumber("ARM_setpoint", GetController().GetSetpoint().position.value());*/
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAccumGyroY().GetValueAsDouble());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAngle());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_Z",arm_pigeon.GetGravityVectorZ().GetValueAsDouble());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_Y",arm_pigeon.GetGravityVectorY().GetValueAsDouble());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_X",arm_pigeon.GetGravityVectorX().GetValueAsDouble());
-    
+    /*
     frc::SmartDashboard::PutNumber("Brake Time", (frc::GetTime() - time_brake_released).value());
-    frc::SmartDashboard::PutNumber("Arm State", m_ArmState);
+    frc::SmartDashboard::PutNumber("Arm State", m_ArmState);*/
     
     // Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
     //                 0_ms, 

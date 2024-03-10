@@ -31,7 +31,7 @@ const auto kArmVelLimit = units::degrees_per_second_t(90.0);
 const auto kArmAccelLimit = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>(90.0);
 const auto kControllerTolerance = units::degree_t(3.0);
 const int kAngleMotorId = 5;
-const int kAbsEncoderId = 1;
+const int kAbsEncoderId = 9;
 const int kAngleEncoderPulsePerRev = 2048;
 const auto kFFks = units::volt_t(0.18); // Volts static (motor)
 const auto kFFkg = units::volt_t(0.25); // Volts
@@ -45,8 +45,9 @@ const double kArmPeakCurrentDuration = 0.1;
 
 const int kLinearMax = 1140;
 const int kLinearMin = 1100;
-
 const double kArmAngleOffset = 40.0;
+// const double kArmAngleOffset = -75.0 + 360.0;
+
 const double kArmAngleStarting = 75.0; // With offset 
 const double kArmAngleDriving = 30.0; // With offset
 const double kArmAngleIntake = -1.5; //with offset

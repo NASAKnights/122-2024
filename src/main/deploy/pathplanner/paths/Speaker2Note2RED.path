@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.276424687256444,
-        "y": 5.545953474318579
+        "x": 15.33,
+        "y": 5.537554731751458
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.276424687256444,
-        "y": 5.545953474318579
+        "x": 14.33,
+        "y": 5.537554731751458
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3,
-        "y": 5.545953474318579
+        "x": 14.238336702872099,
+        "y": 5.537554731751458
       },
       "prevControl": {
-        "x": 2.1999999999999997,
-        "y": 5.545953474318579
+        "x": 14.138364304775344,
+        "y": 5.539904118646819
       },
       "nextControl": {
-        "x": 2.3499999999999996,
-        "y": 5.545953474318579
+        "x": 14.338309100968853,
+        "y": 5.535205344856096
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.276424687256444,
-        "y": 5.545953474318579
+        "x": 15.33,
+        "y": 5.537554731751458
       },
       "prevControl": {
-        "x": 2.5688718340806123,
-        "y": 5.549360858912709
+        "x": 15.230003887058066,
+        "y": 5.536673030836171
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,37 +45,25 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.65,
-      "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 0,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.6,
       "command": {
-        "type": "race",
+        "type": "deadline",
         "data": {
           "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.0
+              }
+            },
             {
               "type": "named",
               "data": {
                 "name": "a_runIntake"
-              }
-            },
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 1.1
               }
             }
           ]
@@ -83,22 +71,22 @@
       }
     },
     {
-      "name": "Shoot",
-      "waypointRelativePos": 1.0,
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.75,
       "command": {
-        "type": "race",
+        "type": "deadline",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "a_shoot"
-              }
-            },
             {
               "type": "wait",
               "data": {
                 "waitTime": 2.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "a_shoot"
               }
             }
           ]
@@ -114,13 +102,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Red",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
