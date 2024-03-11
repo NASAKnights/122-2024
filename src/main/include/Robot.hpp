@@ -66,11 +66,13 @@ private:
 
 
   frc::DigitalInput autoColor{1};
+  frc::DigitalInput auto4Note{8};
+  frc::DigitalInput auto2{7};
+  frc::DigitalInput auto3{6};
 
   // PS4 controllers
   frc::Joystick m_driverController{DriveConstants::kDriverPort};
   frc::Joystick m_operatorController{DriveConstants::kOperatorPort};
-
 
 
   //
@@ -80,5 +82,4 @@ private:
   void BindCommands();
   frc2::CommandPtr GetAutonomousCommand();
   void UpdateDashboard();
-  void Arm_Position_Log();
 };

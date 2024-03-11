@@ -84,7 +84,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 1.3,
       "command": {
         "type": "race",
         "data": {
@@ -118,7 +118,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Blue",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

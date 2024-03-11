@@ -57,7 +57,7 @@ void Robot::DisabledInit() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-  m_autonomousCommand = this->GetAutonomousCommand();
+  // m_autonomousCommand = this->GetAutonomousCommand();
 
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
@@ -189,7 +189,7 @@ void Robot::BindCommands() {
   frc2::JoystickButton(&m_operatorController, 10)
         .WhileTrue(Extend(&m_climber).ToPtr());
 
-  // frc2::JoystickButton(&m_operatorController, 6).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
+  // frc2::JoystickButton(&m_operatorController, 6).OnFalse(frc2::CommandPtr(frc2::InstantCommablend([this] {
   //       // m_arm.SetGoal(units::degree_t(m_arm.GetMeasurement()));
   //       m_arm.Disable();
   //     },
@@ -204,7 +204,12 @@ void Robot::BindCommands() {
 */
   frc2::JoystickButton(&m_operatorController, 5)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                0.8, 57).ToPtr());
+                0.8, 62.5).ToPtr());
+
+
+  frc2::JoystickButton(&m_operatorController, 1)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
+                0.8, 66.25).ToPtr());
  
 //AMP
   /*frc2::JoystickButton(&m_operatorController, 5)
@@ -244,29 +249,79 @@ void Robot::BindCommands() {
 // }
 frc2::CommandPtr Robot::GetAutonomousCommand(){
   
-  if(autoColor.Get())
-  {
+  if(auto3.Get())
+  { if(auto4Note.Get()){
     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
     m_swerveDrive.ResetPose(start);
     return pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
+    }
+    else
+    { 
+       auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
+       m_swerveDrive.ResetPose(start);
+       return pathplanner::PathPlannerAuto("Move").ToPtr();
+    }
   }
   else{
-    auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
-    m_swerveDrive.ResetPose(start);
-    return pathplanner::PathPlannerAuto("Move").ToPtr();
+    if(auto4Note.Get()){
+      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
+      m_swerveDrive.ResetPose(start);
+      return pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
+    }
+    else
+    { 
+      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
+      m_swerveDrive.ResetPose(start);
+      return pathplanner::PathPlannerAuto("Move").ToPtr();
+    }
   }
 }
 
 void Robot::DisabledPeriodic() {
   m_arm.Disable();
-  if(autoColor.Get()){
+  if(auto3.Get()){
+    m_LED_Controller.candle.SetLEDs(0,0,255,0,0,4);
+  }
+  else{
+    m_LED_Controller.candle.SetLEDs(255,0,0,0,0,4);
+  }
+  if(auto4Note.Get()){
     autoName = 1;
-    m_LED_Controller.candle.SetLEDs(255,0,0,0,0,8);
+    m_LED_Controller.candle.SetLEDs(0,255,0,0,4,4);
   }
   else{
     autoName = 2;
-    m_LED_Controller.candle.SetLEDs(0,255,0,0,0,8);
+    m_LED_Controller.candle.SetLEDs(0,0,0,0,4,4);
   }
+  
+  // Set Auto commands
+  if(auto3.Get())
+  { if(auto4Note.Get()){
+      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
+      m_swerveDrive.ResetPose(start);
+      m_autonomousCommand =  pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
+    }
+    else
+    { 
+       auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
+       m_swerveDrive.ResetPose(start);
+       m_autonomousCommand =  pathplanner::PathPlannerAuto("Move").ToPtr();
+    }
+  }
+  else{
+    if(auto4Note.Get()){
+      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
+      m_swerveDrive.ResetPose(start);
+      m_autonomousCommand =  pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
+    }
+    else
+    { 
+      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
+      m_swerveDrive.ResetPose(start);
+      m_autonomousCommand =  pathplanner::PathPlannerAuto("Move").ToPtr();
+    }
+  }
+
   frc::SmartDashboard::PutNumber("Auto", autoName);
   // m_swerveDrive.SetVision();
 }
@@ -288,54 +343,16 @@ void Robot::UpdateDashboard() {
    ARM_Speed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
    servo_angle = frc::SmartDashboard::GetNumber("servo_angle",100);
 
+  frc::SmartDashboard::PutBoolean("AutoSwitches/color", autoColor.Get());
+  frc::SmartDashboard::PutBoolean("AutoSwitches/7", auto2.Get());
+  frc::SmartDashboard::PutBoolean("AutoSwitches/6", auto3.Get());
+  frc::SmartDashboard::PutBoolean("AutoSwitches/8", auto4Note.Get());
+
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();
-  Arm_Position_Log();
   
 }
 
-void Robot::Arm_Position_Log()
-{  frc::Pose2d blue_Speaker_Pos = frc::Pose2d(0_m  , units::length::meter_t{5.583}, frc::Rotation2d{}); 
-   auto currentPos =m_swerveDrive.GetPose();
-   auto robot2Speaker = currentPos.RelativeTo(blue_Speaker_Pos);
-   float distance = sqrt(robot2Speaker.X().value()*robot2Speaker.X().value()+robot2Speaker.Y().value()*robot2Speaker.Y().value());
-   frc::SmartDashboard::PutNumber("Distance",distance);
-   //Make into feet
-   distance = distance * 3,28084;
-   int i = distance/1.5;
-   switch(i)
-   {
-   case 0:
-   frc::SmartDashboard::PutNumber("Distance_TEST",i);
-  //m_arm.handle_Setpoint(units::angle::degree_t{40});
-    break;
-   case 1:
-   frc::SmartDashboard::PutNumber("Distance_TEST",i);
-   // m_arm.handle_Setpoint(units::angle::degree_t{50});
-   break;
-   case 2:
-   frc::SmartDashboard::PutNumber("Distance_TEST",i);
-  //m_arm.handle_Setpoint(units::angle::degree_t{40});
-    break;
-    case 3:
-   frc::SmartDashboard::PutNumber("Distance_TEST",i);
-  //m_arm.handle_Setpoint(units::angle::degree_t{40});
-    break;
-    case 4:
-   frc::SmartDashboard::PutNumber("Distance_TEST",i);
-  //m_arm.handle_Setpoint(units::angle::degree_t{40});
-    case 5:
-   frc::SmartDashboard::PutNumber("Distance_TEST",i);
-  //m_arm.handle_Setpoint(units::angle::degree_t{40});
-    case 6:
-   frc::SmartDashboard::PutNumber("Distance_TEST",i);
-  //m_arm.handle_Setpoint(units::angle::degree_t{40});
-    case 7:
-   frc::SmartDashboard::PutNumber("Distance_TEST",i);
-  //m_arm.handle_Setpoint(units::angle::degree_t{40});
-    break;
-   }
-}
 
 
 #ifndef RUNNING_FRC_TESTS

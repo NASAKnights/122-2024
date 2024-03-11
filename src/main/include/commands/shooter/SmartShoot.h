@@ -41,6 +41,6 @@ class SmartShoot
     SwerveDrive* swerdrive;
 
     double shootSpeed;
-        
+    float distance;
     SmartShooterState m_state;
 };

@@ -43,8 +43,8 @@ const int kArmContinuousCurrentLimit = 35;
 const int kArmPeakCurrentLimit = 60;
 const double kArmPeakCurrentDuration = 0.1;
 
-const int kLinearMax = 1140;
-const int kLinearMin = 1100;
+const int kLinearMax = 1065;//1140
+const int kLinearMin = 1010;//1100
 const double kArmAngleOffset = 40.0;
 // const double kArmAngleOffset = -75.0 + 360.0;
 
