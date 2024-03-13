@@ -75,7 +75,7 @@ void Climber::extend() {
     }
     case CLIMBER_EXTEND_MOVING: 
     {
-      climberMotor1.Set(-0.6);
+      climberMotor1.Set(-0.9);
       if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 315)
       {
         //climberMotor1.StopMotor();
@@ -96,7 +96,7 @@ void Climber::extend() {
 void Climber::retract(){
     
     if (botLimit1.Get()) {
-      climberMotor1.Set(0.6);
+      climberMotor1.Set(0.9);
     }
     else {
       frc::SmartDashboard::PutBoolean("Climber",true);

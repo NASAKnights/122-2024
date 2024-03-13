@@ -76,6 +76,8 @@ void Shoot::End(bool interrupted)
   shoooter->stopShooter();
   intake->stopIntake();
   m_state = DONE;
+  m_led_control->candle.SetLEDs(0,255,255,1,8);
+
 }
 
 // Returns true when the command should end.

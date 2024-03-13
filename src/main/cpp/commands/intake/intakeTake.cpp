@@ -25,6 +25,8 @@ intakeTake::intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm, L
 void intakeTake::Initialize() {
   m_state = MOVING;
   m_arm->handle_Setpoint(units::angle::degree_t(ArmConstants::kArmAngleIntake)); //38.5
+  m_led_control->m_intakeState = NO_NOTE;
+  m_led_control->HandleIntakeState();
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -56,6 +58,7 @@ void intakeTake::Execute() {
 void intakeTake::End(bool interrupted) { 
   intake->stopIntake(); 
   m_state = IDLE;
+  m_led_control->candle.SetLEDs(0,255,255,1,8);
 }
 
 // Returns true when the command should end.

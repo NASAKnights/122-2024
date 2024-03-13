@@ -37,7 +37,7 @@ ArmSubsystem::ArmSubsystem()
 
     m_encoder.SetPositionOffset(ArmConstants::kArmAngleOffset/360.0);
     m_encoder.SetDistancePerRotation(360);
-    // m_encoder.SetPositionOffset(0.2);
+   
     Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
                     0_ms, 
                     0_ms,  
@@ -61,7 +61,10 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
   // Calculate the feedforward from the sepoint
   units::volt_t feedforward =
       m_feedforward.Calculate(setpoint.position, setpoint.velocity);
-  frc::GetTime();
+  
+  frc::SmartDashboard::PutNumber("output", output);
+  frc::SmartDashboard::PutNumber("setpoint pos", setpoint.position.value());
+  frc::SmartDashboard::PutNumber("setpoint vel", setpoint.velocity.value());
 
   // Output will be 0 if disabled.
   if(fabs(output) < 1e-6 || GetController().AtGoal())
@@ -91,10 +94,11 @@ void ArmSubsystem::arm_Brake_Out()
 
 void ArmSubsystem::printLog()
 {
-    frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value());  
-    /*
-    frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
-    frc::SmartDashboard::PutNumber("ARM_setpoint", GetController().GetSetpoint().position.value());*/
+    frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value()); 
+    frc::SmartDashboard::PutNumber("armGoal_POS", GetController().GetGoal().position.value());
+    frc::SmartDashboard::PutNumber("armGoal_vel", GetController().GetGoal().velocity.value());
+    // frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
+    frc::SmartDashboard::PutNumber("ARM_setpoint", GetController().GetSetpoint().position.value());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAccumGyroY().GetValueAsDouble());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAngle());
     // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_Z",arm_pigeon.GetGravityVectorZ().GetValueAsDouble());
@@ -117,29 +121,35 @@ units::degree_t ArmSubsystem::GetMeasurement() {
 }
 
 void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
-  if(fabs((setpoint - GetController().GetGoal().position).value()) >= 1e-1)
+  if(fabs((setpoint - GetController().GetGoal().position).value()) >= 1e-1 && m_ArmState != ArmConstants::BRAKED)
   {
 
-    m_ArmState = ArmConstants::BRAKED;
-    SetGoal(setpoint);
-    arm_Brake_Out();
+    m_ArmState = ArmConstants::START_ARM;
+    // SetGoal(setpoint);
+    Disable();
   }
 
   switch (m_ArmState)
   {
+  case ArmConstants::START_ARM:
+  {
+    arm_Brake_Out();
+    m_ArmState = ArmConstants::BRAKED;
+  }
   case ArmConstants::BRAKED:
   {
-    if ((frc::GetTime() - time_brake_released).value() > 0.5)
+    if ((frc::GetTime() - time_brake_released).value() > 0.2)
     {
       m_ArmState = ArmConstants::MOVING;
+      SetGoal(setpoint);
       Enable();
     }
   break;
   }
   case ArmConstants::MOVING:
   {
-    if((GetController().GetGoal().position - GetMeasurement()) <
-           units::angle::degree_t(3))
+    if(fabs((GetController().GetGoal().position - GetMeasurement()).value()) <
+           3)
     {
       arm_Brake_In();
       m_ArmState = ArmConstants::MOVING;

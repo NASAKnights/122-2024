@@ -18,6 +18,7 @@
 namespace ArmConstants {
 
 enum ArmState{
+    START_ARM,
     BRAKED,
     // UNBRAKED,
     MOVING,
@@ -27,14 +28,14 @@ enum ArmState{
 const double kAngleP = 0.3;
 const double kAngleI = 0.0;
 const double kAngleD = 0.0;//0.0001
-const auto kArmVelLimit = units::degrees_per_second_t(90.0);
-const auto kArmAccelLimit = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>(90.0);
+const auto kArmVelLimit = units::degrees_per_second_t(140.0);
+const auto kArmAccelLimit = units::angular_acceleration::degrees_per_second_squared_t(120.0);
 const auto kControllerTolerance = units::degree_t(3.0);
 const int kAngleMotorId = 5;
-const int kAbsEncoderId = 9;
+const int kAbsEncoderId = 1;
 const int kAngleEncoderPulsePerRev = 2048;
 const auto kFFks = units::volt_t(0.18); // Volts static (motor)
-const auto kFFkg = units::volt_t(0.25); // Volts
+const auto kFFkg = units::volt_t(0.5); // Volts
 const auto kFFkV = units::unit_t<frc::ArmFeedforward::kv_unit>(2.26); // volts*s/rad
 const auto kFFkA = units::unit_t<frc::ArmFeedforward::ka_unit>(0.06); // volts*s^2/rad
 
@@ -43,12 +44,11 @@ const int kArmContinuousCurrentLimit = 35;
 const int kArmPeakCurrentLimit = 60;
 const double kArmPeakCurrentDuration = 0.1;
 
-const int kLinearMax = 1065;//1140
-const int kLinearMin = 1010;//1100
+const int kLinearMax = 1100;//1140
+const int kLinearMin = 1060;//1100
 const double kArmAngleOffset = 40.0;
-// const double kArmAngleOffset = -75.0 + 360.0;
 
-const double kArmAngleStarting = 75.0; // With offset 
+const double kArmAngleStarting = 80.0; // With offset \[]
 const double kArmAngleDriving = 30.0; // With offset
 const double kArmAngleIntake = -1.5; //with offset
 const double kArmAngleShootClose = 40.0; //with offset

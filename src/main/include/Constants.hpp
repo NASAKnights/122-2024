@@ -72,7 +72,7 @@ const frc::Rotation2d kFrontRightOffset{
 const frc::Rotation2d kBackLeftOffset{-units::degree_t{-129-30+24}}; // module 3 // 
 // const frc::Rotation2d kBackLeftOffset{-units::degree_t{74-24-24-4}}; // module 3
 const frc::Rotation2d kBackRightOffset{
-    -units::degree_t{178 - 5.5}}; // 265.517 // -93.867 // module 4
+    -units::degree_t{178 - 5.5 - 27}}; // 265.517 // -93.867 // module 4
 
 // baby swerve, fl 103, fr 42.5, bl 160.6, br 85
 

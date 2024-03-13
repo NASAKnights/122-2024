@@ -65,7 +65,7 @@ private:
   double servo_angle = 100;
 
 
-  frc::DigitalInput autoColor{1};
+  frc::DigitalInput autoColor{9};
   frc::DigitalInput auto4Note{8};
   frc::DigitalInput auto2{7};
   frc::DigitalInput auto3{6};
