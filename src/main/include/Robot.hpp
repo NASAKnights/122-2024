@@ -58,12 +58,13 @@ private:
   LEDController m_LED_Controller;
   Climber m_climber;
 
+
   double autoName = 0;
   double ARM_Angel = 60.0;
   double ARM_Speed = -120;
 
   double servo_angle = 100;
-
+  float  distance;
 
   frc::DigitalInput autoColor{1};
   frc::DigitalInput auto4Note{8};
@@ -82,4 +83,5 @@ private:
   void BindCommands();
   frc2::CommandPtr GetAutonomousCommand();
   void UpdateDashboard();
+  void Arm_Position();
 };

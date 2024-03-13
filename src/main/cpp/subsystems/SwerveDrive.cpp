@@ -45,6 +45,8 @@ SwerveDrive::SwerveDrive()
   navx.Calibrate();
   speeds = frc::ChassisSpeeds();
   networkTableInst.StartServer();
+  frc::SmartDashboard::PutData("Field",&m_field);
+
 
   poseTable = networkTableInst.GetTable("ROS2Bridge");
   baseLink1Subscribe = poseTable->GetDoubleArrayTopic(baseLink1).Subscribe(
@@ -101,6 +103,9 @@ void SwerveDrive::Periodic() {
 }
 
 void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
+  if(enable)
+  {
+    
   auto states = kSwerveKinematics.ToSwerveModuleStates(speeds);
 
   kSwerveKinematics.DesaturateWheelSpeeds(
@@ -120,6 +125,30 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
   // frc::SmartDashboard::PutNumber("drive/y meters", odometry.GetPose().Y().value());
   // frc::SmartDashboard::PutNumber("drive/rotation degrees", odometry.GetPose().Rotation().Degrees().value());
 }
+}
+
+void SwerveDrive::Strafe(frc::ChassisSpeeds speeds, double desiredAngle) {
+  speeds.omega = units::angular_velocity::radians_per_second_t{8.5*(desiredAngle-m_poseEstimator.GetEstimatedPosition().Rotation().Radians().value())};
+  auto states = kSwerveKinematics.ToSwerveModuleStates(speeds);
+
+  kSwerveKinematics.DesaturateWheelSpeeds(
+      &states, speeds, units::meters_per_second_t{ModuleConstants::kMaxSpeed},
+      DriveConstants::kMaxTranslationalVelocity,
+      DriveConstants::kMaxRotationalVelocity);
+
+  for (int i = 0; i < 4; i++) {
+    modules[i].SetDesiredState(states[i]);
+  }
+
+  frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
+  frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
+  frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
+
+  // frc::SmartDashboard::PutNumber("drive/x meters", odometry.GetPose().X().value());
+  // frc::SmartDashboard::PutNumber("drive/y meters", odometry.GetPose().Y().value());
+  // frc::SmartDashboard::PutNumber("drive/rotation degrees", odometry.GetPose().Rotation().Degrees().value());
+}
+
 
 
 void SwerveDrive::SetFast() {}
@@ -153,6 +182,7 @@ frc::Pose2d SwerveDrive::GetPose() { return m_poseEstimator.GetEstimatedPosition
 
 void SwerveDrive::UpdateOdometry() {
   // odometry.Update(GetHeading(), GetModulePositions());
+
 }
 void SwerveDrive::SetVision(){ 
    
@@ -255,6 +285,8 @@ void SwerveDrive::UpdatePoseEstimate() {
   }
 
   m_poseEstimator.Update(m_pigeon.GetRotation2d(),GetModulePositions());
+  m_field.SetRobotPose(m_poseEstimator.GetEstimatedPosition());
+
 }
 
 void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
@@ -271,3 +303,12 @@ void SwerveDrive::PrintNetworkTableValues() {
   
 }
 */
+void SwerveDrive::EnableDrive() {
+  enable = true;
+  frc::SmartDashboard::PutBoolean("TestTestTest", enable);
+}
+void SwerveDrive::DisableDrive() {
+  enable = false;
+  frc::SmartDashboard::PutBoolean("TestTestTest", enable);
+
+}
