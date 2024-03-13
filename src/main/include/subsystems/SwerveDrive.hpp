@@ -38,6 +38,7 @@
 
 #include "Constants.hpp"
 #include "SwerveModule.hpp"
+#include <frc/smartdashboard/Field2d.h>
 
 class SwerveDrive : public frc2::SubsystemBase {
 public:
@@ -56,6 +57,9 @@ public:
   frc::Rotation2d GetHeading();
   void ResetHeading();
   void ResetDriveEncoders();
+  void EnableDrive();
+  void DisableDrive();
+
 
   std::array<frc::SwerveModulePosition, 4> GetModulePositions();
 
@@ -68,6 +72,7 @@ public:
 
   void InitializePID();
   void SetReference(frc::Pose2d);
+  void Strafe(frc::ChassisSpeeds speeds, double angle);
 
   void UpdatePoseEstimate();
   void PublishOdometry(frc::Pose2d);
@@ -87,12 +92,13 @@ private:
 
   frc::ChassisSpeeds speeds;
   // frc::SwerveDriveOdometry<4> odometry;
-
+ frc::Field2d m_field;
   frc::PIDController pidX;
   frc::PIDController pidY;
   frc::PIDController pidRot;
 
   bool hasRun = false;
+  bool enable= true;
   // ----------------------
 
   nt::NetworkTableInstance networkTableInst;

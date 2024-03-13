@@ -11,6 +11,8 @@
 #include <subsystems/Intake.h>
 #include <subsystems/SwerveDrive.hpp>
 #include <arm/Arm.h>
+#include <frc/Joystick.h>
+
 
 enum SmartShooterState
 {
@@ -22,7 +24,7 @@ enum SmartShooterState
 class SmartShoot
     : public frc2::CommandHelper<frc2::Command, SmartShoot> {
  public:
-  SmartShoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem* _arm, double _shootSpeed,  SwerveDrive* _swerdrive);
+  SmartShoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem* _arm, double _shootSpeed,  SwerveDrive* _swerdrive, frc::Joystick* _operatorController,frc::Joystick* _driverController,bool _color);
 
   void Initialize() override;
 
@@ -33,14 +35,21 @@ class SmartShoot
   bool IsFinished() override;
   
   void Arm_Position();
+
   private:
     Shooter* shoooter;
     Indexer* indexing;
     Intake* intake;
     ArmSubsystem* arm;
     SwerveDrive* swerdrive;
-
+    frc::Joystick* operatorController;
+    frc::Joystick* driverController;
+    
+    
     double shootSpeed;
+    bool color;
+  
+
     float distance;
     SmartShooterState m_state;
 };
