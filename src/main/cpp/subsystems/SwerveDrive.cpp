@@ -128,7 +128,7 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
 }
 
 void SwerveDrive::Strafe(frc::ChassisSpeeds speeds, double desiredAngle) {
-  speeds.omega = units::angular_velocity::radians_per_second_t{8.5*(desiredAngle-m_poseEstimator.GetEstimatedPosition().Rotation().Radians().value())};
+  speeds.omega = units::angular_velocity::radians_per_second_t{7*(desiredAngle-m_poseEstimator.GetEstimatedPosition().Rotation().Radians().value())};
   auto states = kSwerveKinematics.ToSwerveModuleStates(speeds);
 
   kSwerveKinematics.DesaturateWheelSpeeds(

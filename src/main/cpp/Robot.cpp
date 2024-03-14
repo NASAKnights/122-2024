@@ -164,6 +164,11 @@ void Robot::BindCommands() {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
 
+
+ frc2::JoystickButton(&m_operatorController, 8)
+            .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr()); 
+
+
   frc2::JoystickButton(&m_driverController, 9).OnTrue(frc2::InstantCommand(
       [this] {
         frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleStarting);
@@ -178,10 +183,10 @@ void Robot::BindCommands() {
   frc2::JoystickButton(&m_operatorController, 10)
         .WhileTrue(Extend(&m_climber).ToPtr());
 
- frc2::JoystickButton(&m_operatorController, 6)
+/* frc2::JoystickButton(&m_operatorController, 6)
             .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr());     
     
-    /*  frc2::JoystickButton(&m_operatorController, 6)
+    /  frc2::JoystickButton(&m_operatorController, 6)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm,  &m_LED_Controller,
                 0.8, ArmConstants::kArmAngleShootClose).ToPtr()); */
   frc2::JoystickButton(&m_operatorController, 1)

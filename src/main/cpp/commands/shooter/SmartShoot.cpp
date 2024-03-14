@@ -51,13 +51,15 @@ void SmartShoot::Initialize() {
 void SmartShoot::Execute() { 
   //TODO: ADD CONSTANT FOR MOTOR SPEED CHECK
  // shoooter->Shoot(shootSpeed);//angle is 78
+ frc::SmartDashboard::PutBoolean("TestTestestwqasdljnaskjdön", operatorController->GetRawButton(6));
   Arm_Position();
+   shoooter->Shoot(shootSpeed);//angle is 78
   switch (m_state)
   {
   case SMARTSPINUP:
   {
      // Change button 
-     if(shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE&&    operatorController->GetTrigger()  == true)
+     if(shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE&&    operatorController->GetRawButton(6))
     {
       m_state = SMARTSHOOTING;
     }
@@ -117,7 +119,7 @@ void SmartShoot::Arm_Position()
    distance = sqrt(robot2Speaker.X().value()*robot2Speaker.X().value()+robot2Speaker.Y().value()*robot2Speaker.Y().value());
    float angle = (asin(robot2Speaker.Y().value()/distance));
    if(angle > PI){
-    angle = PI - 0.175;
+    angle = PI;
    }
    swerdrive->Strafe(speed,angle);
    frc::SmartDashboard::PutNumber("rotataion",angle);
@@ -128,7 +130,7 @@ void SmartShoot::Arm_Position()
    distance = sqrt(robot2Speaker.X().value()*robot2Speaker.X().value()+robot2Speaker.Y().value()*robot2Speaker.Y().value());
    float angle = (asin(robot2Speaker.Y().value()/distance));
    if(angle > PI){
-    angle = PI - 0.175;
+      angle = PI;
    }
    }
 
