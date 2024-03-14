@@ -57,7 +57,7 @@ void Robot::DisabledInit() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-  // m_autonomousCommand = this->GetAutonomousCommand();
+  m_autonomousCommand = this->GetAutonomousCommand();
 
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
@@ -227,7 +227,7 @@ void Robot::BindCommands() {
 // }
 frc2::CommandPtr Robot::GetAutonomousCommand(){
   
-  if(auto3.Get())
+  if(autoColor.Get())
   { if(auto4Note.Get()){
     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
     m_swerveDrive.ResetPose(start);
@@ -258,7 +258,7 @@ frc2::CommandPtr Robot::GetAutonomousCommand(){
 
 void Robot::DisabledPeriodic() {
   // m_arm.Disable();
-  if(auto3.Get()){
+  if(autoColor.Get()){
     m_LED_Controller.candle.SetLEDs(0,0,255,0,0,4);
   }
   else{
