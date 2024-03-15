@@ -24,7 +24,11 @@ enum SmartShooterState
 class SmartShoot
     : public frc2::CommandHelper<frc2::Command, SmartShoot> {
  public:
-  SmartShoot(Shooter* _shooter, Indexer* _indexer, Intake* _intake, ArmSubsystem* _arm, double _shootSpeed,  SwerveDrive* _swerdrive, frc::Joystick* _operatorController,frc::Joystick* _driverController,bool _color);
+  SmartShoot(Shooter* _shooter, Indexer* _indexer, 
+            Intake* _intake, ArmSubsystem* _arm, 
+            double _shootSpeed,  SwerveDrive* _swerdrive, 
+            frc::Joystick* _operatorController,frc::Joystick* _driverController,
+            frc::DigitalInput* _color);
 
   void Initialize() override;
 
@@ -47,7 +51,7 @@ class SmartShoot
     
     
     double shootSpeed;
-    bool color;
+    frc::DigitalInput* color;
   
 
     float distance;

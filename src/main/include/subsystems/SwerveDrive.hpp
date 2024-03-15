@@ -99,6 +99,8 @@ private:
 
   bool hasRun = false;
   bool enable= true;
+
+  frc::ChassisSpeeds priorSpeeds = frc::ChassisSpeeds();
   // ----------------------
 
   nt::NetworkTableInstance networkTableInst;

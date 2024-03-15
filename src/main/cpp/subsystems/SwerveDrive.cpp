@@ -28,11 +28,6 @@ SwerveDrive::SwerveDrive()
                         DriveConstants::kFrontRightPosition,
                         DriveConstants::kBackLeftPosition, 
                         DriveConstants::kBackRightPosition}},
-      // odometry{kSwerveKinematics,
-      //          frc::Rotation2d(units::degree_t{m_pigeon.GetAngle()}),
-      //          {modules[0].GetPosition(), modules[1].GetPosition(),
-      //           modules[2].GetPosition(), modules[3].GetPosition()},
-      //          frc::Pose2d()},
       pidX{0.9, 1e-4, 0}, pidY{0.9, 1e-4, 0}, pidRot{0.15, 0, 0},
       networkTableInst(nt::NetworkTableInstance::GetDefault()),
       m_poseEstimator{
@@ -127,26 +122,38 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
 }
 }
 
-void SwerveDrive::Strafe(frc::ChassisSpeeds speeds, double desiredAngle) {
-  speeds.omega = units::angular_velocity::radians_per_second_t{7*(desiredAngle-m_poseEstimator.GetEstimatedPosition().Rotation().Radians().value())};
-  auto states = kSwerveKinematics.ToSwerveModuleStates(speeds);
+void SwerveDrive::Strafe(frc::ChassisSpeeds s_speeds, double desiredAngle) {
+  auto currentAngle = m_poseEstimator.GetEstimatedPosition().Rotation().Radians().value();
+  if (fabs(currentAngle) > 2*M_PI)
+  {
+    currentAngle = fmod(currentAngle , 2 * M_PI);
+    if (currentAngle < 0)
+      currentAngle += 2 * M_PI;
+    // currentAngle = currentAngle - M_PI;
+  }
+  if (fabs(desiredAngle) > 2*M_PI)
+  {
+    desiredAngle = fmod(desiredAngle , 2 * M_PI);
+    if (desiredAngle < 0)
+      desiredAngle += 2 * M_PI;
+    // desiredAngle = desiredAngle - M_PI;
+  }
+  s_speeds.omega = units::angular_velocity::radians_per_second_t{2.5*(desiredAngle-currentAngle)};
+  frc::SmartDashboard::PutNumber("wrapped cA", currentAngle);
+  frc::SmartDashboard::PutNumber("wrapped dA", desiredAngle);
+  
+  auto states = kSwerveKinematics.ToSwerveModuleStates(s_speeds);
 
   kSwerveKinematics.DesaturateWheelSpeeds(
-      &states, speeds, units::meters_per_second_t{ModuleConstants::kMaxSpeed},
+      &states, s_speeds, units::meters_per_second_t{ModuleConstants::kMaxSpeed},
       DriveConstants::kMaxTranslationalVelocity,
-      DriveConstants::kMaxRotationalVelocity);
+      units::radians_per_second_t{1.0});
 
   for (int i = 0; i < 4; i++) {
     modules[i].SetDesiredState(states[i]);
   }
 
-/*  frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
-  frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
-  frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
-*/
-  // frc::SmartDashboard::PutNumber("drive/x meters", odometry.GetPose().X().value());
-  // frc::SmartDashboard::PutNumber("drive/y meters", odometry.GetPose().Y().value());
-  // frc::SmartDashboard::PutNumber("drive/rotation degrees", odometry.GetPose().Rotation().Degrees().value());
+  priorSpeeds = s_speeds;
 }
 
 
@@ -311,10 +318,10 @@ void SwerveDrive::PrintNetworkTableValues() {
 */
 void SwerveDrive::EnableDrive() {
   enable = true;
-  frc::SmartDashboard::PutBoolean("TestTestTest", enable);
+  // frc::SmartDashboard::PutBoolean("TestTestTest", enable);
 }
 void SwerveDrive::DisableDrive() {
   enable = false;
-  frc::SmartDashboard::PutBoolean("TestTestTest", enable);
+  // frc::SmartDashboard::PutBoolean("TestTestTest", enable);
 
 }

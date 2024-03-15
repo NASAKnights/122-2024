@@ -278,33 +278,7 @@ void Robot::DisabledPeriodic() {
     m_LED_Controller.candle.SetLEDs(0,0,0,0,4,4);
   }
   
-  // Set Auto commands
-  // if(auto3.Get())
-  // { if(auto4Note.Get()){
-  //     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
-  //     m_swerveDrive.ResetPose(start);
-  //     m_autonomousCommand =  pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
-  //   }
-  //   else
-  //   { 
-  //      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
-  //      m_swerveDrive.ResetPose(start);
-  //      m_autonomousCommand =  pathplanner::PathPlannerAuto("Move").ToPtr();
-  //   }
-  // }
-  // else{
-  //   if(auto4Note.Get()){
-  //     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
-  //     m_swerveDrive.ResetPose(start);
-  //     m_autonomousCommand =  pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
-  //   }
-  //   else
-  //   { 
-  //     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
-  //     m_swerveDrive.ResetPose(start);
-  //     m_autonomousCommand =  pathplanner::PathPlannerAuto("Move").ToPtr();
-  //   }
-  // }
+  
 
   frc::SmartDashboard::PutNumber("Auto", autoName);
   // m_swerveDrive.SetVision();
