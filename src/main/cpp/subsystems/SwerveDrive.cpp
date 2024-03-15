@@ -128,7 +128,7 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
 }
 
 void SwerveDrive::Strafe(frc::ChassisSpeeds speeds, double desiredAngle) {
-  speeds.omega = units::angular_velocity::radians_per_second_t{8.5*(desiredAngle-m_poseEstimator.GetEstimatedPosition().Rotation().Radians().value())};
+  speeds.omega = units::angular_velocity::radians_per_second_t{7*(desiredAngle-m_poseEstimator.GetEstimatedPosition().Rotation().Radians().value())};
   auto states = kSwerveKinematics.ToSwerveModuleStates(speeds);
 
   kSwerveKinematics.DesaturateWheelSpeeds(
@@ -140,10 +140,10 @@ void SwerveDrive::Strafe(frc::ChassisSpeeds speeds, double desiredAngle) {
     modules[i].SetDesiredState(states[i]);
   }
 
-  frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
+/*  frc::SmartDashboard::PutNumber("drive/vx", speeds.vx.value());
   frc::SmartDashboard::PutNumber("drive/vy", speeds.vy.value());
   frc::SmartDashboard::PutNumber("drive/omega", speeds.omega.value());
-
+*/
   // frc::SmartDashboard::PutNumber("drive/x meters", odometry.GetPose().X().value());
   // frc::SmartDashboard::PutNumber("drive/y meters", odometry.GetPose().Y().value());
   // frc::SmartDashboard::PutNumber("drive/rotation degrees", odometry.GetPose().Rotation().Degrees().value());
@@ -159,7 +159,13 @@ frc::Rotation2d SwerveDrive::GetHeading() {
   return m_pigeon.GetRotation2d();
 }
 
-void SwerveDrive::ResetHeading() { m_pigeon.Reset(); }
+void SwerveDrive::ResetHeading() 
+{ 
+  if(enable== true)
+  {
+   m_pigeon.Reset();
+   } 
+   }
 
 void SwerveDrive::ResetDriveEncoders() {
   for (auto &module : modules) {

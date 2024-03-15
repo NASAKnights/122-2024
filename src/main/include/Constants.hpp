@@ -66,10 +66,10 @@ const units::meters_per_second_t kMaxTranslationalVelocity{4.5};
 const units::radians_per_second_t kMaxRotationalVelocity{4};
 const bool kIsFieldRelative = true;
 
-const frc::Rotation2d kFrontLeftOffset{-units::degree_t{-40}}; // module 1
+const frc::Rotation2d kFrontLeftOffset{-units::degree_t{-40-1.5}}; // module 1
 const frc::Rotation2d kFrontRightOffset{
     -units::degree_t{75+2.5}}; // module 2
-const frc::Rotation2d kBackLeftOffset{-units::degree_t{-129-30+24}}; // module 3 // 
+const frc::Rotation2d kBackLeftOffset{-units::degree_t{-129-30+24+2}}; // module 3 // 
 // const frc::Rotation2d kBackLeftOffset{-units::degree_t{74-24-24-4}}; // module 3
 const frc::Rotation2d kBackRightOffset{
     -units::degree_t{178 - 5.5 - 27}}; // 265.517 // -93.867 // module 4
