@@ -322,14 +322,13 @@ void Robot::UpdateDashboard() {
   //         DriveConstants::kMaxTranslationalVelocity.value());
   // frc::SmartDashboard::PutNumber("Swerve Drive Heading",
   //                                m_swerveDrive.GetHeading().Degrees().value());
-  frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
    ARM_Angel = frc::SmartDashboard::GetNumber("ARM_Angel",ArmConstants::kArmAngleDriving);
    ARM_Speed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
    servo_angle = frc::SmartDashboard::GetNumber("servo_angle",100);
-  frc::SmartDashboard::PutBoolean("AutoSwitches/color", autoColor.Get());
-  frc::SmartDashboard::PutBoolean("AutoSwitches/7", auto2.Get());
-  frc::SmartDashboard::PutBoolean("AutoSwitches/6", auto3.Get());
-  frc::SmartDashboard::PutBoolean("AutoSwitches/8", auto4Note.Get());
+ // frc::SmartDashboard::PutBoolean("AutoSwitches/color", autoColor.Get());
+ // frc::SmartDashboard::PutBoolean("AutoSwitches/7", auto2.Get());
+ // frc::SmartDashboard::PutBoolean("AutoSwitches/6", auto3.Get());
+ // frc::SmartDashboard::PutBoolean("AutoSwitches/8", auto4Note.Get());
 
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();

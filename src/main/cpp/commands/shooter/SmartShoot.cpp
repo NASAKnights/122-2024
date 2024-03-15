@@ -94,7 +94,7 @@ bool SmartShoot::IsFinished() {
 
 void SmartShoot::Arm_Position()
 {  frc::Pose2d blue_Speaker_Pos = frc::Pose2d(0_m  , units::length::meter_t{5.583}, frc::Rotation2d{}); 
-   frc::Pose2d red_Speaker_Pos = frc::Pose2d(0_m  , units::length::meter_t{16.56}, frc::Rotation2d{}); 
+   frc::Pose2d red_Speaker_Pos = frc::Pose2d(units::length::meter_t{16.56}  , units::length::meter_t{5.583}, frc::Rotation2d{units::angle::degree_t{}});
    
         auto leftXAxis =
             MathUtilNK::calculateAxis(driverController->GetRawAxis(1),
@@ -113,32 +113,42 @@ void SmartShoot::Arm_Position()
             swerdrive->GetHeading()));
 
 
-   if(color){
-   auto currentPos = swerdrive->GetPose();
-   auto robot2Speaker = currentPos.RelativeTo(blue_Speaker_Pos);
-   distance = sqrt(robot2Speaker.X().value()*robot2Speaker.X().value()+robot2Speaker.Y().value()*robot2Speaker.Y().value());
-   float angle = (asin(robot2Speaker.Y().value()/distance));
-   if(angle > PI){
-    angle = PI;
-   }
-   swerdrive->Strafe(speed,angle);
-   frc::SmartDashboard::PutNumber("rotataion",angle);
-   }
+  if(1==1){
+    auto currentPos = swerdrive->GetPose();
+    auto robot2Speaker = currentPos.RelativeTo(blue_Speaker_Pos);
+    distance = sqrt(robot2Speaker.X().value()*robot2Speaker.X().value()+robot2Speaker.Y().value()*robot2Speaker.Y().value());
+    float angle = (asin(robot2Speaker.Y().value()/distance));
+
+    if(angle > PI)
+    {
+      angle = PI;
+    }
+    swerdrive->Strafe(speed,angle);
+    //frc::SmartDashboard::PutNumber("rotataion",angle);
+
+  }
    else{
    auto currentPos =  swerdrive->GetPose();
    auto robot2Speaker = currentPos.RelativeTo(red_Speaker_Pos);
+  frc::SmartDashboard::PutNumber("Angle_tesadasdasdasdasdASdasdasdassdasdst_ES",red_Speaker_Pos.X().value());
+  frc::SmartDashboard::PutNumber("Angle_tesadasdasdasdasdASdasdasdassdasdst_ESz",red_Speaker_Pos.Y().value());
+
    distance = sqrt(robot2Speaker.X().value()*robot2Speaker.X().value()+robot2Speaker.Y().value()*robot2Speaker.Y().value());
+      frc::SmartDashboard::PutNumber("Angle_test_ES",distance);
+
    float angle = (asin(robot2Speaker.Y().value()/distance));
    if(angle > PI){
       angle = PI;
    }
+   swerdrive->Strafe(speed,angle+PI);
+   frc::SmartDashboard::PutNumber("rotataion",angle);
    }
+       frc::SmartDashboard::PutNumber("Distance",distance);
 
 
-   frc::SmartDashboard::PutNumber("Distance",distance);
    //Make into feet
-   distance = (distance) * 3.28084 ;
-   int i = distance/1.5;
+   distance = ((distance) * 3.28084)-4;
+   int i = distance/1;
    switch(i)
    {
    case 0:
@@ -147,7 +157,7 @@ void SmartShoot::Arm_Position()
     break;
    case 1:
    frc::SmartDashboard::PutNumber("Distance_TEST",i);
-   arm->handle_Setpoint(units::angle::degree_t{40});
+   arm->handle_Setpoint(units::angle::degree_t{45});
    break;
    case 2:
    frc::SmartDashboard::PutNumber("Distance_TEST",i);
@@ -155,28 +165,58 @@ void SmartShoot::Arm_Position()
     break;
     case 3:
    frc::SmartDashboard::PutNumber("Distance_TEST",i);
-    arm->handle_Setpoint(units::angle::degree_t{50});
+    arm->handle_Setpoint(units::angle::degree_t{55});
     break;
     case 4:
     frc::SmartDashboard::PutNumber("Distance_TEST",i);
-   arm->handle_Setpoint(units::angle::degree_t{57});
+   arm->handle_Setpoint(units::angle::degree_t{60});
     break;
      case 5:
   frc::SmartDashboard::PutNumber("Distance_TEST",i);
-     arm->handle_Setpoint(units::angle::degree_t{57});
+     arm->handle_Setpoint(units::angle::degree_t{65});
     break;
      case 6:
     frc::SmartDashboard::PutNumber("Distance_TEST",i);
-   arm->handle_Setpoint(units::angle::degree_t{62});
+   arm->handle_Setpoint(units::angle::degree_t{70});
     break;
      case 7:
     frc::SmartDashboard::PutNumber("Distance_TEST",i);
-     arm->handle_Setpoint(units::angle::degree_t{62});
+     arm->handle_Setpoint(units::angle::degree_t{75});
     break;
+     case 8:
+    frc::SmartDashboard::PutNumber("Distance_TEST",i);
+   arm->handle_Setpoint(units::angle::degree_t{80});
+   break;
+    case 9:
+    frc::SmartDashboard::PutNumber("Distance_TEST",i);
+   arm->handle_Setpoint(units::angle::degree_t{85});
+   break;
+    case 10:
+    frc::SmartDashboard::PutNumber("Distance_TEST",i);
+   arm->handle_Setpoint(units::angle::degree_t{90});
+   break;
+    case 11:
+    frc::SmartDashboard::PutNumber("Distance_TEST",i);
+   arm->handle_Setpoint(units::angle::degree_t{95});
+      break;
+
+    case 12:
+    frc::SmartDashboard::PutNumber("Distance_TEST",i);
+   arm->handle_Setpoint(units::angle::degree_t{100});
+   break;
+   case 13:
+    frc::SmartDashboard::PutNumber("Distance_TEST",i);
+   arm->handle_Setpoint(units::angle::degree_t{105});
+   break;
+   case 14:
+    frc::SmartDashboard::PutNumber("Distance_TEST",i);
+   arm->handle_Setpoint(units::angle::degree_t{110});
+   break;
 
     default:
    frc::SmartDashboard::PutNumber("Distance_TEST",i);
-    arm->handle_Setpoint(units::angle::degree_t{40});  
+      arm->handle_Setpoint(units::angle::degree_t{75});
+
     break;
     }
 
