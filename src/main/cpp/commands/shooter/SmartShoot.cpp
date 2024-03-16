@@ -56,9 +56,10 @@ void SmartShoot::Execute()
   switch (m_state)
   {
   case SMARTSPINUP:
-  {
+  { Arm_Position();
+    shoooter->Shoot(shootSpeed); 
     // Change button
-    if (shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE && operatorController->GetRawButton(6))
+    if (shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE && swerdrive->atSetpoint() && operatorController->GetRawButton(6))
     {
       m_state = SMARTSHOOTING;
     }
@@ -112,7 +113,7 @@ void SmartShoot::Arm_Position()
           -rightXAxis * DriveConstants::kMaxRotationalVelocity,
           swerdrive->GetHeading()));
 
-  if (color->Get()) // true = blue, false = red
+  if (/*color->Get()*/false) // true = blue, false = red
   { 
     auto currentPos = swerdrive->GetPose();
     auto robot2Speaker = currentPos.RelativeTo(blue_Speaker_Pos);
@@ -144,66 +145,66 @@ void SmartShoot::Arm_Position()
   switch (i)
   {
   case 0:
-    arm->handle_Setpoint(units::angle::degree_t{40});
+    arm->handle_Setpoint(units::angle::degree_t{38});
     break;
   case 1:
-    arm->handle_Setpoint(units::angle::degree_t{45});
+    arm->handle_Setpoint(units::angle::degree_t{39});
     break;
   case 2:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{50});
+    arm->handle_Setpoint(units::angle::degree_t{40});
     break;
   case 3:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{55});
+    arm->handle_Setpoint(units::angle::degree_t{40});
     break;
   case 4:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{60});
+    arm->handle_Setpoint(units::angle::degree_t{44});
     break;
   case 5:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{65});
+    arm->handle_Setpoint(units::angle::degree_t{47});
     break;
   case 6:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{70});
+    arm->handle_Setpoint(units::angle::degree_t{50});
     break;
   case 7:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{75});
+    arm->handle_Setpoint(units::angle::degree_t{51});
     break;
   case 8:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{77});
+    arm->handle_Setpoint(units::angle::degree_t{52});
     break;
   case 9:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{79});
+    arm->handle_Setpoint(units::angle::degree_t{54});
     break;
   case 10:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{81});
+    arm->handle_Setpoint(units::angle::degree_t{57});
     break;
   case 11:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{83});
+    arm->handle_Setpoint(units::angle::degree_t{62});
     break;
   case 12:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{85});
+    arm->handle_Setpoint(units::angle::degree_t{63});
     break;
   case 13:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{87});
+    arm->handle_Setpoint(units::angle::degree_t{64});
     break;
   case 14:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{90});
+    arm->handle_Setpoint(units::angle::degree_t{65});
     break;
   default:
     // frc::SmartDashboard::PutNumber("Distance_TEST", i);
-    arm->handle_Setpoint(units::angle::degree_t{75});
+    arm->handle_Setpoint(units::angle::degree_t{66});
 
     break;
   }

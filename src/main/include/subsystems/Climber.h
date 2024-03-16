@@ -15,7 +15,10 @@ enum ResetState {
   CLIMBER_EXTEND_START,
   CLIMBER_EXTEND_MOVING,
   CLIMBER_EXTEND_DONE,
-  CLIMBER_EXTEND_BRAKE_DISENGAGE
+  CLIMBER_EXTEND_BRAKE_DISENGAGE,
+  CLIMBER_RETRACT_START,
+  CLIMBER_RETRACT_MOVING,
+  CLIMBER_RETRACT_DONE
 };
 
 
@@ -34,7 +37,8 @@ class Climber : public frc2::SubsystemBase {
 
   void extend();
   void retract();
-  
+  void retractLimit_Pit();
+
   void moveMotor();
   void stopMotor();
   void disableBrake();

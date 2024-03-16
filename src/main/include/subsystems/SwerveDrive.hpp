@@ -78,6 +78,7 @@ public:
   void PublishOdometry(frc::Pose2d);
   void PrintNetworkTablseValues();
   void SetVision();
+  bool atSetpoint();
   frc::Pose2d GetVision();
 
 private:
@@ -99,6 +100,7 @@ private:
 
   bool hasRun = false;
   bool enable= true;
+  double pos_Error;
 
   frc::ChassisSpeeds priorSpeeds = frc::ChassisSpeeds();
   // ----------------------
