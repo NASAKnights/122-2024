@@ -41,6 +41,8 @@ void Robot::RobotInit()
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
   this->UpdateDashboard();
+  m_arm.Emergency_Stop();
+
 }
 
 /**
@@ -281,7 +283,6 @@ void Robot::DisabledPeriodic() {
     autoName = 2;
     m_LED_Controller.candle.SetLEDs(0,0,0,0,4,4);
   }
-  m_arm.Emergency_Stop();
   
   
 
