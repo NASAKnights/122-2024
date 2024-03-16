@@ -1,0 +1,144 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.83,
+        "y": 2.61
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.6243918613834945,
+        "y": 3.694988489606398
+      },
+      "isLocked": false,
+      "linkedName": "ShotPos1"
+    },
+    {
+      "anchor": {
+        "x": 7.7027703077835925,
+        "y": 4.216023607503395
+      },
+      "prevControl": {
+        "x": 7.053300663345703,
+        "y": 4.936765171196087
+      },
+      "nextControl": {
+        "x": 8.137822537515902,
+        "y": 3.7332293352373873
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.83,
+        "y": 2.61
+      },
+      "prevControl": {
+        "x": 4.833513183987599,
+        "y": 4.690976215618337
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ShotPos1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.05,
+      "rotationDegrees": -3.959718844296408,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.9,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "a_runIntake"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ArmDown",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 4.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "a_ArmDown"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ArmDown2",
+      "waypointRelativePos": 1.25,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 5.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "a_ArmDown"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -33.217296005956946,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Blue",
+  "previewStartingState": {
+    "rotation": -34.645483117266814,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

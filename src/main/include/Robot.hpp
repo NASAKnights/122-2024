@@ -21,6 +21,7 @@
 #include "commands/intake/intakeTake.h"
 #include "subsystems/LEDController.h"
 #include "subsystems/Climber.h"
+#include "commands/ArmDown.h"
 
 class Robot : public frc::TimedRobot {
 public:

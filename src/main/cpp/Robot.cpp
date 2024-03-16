@@ -21,7 +21,6 @@
 #include <cmath>
 #include <commands/shooter/SmartShoot.h>
 
-
 Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit() 
@@ -116,6 +115,8 @@ void Robot::CreateRobot() {
   
       pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, ArmConstants::kArmAngleShootClose+1).ToPtr())); // <- This example method returns CommandPtr
       pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(intakeTake(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr()));
+      pathplanner::NamedCommands::registerCommand("a_ArmDown", std::move(ArmDown(&m_arm).ToPtr()));
+
 
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this] {
@@ -227,32 +228,36 @@ void Robot::BindCommands() {
 // }
 frc2::CommandPtr Robot::GetAutonomousCommand(){
   
-  if(autoColor.Get())
-  { if(auto4Note.Get()){
-    auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
-    m_swerveDrive.ResetPose(start);
-    return pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
-    }
-    else
-    { 
-       auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
-       m_swerveDrive.ResetPose(start);
-       return pathplanner::PathPlannerAuto("Move").ToPtr();
-    }
-  }
-  else{
-    if(auto4Note.Get()){
-      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
-      m_swerveDrive.ResetPose(start);
-      return pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
-    }
-    else
-    { 
-      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
-      m_swerveDrive.ResetPose(start);
-      return pathplanner::PathPlannerAuto("Move").ToPtr();
-    }
-  }
+  auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("ShootDriveB")[0]->getPathPoses()[0];
+  m_swerveDrive.ResetPose(start);
+
+  return pathplanner::PathPlannerAuto("ShootDriveB").ToPtr();
+  // if(autoColor.Get())
+  // { if(auto4Note.Get()){
+  //   auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
+  //   m_swerveDrive.ResetPose(start);
+  //   return pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
+  //   }
+  //   else
+  //   { 
+  //      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
+  //      m_swerveDrive.ResetPose(start);
+  //      return pathplanner::PathPlannerAuto("Move").ToPtr();
+  //   }
+  // }
+  // else{
+  //   if(auto4Note.Get()){
+  //     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
+  //     m_swerveDrive.ResetPose(start);
+  //     return pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
+  //   }
+  //   else
+  //   { 
+  //     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
+  //     m_swerveDrive.ResetPose(start);
+  //     return pathplanner::PathPlannerAuto("Move").ToPtr();
+  //   }
+  // }
 }
 
 

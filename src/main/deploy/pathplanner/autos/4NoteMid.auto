@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6495764317070253,
+      "y": 4.458095292330835
+    },
+    "rotation": -60.84235818769974
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4NoteMid_step1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4NoteMid_step2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4NoteMid_step3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Blue",
+  "choreoAuto": false
+}

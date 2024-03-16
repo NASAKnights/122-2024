@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 15.266865872671307,
+      "y": 5.558610526713642
+    },
+    "rotation": 179.90641609509538
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -18,33 +24,15 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 1.0
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Speaker2Note2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Speaker2Note3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Speaker2Note1"
           }
         }
       ]
     }
   },
-  "folder": "Blue",
+  "folder": "Red",
   "choreoAuto": false
 }
