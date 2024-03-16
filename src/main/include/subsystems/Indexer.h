@@ -6,6 +6,8 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc/DigitalInput.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 
 class Indexer : public frc2::SubsystemBase {
  public:

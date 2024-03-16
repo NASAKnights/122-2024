@@ -16,7 +16,8 @@ ArmSubsystem::ArmSubsystem()
                 ArmConstants::kArmVelLimit,
                 ArmConstants::kArmAccelLimit), 5_ms)),
       m_motor(ArmConstants::kAngleMotorId),
-      m_encoder(ArmConstants::kAbsEncoderId),
+      m_encoderL(ArmConstants::kAbsEncoderIdL),
+      m_encoderR(ArmConstants::kAbsEncoderIdR),
       m_feedforward(ArmConstants::kFFks,
                     ArmConstants::kFFkg,
                     ArmConstants::kFFkV,
@@ -35,8 +36,12 @@ ArmSubsystem::ArmSubsystem()
     m_motor.GetConfigurator().Apply(armAngleConfig);
     m_motor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
-    m_encoder.SetPositionOffset(ArmConstants::kArmAngleOffset/360.0);
-    m_encoder.SetDistancePerRotation(360);
+    m_encoderL.SetPositionOffset(ArmConstants::kArmAngleOffsetL/360.0);
+    m_encoderL.SetDistancePerRotation(360);
+    
+    
+    m_encoderR.SetPositionOffset(ArmConstants::kArmAngleOffsetR/360.0);
+    m_encoderR.SetDistancePerRotation(360);
    
     Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
                     0_ms, 
@@ -45,7 +50,7 @@ ArmSubsystem::ArmSubsystem()
                     units::time::microsecond_t{ArmConstants::kLinearMin});
   
     //Make pigeon kind of absolut
-    arm_pigeon.SetYaw(units::angle::degree_t{m_encoder.GetDistance()});
+    arm_pigeon.SetYaw(units::angle::degree_t{m_encoderL.GetDistance()});
     
     GetController().SetTolerance(ArmConstants::kControllerTolerance);
     // Start m_arm in neutral position
@@ -91,7 +96,12 @@ void ArmSubsystem::arm_Brake_Out()
 // void ArmSubsystem::get_pigeon(){
 //     arm_pigeon.GetAccumGyroY();
 // }
+void ArmSubsystem::Emergency_Stop(){
 
+  if(Kill.Get()== true){
+    m_motor.StopMotor();
+  }
+}
 void ArmSubsystem::printLog()
 {
     frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value()); 
@@ -117,7 +127,14 @@ void ArmSubsystem::printLog()
 }
 
 units::degree_t ArmSubsystem::GetMeasurement() {
-  return units::degree_t{(m_encoder.GetDistance())};
+  units::degree_t avrage_encoder = (units::degree_t{(m_encoderL.GetDistance())}+units::degree_t{(m_encoderR.GetDistance())})/2.0;
+  if(m_encoderL.GetDistance() == -ArmConstants::kArmAngleOffsetL){
+   return units::degree_t{(m_encoderR.GetDistance())};
+  }
+ if(m_encoderR.GetDistance() == -ArmConstants::kArmAngleOffsetR){
+   return units::degree_t{(m_encoderL.GetDistance())};
+  }
+  return avrage_encoder;
 }
 
 void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){

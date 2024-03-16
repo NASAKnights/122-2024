@@ -281,6 +281,7 @@ void Robot::DisabledPeriodic() {
     autoName = 2;
     m_LED_Controller.candle.SetLEDs(0,0,0,0,4,4);
   }
+  m_arm.Emergency_Stop();
   
   
 

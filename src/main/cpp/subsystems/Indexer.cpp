@@ -9,7 +9,11 @@ Indexer::Indexer() : limitSwitchNear(2), limitSwitchFar(3) {
 }
 
 // This method will be called once per scheduler run
-void Indexer::Periodic() {}
+void Indexer::Periodic() {
+    frc::SmartDashboard::PutBoolean("note",hasNote());
+
+
+}
 
 bool Indexer::hasNote() {
     return (limitSwitchNear.Get() || limitSwitchFar.Get());
