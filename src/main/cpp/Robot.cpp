@@ -20,6 +20,7 @@
 #include <autos/Auto.h>
 #include <cmath>
 #include <commands/shooter/SmartShoot.h>
+#include <frc2/command/button/POVButton.h>
 
 
 Robot::Robot() { this->CreateRobot(); }
@@ -74,7 +75,7 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
-  m_LED_Controller.candle.ClearAnimation(0);
+  //m_LED_Controller.candle.ClearAnimation(0);
 }
 
 /**
@@ -165,7 +166,7 @@ void Robot::BindCommands() {
       }))); // TODO assign as test
 
 
- frc2::JoystickButton(&m_operatorController, 8)
+ frc2::JoystickButton(&m_operatorController, 6)
             .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr()); 
 
 
@@ -176,29 +177,31 @@ void Robot::BindCommands() {
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
         frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleDriving);
       }).ToPtr()));
-
+/*
   frc2::JoystickButton(&m_operatorController, 9)
     .WhileTrue(Retract(&m_climber).ToPtr());
   
   frc2::JoystickButton(&m_operatorController, 10)
-        .WhileTrue(Extend(&m_climber).ToPtr());
+        .WhileTrue(Extend(&m_climber).ToPtr());*/
 
 /* frc2::JoystickButton(&m_operatorController, 6)
             .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr());     
     
-    /  frc2::JoystickButton(&m_operatorController, 6)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm,  &m_LED_Controller,
-                0.8, ArmConstants::kArmAngleShootClose).ToPtr()); */
+   */
   frc2::JoystickButton(&m_operatorController, 1)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
                 0.8, 66.25).ToPtr());
 
- 
-//AMP
-  /*frc2::JoystickButton(&m_operatorController, 5)
+
+frc2::POVButton(&m_operatorController,270)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                0.4, 105).ToPtr()); // -15, 145
-*/
+                0.4, 105-40).ToPtr()); // -15, 145
+
+
+frc2::POVButton(&m_operatorController,90)
+    .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm,  &m_LED_Controller,
+                0.8, ArmConstants::kArmAngleShootClose).ToPtr()); 
+
     frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr());
 
@@ -207,6 +210,7 @@ void Robot::BindCommands() {
       m_intake.runIntakeReverse();
     },{&m_intake}).ToPtr())
     .OnFalse(frc2::InstantCommand([this] {
+    
       return m_intake.stopIntake();
     }, {&m_intake}).ToPtr());
 

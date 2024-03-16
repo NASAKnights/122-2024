@@ -4,7 +4,7 @@
 
 #include "subsystems/Indexer.h"
 
-Indexer::Indexer() : limitSwitch(2), limitSwitch2(3) {
+Indexer::Indexer() : limitSwitchNear(2), limitSwitchFar(3) {
 
 }
 
@@ -12,5 +12,10 @@ Indexer::Indexer() : limitSwitch(2), limitSwitch2(3) {
 void Indexer::Periodic() {}
 
 bool Indexer::hasNote() {
-    return (limitSwitch.Get() || limitSwitch2.Get());
+    return (limitSwitchNear.Get() || limitSwitchFar.Get());
 }
+/*
+bool Indexer::FarNote() {
+       if
+
+}*/

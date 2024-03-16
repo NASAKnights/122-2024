@@ -76,7 +76,7 @@ void Climber::extend() {
     case CLIMBER_EXTEND_MOVING: 
     {
       climberMotor1.Set(-0.9);
-      if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 315)
+      if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 300)
       {
         //climberMotor1.StopMotor();
         climberMotor1.Set(0);
@@ -94,9 +94,38 @@ void Climber::extend() {
 }
 
 void Climber::retract(){
+  switch (m_ClimberState)
+  {
+    case CLIMBER_RETRACT_START:
+    { 
+      m_ClimberState = CLIMBER_EXTEND_BRAKE_DISENGAGE;
+  
+      break;
+    }
+    case CLIMBER_RETRACT_MOVING: 
+    {
+      climberMotor1.Set(-0.9);
+      if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 75)
+      {
+        //climberMotor1.StopMotor();
+        climberMotor1.Set(0);
+        m_ClimberState = CLIMBER_RETRACT_DONE;
+      }
+    }
+    case CLIMBER_RETRACT_DONE:
+    {
+      break;
+    }
+    default:
+      break;
+  
+}
+}
+
+void Climber::retractLimit_Pit(){
     
     if (botLimit1.Get()) {
-      climberMotor1.Set(0.9);
+      climberMotor1.Set(0.1);
     }
     else {
       frc::SmartDashboard::PutBoolean("Climber",true);

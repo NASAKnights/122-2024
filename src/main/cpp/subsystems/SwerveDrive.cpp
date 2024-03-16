@@ -124,7 +124,7 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
 
 void SwerveDrive::Strafe(frc::ChassisSpeeds s_speeds, double desiredAngle) {
   auto currentAngle = m_poseEstimator.GetEstimatedPosition().Rotation().Radians().value();
-  if (fabs(currentAngle) > 2*M_PI)
+  /*if (fabs(currentAngle) > 2*M_PI)
   {
     currentAngle = fmod(currentAngle , 2 * M_PI);
     if (currentAngle < 0)
@@ -137,8 +137,12 @@ void SwerveDrive::Strafe(frc::ChassisSpeeds s_speeds, double desiredAngle) {
     if (desiredAngle < 0)
       desiredAngle += 2 * M_PI;
     // desiredAngle = desiredAngle - M_PI;
-  }
-  s_speeds.omega = units::angular_velocity::radians_per_second_t{2.5*(desiredAngle-currentAngle)};
+  }*/
+
+  double errorBand= (M_PI-(-M_PI))/2;
+  pos_Error= frc::InputModulus(desiredAngle-currentAngle,-errorBand,errorBand);
+
+  s_speeds.omega = units::angular_velocity::radians_per_second_t{8*(pos_Error)};
   frc::SmartDashboard::PutNumber("wrapped cA", currentAngle);
   frc::SmartDashboard::PutNumber("wrapped dA", desiredAngle);
   
@@ -147,7 +151,7 @@ void SwerveDrive::Strafe(frc::ChassisSpeeds s_speeds, double desiredAngle) {
   kSwerveKinematics.DesaturateWheelSpeeds(
       &states, s_speeds, units::meters_per_second_t{ModuleConstants::kMaxSpeed},
       DriveConstants::kMaxTranslationalVelocity,
-      units::radians_per_second_t{1.0});
+      units::radians_per_second_t{3.0});
 
   for (int i = 0; i < 4; i++) {
     modules[i].SetDesiredState(states[i]);
@@ -324,4 +328,11 @@ void SwerveDrive::DisableDrive() {
   enable = false;
   // frc::SmartDashboard::PutBoolean("TestTestTest", enable);
 
+}
+bool SwerveDrive::atSetpoint(){
+   if(pos_Error < 0.015)
+   {
+    return true;
+   }
+   return false;
 }
