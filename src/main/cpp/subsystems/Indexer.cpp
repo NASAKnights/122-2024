@@ -4,13 +4,22 @@
 
 #include "subsystems/Indexer.h"
 
-Indexer::Indexer() : limitSwitch(2), limitSwitch2(3) {
+Indexer::Indexer() : limitSwitchNear(2), limitSwitchFar(3) {
 
 }
 
 // This method will be called once per scheduler run
-void Indexer::Periodic() {}
+void Indexer::Periodic() {
+    frc::SmartDashboard::PutBoolean("note",hasNote());
+
+
+}
 
 bool Indexer::hasNote() {
-    return (limitSwitch.Get() || limitSwitch2.Get());
+    return (limitSwitchNear.Get() || limitSwitchFar.Get());
 }
+/*
+bool Indexer::FarNote() {
+       if
+
+}*/

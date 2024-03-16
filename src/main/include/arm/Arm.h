@@ -13,6 +13,7 @@
 
 #include "Constants.hpp"
 #include <frc/Servo.h>
+#include <frc/DigitalInput.h>
 
 
 namespace ArmConstants {
@@ -32,7 +33,9 @@ const auto kArmVelLimit = units::degrees_per_second_t(140.0);
 const auto kArmAccelLimit = units::angular_acceleration::degrees_per_second_squared_t(120.0);
 const auto kControllerTolerance = units::degree_t(3.0);
 const int kAngleMotorId = 5;
-const int kAbsEncoderId = 1;
+const int kAbsEncoderIdL = 1;
+const int kAbsEncoderIdR = 0;
+
 const int kAngleEncoderPulsePerRev = 2048;
 const auto kFFks = units::volt_t(0.18); // Volts static (motor)
 const auto kFFkg = units::volt_t(0.5); // Volts
@@ -46,7 +49,9 @@ const double kArmPeakCurrentDuration = 0.1;
 
 const int kLinearMax = 1100;//1140
 const int kLinearMin = 1060;//1100
-const double kArmAngleOffset = 40.0;
+const double kArmAngleOffsetL = 40.0;
+const double kArmAngleOffsetR = 40.0;
+
 
 const double kArmAngleStarting = 80.0; // With offset \[]
 const double kArmAngleDriving = 30.0; // With offset
@@ -68,6 +73,7 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   void arm_Brake_In();
   void arm_Brake_Out();
   void handle_Setpoint(units::angle::degree_t);
+  void Emergency_Stop();
   // void get_pigeon();
   units::time::second_t time_brake_released;
     ArmConstants::ArmState m_ArmState;
@@ -78,9 +84,12 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   private:
   ctre::phoenix6::hardware::TalonFX m_motor;
   frc::ArmFeedforward m_feedforward;
-  frc::DutyCycleEncoder m_encoder;	
+  frc::DutyCycleEncoder m_encoderR;	
+  frc::DutyCycleEncoder m_encoderL;	
+
   ctre::phoenix6::hardware::Pigeon2 arm_pigeon{9, "NKCANivore"};
   float ARM_Angle;
   frc::PWM Linear;
+  frc::DigitalInput Kill{4};
 
 };

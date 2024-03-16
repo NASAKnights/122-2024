@@ -6,6 +6,8 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc/DigitalInput.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 
 class Indexer : public frc2::SubsystemBase {
  public:
@@ -17,11 +19,12 @@ class Indexer : public frc2::SubsystemBase {
   void Periodic() override;
 
   bool hasNote();
+  bool FarNote();
   void moveIndexer();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  frc::DigitalInput limitSwitch;
-  frc::DigitalInput limitSwitch2;
+  frc::DigitalInput limitSwitchNear;
+  frc::DigitalInput limitSwitchFar;
 };

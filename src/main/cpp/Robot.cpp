@@ -20,6 +20,7 @@
 #include <autos/Auto.h>
 #include <cmath>
 #include <commands/shooter/SmartShoot.h>
+#include <frc2/command/button/POVButton.h>
 
 Robot::Robot() { this->CreateRobot(); }
 
@@ -39,6 +40,8 @@ void Robot::RobotInit()
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
   this->UpdateDashboard();
+  m_arm.Emergency_Stop();
+
 }
 
 /**
@@ -73,7 +76,7 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
-  m_LED_Controller.candle.ClearAnimation(0);
+  //m_LED_Controller.candle.ClearAnimation(0);
 }
 
 /**
@@ -165,6 +168,11 @@ void Robot::BindCommands() {
         return m_swerveDrive.ResetHeading();
       }))); // TODO assign as test
 
+
+ frc2::JoystickButton(&m_operatorController, 6)
+            .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr()); 
+
+
   frc2::JoystickButton(&m_driverController, 9).OnTrue(frc2::InstantCommand(
       [this] {
         frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleStarting);
@@ -172,29 +180,31 @@ void Robot::BindCommands() {
       ).OnFalse(frc2::CommandPtr(frc2::InstantCommand([this] {
         frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleDriving);
       }).ToPtr()));
-
+/*
   frc2::JoystickButton(&m_operatorController, 9)
     .WhileTrue(Retract(&m_climber).ToPtr());
   
   frc2::JoystickButton(&m_operatorController, 10)
-        .WhileTrue(Extend(&m_climber).ToPtr());
+        .WhileTrue(Extend(&m_climber).ToPtr());*/
 
- frc2::JoystickButton(&m_operatorController, 6)
+/* frc2::JoystickButton(&m_operatorController, 6)
             .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr());     
     
-    /*  frc2::JoystickButton(&m_operatorController, 6)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm,  &m_LED_Controller,
-                0.8, ArmConstants::kArmAngleShootClose).ToPtr()); */
+   */
   frc2::JoystickButton(&m_operatorController, 1)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
                 0.8, 66.25).ToPtr());
 
- 
-//AMP
-  /*frc2::JoystickButton(&m_operatorController, 5)
+
+frc2::POVButton(&m_operatorController,270)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                0.4, 105).ToPtr()); // -15, 145
-*/
+                0.4, 105-40).ToPtr()); // -15, 145
+
+
+frc2::POVButton(&m_operatorController,90)
+    .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm,  &m_LED_Controller,
+                0.8, ArmConstants::kArmAngleShootClose).ToPtr()); 
+
     frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(intakeTake(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr());
 
@@ -203,6 +213,7 @@ void Robot::BindCommands() {
       m_intake.runIntakeReverse();
     },{&m_intake}).ToPtr())
     .OnFalse(frc2::InstantCommand([this] {
+    
       return m_intake.stopIntake();
     }, {&m_intake}).ToPtr());
 
@@ -278,33 +289,7 @@ void Robot::DisabledPeriodic() {
     m_LED_Controller.candle.SetLEDs(0,0,0,0,4,4);
   }
   
-  // Set Auto commands
-  // if(auto3.Get())
-  // { if(auto4Note.Get()){
-  //     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
-  //     m_swerveDrive.ResetPose(start);
-  //     m_autonomousCommand =  pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
-  //   }
-  //   else
-  //   { 
-  //      auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
-  //      m_swerveDrive.ResetPose(start);
-  //      m_autonomousCommand =  pathplanner::PathPlannerAuto("Move").ToPtr();
-  //   }
-  // }
-  // else{
-  //   if(auto4Note.Get()){
-  //     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
-  //     m_swerveDrive.ResetPose(start);
-  //     m_autonomousCommand =  pathplanner::PathPlannerAuto("3NoteSpeakerRun").ToPtr();
-  //   }
-  //   else
-  //   { 
-  //     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("Move")[0]->getPathPoses()[0];
-  //     m_swerveDrive.ResetPose(start);
-  //     m_autonomousCommand =  pathplanner::PathPlannerAuto("Move").ToPtr();
-  //   }
-  // }
+  
 
   frc::SmartDashboard::PutNumber("Auto", autoName);
   // m_swerveDrive.SetVision();
@@ -322,14 +307,13 @@ void Robot::UpdateDashboard() {
   //         DriveConstants::kMaxTranslationalVelocity.value());
   // frc::SmartDashboard::PutNumber("Swerve Drive Heading",
   //                                m_swerveDrive.GetHeading().Degrees().value());
-  frc::SmartDashboard::PutBoolean("Note?", m_indexer.hasNote());
    ARM_Angel = frc::SmartDashboard::GetNumber("ARM_Angel",ArmConstants::kArmAngleDriving);
    ARM_Speed = frc::SmartDashboard::GetNumber("ARM_Speed",-120);
    servo_angle = frc::SmartDashboard::GetNumber("servo_angle",100);
-  frc::SmartDashboard::PutBoolean("AutoSwitches/color", autoColor.Get());
-  frc::SmartDashboard::PutBoolean("AutoSwitches/7", auto2.Get());
-  frc::SmartDashboard::PutBoolean("AutoSwitches/6", auto3.Get());
-  frc::SmartDashboard::PutBoolean("AutoSwitches/8", auto4Note.Get());
+ // frc::SmartDashboard::PutBoolean("AutoSwitches/color", autoColor.Get());
+ // frc::SmartDashboard::PutBoolean("AutoSwitches/7", auto2.Get());
+ // frc::SmartDashboard::PutBoolean("AutoSwitches/6", auto3.Get());
+ // frc::SmartDashboard::PutBoolean("AutoSwitches/8", auto4Note.Get());
 
   // m_swerveDrive.PrintNetworkTableValues();
   m_arm.printLog();

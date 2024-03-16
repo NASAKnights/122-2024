@@ -78,6 +78,7 @@ public:
   void PublishOdometry(frc::Pose2d);
   void PrintNetworkTablseValues();
   void SetVision();
+  bool atSetpoint();
   frc::Pose2d GetVision();
 
 private:
@@ -92,13 +93,16 @@ private:
 
   frc::ChassisSpeeds speeds;
   // frc::SwerveDriveOdometry<4> odometry;
- frc::Field2d m_field;
+  frc::Field2d m_field;
   frc::PIDController pidX;
   frc::PIDController pidY;
   frc::PIDController pidRot;
 
   bool hasRun = false;
   bool enable= true;
+  double pos_Error;
+
+  frc::ChassisSpeeds priorSpeeds = frc::ChassisSpeeds();
   // ----------------------
 
   nt::NetworkTableInstance networkTableInst;
