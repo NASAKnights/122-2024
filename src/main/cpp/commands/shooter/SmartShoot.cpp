@@ -150,61 +150,46 @@ void SmartShoot::Arm_Position()
     arm->handle_Setpoint(units::angle::degree_t{39});
     break;
   case 2:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{40});
     break;
   case 3:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{40});
     break;
   case 4:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{44});
     break;
   case 5:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{47});
     break;
   case 6:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{50});
     break;
   case 7:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{51});
     break;
   case 8:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{52});
     break;
   case 9:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{54});
     break;
   case 10:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{57});
     break;
   case 11:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{62});
     break;
   case 12:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{63});
     break;
   case 13:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{64});
     break;
   case 14:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{65});
     break;
   default:
-    // frc::SmartDashboard::PutNumber("Distance_TEST", i);
     arm->handle_Setpoint(units::angle::degree_t{66});
-
     break;
   }
 }

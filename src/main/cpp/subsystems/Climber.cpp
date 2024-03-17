@@ -75,6 +75,7 @@ void Climber::extend() {
         climberMotor1.Set(0);
         m_ClimberState = CLIMBER_EXTEND_DONE;
       }
+      break;
     }
     case CLIMBER_EXTEND_DONE:
     {
@@ -104,6 +105,7 @@ void Climber::retract(){
         climberMotor1.Set(0);
         m_ClimberState = CLIMBER_RETRACT_DONE;
       }
+      break;
     }
     case CLIMBER_RETRACT_DONE:
     {
