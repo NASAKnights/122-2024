@@ -20,16 +20,15 @@ SmartShoot::SmartShoot(Shooter *_shooter,
                        frc::Joystick *_operatorController,
                        frc::Joystick *_driverController,
                        frc::DigitalInput* _color) :
-
-                                      shoooter{_shooter},
-                                      indexing{_indexer},
-                                      intake{_intake},
-                                      arm{_arm},
-                                      shootSpeed{_shootSpeed},
-                                      swerdrive{_swerdrive},
-                                      operatorController{_operatorController},
-                                      driverController{_driverController},
-                                      color{_color}
+          shoooter{_shooter},
+          indexing{_indexer},
+          intake{_intake},
+          arm{_arm},
+          shootSpeed{_shootSpeed},
+          swerdrive{_swerdrive},
+          operatorController{_operatorController},
+          driverController{_driverController},
+          color{_color}
 
 {
   AddRequirements(indexing);
@@ -54,25 +53,26 @@ void SmartShoot::Execute()
   shoooter->Shoot(shootSpeed); // angle is 78
   switch (m_state)
   {
-  case SMARTSPINUP:
-  { Arm_Position();
-    shoooter->Shoot(shootSpeed); 
-    // Change button
-    if (shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE && swerdrive->atSetpoint() && operatorController->GetRawButton(6))
-    {
-      m_state = SMARTSHOOTING;
+    case SMARTSPINUP:
+    { 
+      Arm_Position();
+      shoooter->Shoot(shootSpeed); 
+      // Change button
+      if (shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE && swerdrive->atSetpoint() && operatorController->GetRawButton(6))
+      {
+        m_state = SMARTSHOOTING;
+      }
+      break;
     }
-    break;
-  }
-  case SMARTSHOOTING:
-  {
-    intake->intakeIndex();
-    break;
-  }
-  default:
-  {
-    break;
-  }
+    case SMARTSHOOTING:
+    {
+      intake->intakeIndex();
+      break;
+    }
+    default:
+    {
+      break;
+    }
   }
 }
 // Called once the command ends or is interrupted.

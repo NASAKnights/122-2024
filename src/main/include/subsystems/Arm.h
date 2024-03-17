@@ -50,7 +50,7 @@ const double kArmPeakCurrentDuration = 0.1;
 const int kLinearMax = 1100;//1140
 const int kLinearMin = 1060;//1100
 const double kArmAngleOffsetL = 40.0;
-const double kArmAngleOffsetR = 40.0;
+const double kArmAngleOffsetR = 0.0;
 
 
 const double kArmAngleStarting = 80.0; // With offset

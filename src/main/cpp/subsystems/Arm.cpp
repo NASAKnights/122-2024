@@ -97,6 +97,7 @@ void ArmSubsystem::Emergency_Stop(){
 void ArmSubsystem::printLog()
 {
     frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value()); 
+    frc::SmartDashboard::PutNumber("ARM_ENC_ABS_r", m_encoderR.GetDistance()); 
     frc::SmartDashboard::PutNumber("armGoal_POS", GetController().GetGoal().position.value());
     // frc::SmartDashboard::PutNumber("armGoal_vel", GetController().GetGoal().velocity.value());
     // frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
@@ -154,8 +155,7 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
   }
   case ArmConstants::MOVING:
   {
-    if(fabs((GetController().GetGoal().position - GetMeasurement()).value()) <
-           3)
+    if(fabs((GetController().GetGoal().position - GetMeasurement()).value()) <3)
     {
       arm_Brake_In();
       m_ArmState = ArmConstants::MOVING;

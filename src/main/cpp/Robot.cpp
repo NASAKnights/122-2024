@@ -174,6 +174,10 @@ void Robot::BindCommands()
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
                        0.8, 66.25).ToPtr()); //Far Shot
 
+  
+  frc2::JoystickButton(&m_operatorController, 3)
+      .WhileTrue(IntakeNote(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr());
+
   frc2::JoystickButton(&m_operatorController, 4)
       .OnTrue(frc2::RunCommand([this]
           { m_intake.runIntakeReverse(); },
@@ -208,12 +212,6 @@ void Robot::BindCommands()
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
                        0.8, ArmConstants::kArmAngleShootClose)
                      .ToPtr());
-
-  frc2::JoystickButton(&m_operatorController, 3)
-      .WhileTrue(IntakeNote(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr());
-
-  
-
   
 }
 /**

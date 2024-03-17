@@ -52,12 +52,14 @@ void Shoot::Execute() {
     case SHOOTING:
     {
       m_led_control->m_shooterState = LED_SHOOTING;
+      m_led_control->HandleShooterState();
       intake->intakeIndex();
       shoooter->Shoot(shootSpeed);
       break;
     }
     default:
     {
+      m_led_control->HandleShooterState();
       break;
     }
   }

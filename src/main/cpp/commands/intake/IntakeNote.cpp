@@ -50,6 +50,11 @@ void IntakeNote::Execute() {
       m_led_control->HandleIntakeState();
       break;
     }
+    default:
+    {
+      m_led_control->HandleIntakeState();
+      break;
+    }
   }
 }
 
