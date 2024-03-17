@@ -30,8 +30,8 @@ class Shooter : public frc2::SubsystemBase {
   rev::SparkMaxPIDController m_shootPIDTop = m_shootMotorTop.GetPIDController();
   rev::SparkMaxPIDController m_shootPIDBot = m_shootMotorBot.GetPIDController();
 
-  rev::SparkMaxRelativeEncoder m_shootEncoderTop = m_shootMotorTop.GetEncoder();
-  rev::SparkMaxRelativeEncoder m_shootEncoderBot = m_shootMotorBot.GetEncoder();
+  rev::SparkRelativeEncoder m_shootEncoderTop = m_shootMotorTop.GetEncoder();
+  rev::SparkRelativeEncoder m_shootEncoderBot = m_shootMotorBot.GetEncoder();
 
   bool running = false;
   int SHOOT_speed;

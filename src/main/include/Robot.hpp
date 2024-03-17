@@ -6,22 +6,40 @@
 
 #include <frc/Joystick.h>
 #include <frc/TimedRobot.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/CommandScheduler.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/button/JoystickButton.h>
+#include <frc2/command/button/POVButton.h>
+
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
 
-#include "subsystems/SwerveDrive.hpp"
-#include "arm/Arm.h"
-#include "commands/shooter/shoot.h"
-#include "commands//Retract.h"
-#include "commands//Extend.h"
-
-
-#include "commands/intake/intakeTake.h"
-#include "subsystems/LEDController.h"
 #include "subsystems/Climber.h"
+#include "subsystems/SwerveDrive.hpp"
+#include "subsystems/LEDController.h"
+#include "subsystems/Arm.h"
+
+#include "commands/shooter/Shoot.h"
+#include "commands/shooter/SmartShoot.h"
+#include "commands/Retract.h"
+#include "commands/Extend.h"
+#include "commands/intake/IntakeNote.h"
+#include "commands/TrajectoryFollower.hpp"
 #include "commands/ArmDown.h"
+
+#include "util/NKTrajectoryManager.hpp"
+
+#include <units/angular_velocity.h>
+#include <units/velocity.h>
+
+#include <cmath>
+
 
 class Robot : public frc::TimedRobot {
 public:
@@ -62,15 +80,15 @@ private:
 
   double autoName = 0;
   double ARM_Angel = 60.0;
-  double ARM_Speed = -120;
+  // double ARM_Speed = -120;
 
   double servo_angle = 100;
   float  distance;
 
   frc::DigitalInput autoColor{9};
-  frc::DigitalInput auto4Note{8};
-  frc::DigitalInput auto2{7};
-  frc::DigitalInput auto3{6};
+  frc::DigitalInput autoSwitch8{8};
+  frc::DigitalInput autoSwitch7{7};
+  frc::DigitalInput autoSwitch6{6};
 
   // PS4 controllers
   frc::Joystick m_driverController{DriveConstants::kDriverPort};

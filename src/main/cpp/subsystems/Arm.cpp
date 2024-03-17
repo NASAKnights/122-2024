@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-#include <arm/Arm.h>
+#include "subsystems/Arm.h"
 
 using State = frc::TrapezoidProfile<units::degrees>::State;
 using degrees_per_second_squared_t = units::unit_t<units::compound_unit<units::angular_velocity::degrees_per_second, units::inverse<units::time::seconds>>>;
@@ -57,7 +57,6 @@ ArmSubsystem::ArmSubsystem()
     SetGoal(State{units::degree_t(80.0), 0_rad_per_s});
     // arm_pigeon.Reset();
     //time_brake_released = frc::GetTime();
-    // frc::SmartDashboard::PutNumber("Angle",100);
 
     //Linear.SetSpeed()
 }
@@ -66,10 +65,6 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
   // Calculate the feedforward from the sepoint
   units::volt_t feedforward =
       m_feedforward.Calculate(setpoint.position, setpoint.velocity);
-  
-  frc::SmartDashboard::PutNumber("output", output);
-  frc::SmartDashboard::PutNumber("setpoint pos", setpoint.position.value());
-  frc::SmartDashboard::PutNumber("setpoint vel", setpoint.velocity.value());
 
   // Output will be 0 if disabled.
   if(fabs(output) < 1e-6 || GetController().AtGoal())
@@ -93,9 +88,6 @@ void ArmSubsystem::arm_Brake_Out()
   Linear.SetSpeed(-1);
 }
 
-// void ArmSubsystem::get_pigeon(){
-//     arm_pigeon.GetAccumGyroY();
-// }
 void ArmSubsystem::Emergency_Stop(){
 
   if(Kill.Get()== true){
@@ -106,36 +98,32 @@ void ArmSubsystem::printLog()
 {
     frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value()); 
     frc::SmartDashboard::PutNumber("armGoal_POS", GetController().GetGoal().position.value());
-    frc::SmartDashboard::PutNumber("armGoal_vel", GetController().GetGoal().velocity.value());
+    // frc::SmartDashboard::PutNumber("armGoal_vel", GetController().GetGoal().velocity.value());
     // frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
     frc::SmartDashboard::PutNumber("ARM_setpoint", GetController().GetSetpoint().position.value());
-    // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAccumGyroY().GetValueAsDouble());
-    // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gyro_Y", arm_pigeon.GetAngle());
-    // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_Z",arm_pigeon.GetGravityVectorZ().GetValueAsDouble());
-    // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_Y",arm_pigeon.GetGravityVectorY().GetValueAsDouble());
-    // frc::SmartDashboard::PutNumber("ARM_Pigeon_Gravity_X",arm_pigeon.GetGravityVectorX().GetValueAsDouble());
     /*
     frc::SmartDashboard::PutNumber("Brake Time", (frc::GetTime() - time_brake_released).value());
     frc::SmartDashboard::PutNumber("Arm State", m_ArmState);*/
     
-    // Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
-    //                 0_ms, 
-    //                 0_ms, 
-    //                 0_ms, 
-    //                 units::time::microsecond_t{ArmConstants::kLinearMin});
+
 
 }
 
-units::degree_t ArmSubsystem::GetMeasurement() {
-  units::degree_t avrage_encoder = (units::degree_t{(m_encoderL.GetDistance())}+units::degree_t{(m_encoderR.GetDistance())})/2.0;
-  if(m_encoderL.GetDistance() == -ArmConstants::kArmAngleOffsetL){
-   return units::degree_t{(m_encoderR.GetDistance())};
-  }
- if(m_encoderR.GetDistance() == -ArmConstants::kArmAngleOffsetR){
-   return units::degree_t{(m_encoderL.GetDistance())};
-  }
-  return avrage_encoder;
+units::degree_t ArmSubsystem::GetMeasurement() { // original get measurement function
+  return units::degree_t{(m_encoderL.GetDistance())};
 }
+
+
+// units::degree_t ArmSubsystem::GetMeasurement() { //with redunant encoders
+//   units::degree_t avrage_encoder = (units::degree_t{(m_encoderL.GetDistance())}+units::degree_t{(m_encoderR.GetDistance())})/2.0;
+//   if(m_encoderL.GetDistance() == -ArmConstants::kArmAngleOffsetL){
+//    return units::degree_t{(m_encoderR.GetDistance())};
+//   }
+//  if(m_encoderR.GetDistance() == -ArmConstants::kArmAngleOffsetR){
+//    return units::degree_t{(m_encoderL.GetDistance())};
+//   }
+//   return avrage_encoder;
+// }
 
 void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
   if(fabs((setpoint - GetController().GetGoal().position).value()) >= 1e-1 && m_ArmState != ArmConstants::BRAKED)
@@ -152,6 +140,7 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
   {
     arm_Brake_Out();
     m_ArmState = ArmConstants::BRAKED;
+    break;
   }
   case ArmConstants::BRAKED:
   {
@@ -161,7 +150,7 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
       SetGoal(setpoint);
       Enable();
     }
-  break;
+    break;
   }
   case ArmConstants::MOVING:
   {
@@ -175,7 +164,7 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
     {
       m_ArmState = ArmConstants::DONE;
     }
-  break;
+    break;
   }
   case ArmConstants::DONE:
   {

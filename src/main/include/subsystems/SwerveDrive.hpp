@@ -17,6 +17,8 @@
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
+#include <frc/smartdashboard/Field2d.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/SubsystemBase.h>
 #include <frc/geometry/Quaternion.h>
 #include <networktables/DoubleArrayTopic.h>
@@ -31,6 +33,7 @@
 #include <frc/estimator/PoseEstimator.h>
 #include <frc/DriverStation.h>
 #include <frc/trajectory/constraint/SwerveDriveKinematicsConstraint.h>
+
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
 #include <pathplanner/lib/util/PIDConstants.h>
@@ -38,7 +41,7 @@
 
 #include "Constants.hpp"
 #include "SwerveModule.hpp"
-#include <frc/smartdashboard/Field2d.h>
+
 
 class SwerveDrive : public frc2::SubsystemBase {
 public:

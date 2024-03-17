@@ -2,10 +2,6 @@
 
 #include "subsystems/SwerveDrive.hpp"
 
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <pathplanner/lib/auto/AutoBuilder.h>
-
-#include "Constants.hpp"
 
 SwerveDrive::SwerveDrive()
     : modules{{SwerveModule(ElectricalConstants::kFrontLeftDriveMotorID,

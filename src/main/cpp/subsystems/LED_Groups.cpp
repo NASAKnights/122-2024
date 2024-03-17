@@ -2,16 +2,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 #include "subsystems/LED_Groups.h"
-#include <ctre/phoenix/led/Animation.h>
-#include <ctre/phoenix/led/LarsonAnimation.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-
 
 void LED_Group::SetColor(int _r, int _g, int _b)
 {
     for(int i: _group)
     {
-        while(_candle->SetLEDs(_r, _g, _b, 0, i, 1)!=ctre::phoenix::OK){}
+        _candle->SetLEDs(_r, _g, _b, 0, i, 1);
     }
 }
 

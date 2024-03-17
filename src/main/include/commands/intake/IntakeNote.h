@@ -6,29 +6,23 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <subsystems/Intake.h>
-#include <subsystems/Shooter.h>
-#include <subsystems/Indexer.h>
-#include <arm/Arm.h>
-#include <subsystems/LEDController.h>
 
-/**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
- */
+#include "subsystems/Indexer.h"
+#include "subsystems/Intake.h"
+#include "subsystems/Shooter.h"
+#include "subsystems/Arm.h"
+#include "subsystems/LEDController.h"
+
 enum IntakeState
 {
   MOVING,
   IDLE
 };
 
-class intakeTake
-    : public frc2::CommandHelper<frc2::Command, intakeTake> {
+class IntakeNote
+    : public frc2::CommandHelper<frc2::Command, IntakeNote> {
  public:
-  intakeTake(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm, LEDController* led_controller);
+  IntakeNote(Intake* _intake, Indexer* _indexer, ArmSubsystem* _arm, LEDController* led_controller);
 
   void Initialize() override;
 

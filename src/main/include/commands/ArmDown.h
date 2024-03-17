@@ -6,18 +6,11 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <arm/Arm.h>
+#include <subsystems/Arm.h>
 
-/**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
- */
 class ArmDown
     : public frc2::CommandHelper<frc2::Command, ArmDown> {
-  public:
+public:
   ArmDown(ArmSubsystem* _arm);
 
   void Initialize() override;
@@ -27,6 +20,6 @@ class ArmDown
   void End(bool interrupted) override;
 
   bool IsFinished() override;
-  
+private:
   ArmSubsystem* m_arm;
 };

@@ -53,7 +53,7 @@ const double kArmAngleOffsetL = 40.0;
 const double kArmAngleOffsetR = 40.0;
 
 
-const double kArmAngleStarting = 80.0; // With offset \[]
+const double kArmAngleStarting = 80.0; // With offset
 const double kArmAngleDriving = 30.0; // With offset
 const double kArmAngleIntake = -1.5; //with offset
 const double kArmAngleShootClose = 40.0; //with offset
@@ -74,14 +74,13 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   void arm_Brake_Out();
   void handle_Setpoint(units::angle::degree_t);
   void Emergency_Stop();
-  // void get_pigeon();
-  units::time::second_t time_brake_released;
-    ArmConstants::ArmState m_ArmState;
-
-
+  // void get_pigeon();s
   void UseOutput(double output, State setpoint) override;
   units::degree_t GetMeasurement() override;
-  private:
+
+  units::time::second_t time_brake_released;
+  ArmConstants::ArmState m_ArmState;
+private:
   ctre::phoenix6::hardware::TalonFX m_motor;
   frc::ArmFeedforward m_feedforward;
   frc::DutyCycleEncoder m_encoderR;	

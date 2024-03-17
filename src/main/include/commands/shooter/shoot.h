@@ -10,7 +10,7 @@
 #include <subsystems/Indexer.h>
 #include <subsystems/Intake.h>
 #include <subsystems/LEDController.h>
-#include <arm/Arm.h>
+#include <subsystems/Arm.h>
 
 enum ShooterState
 {

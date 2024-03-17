@@ -89,10 +89,6 @@ const frc::Translation2d kBackRightPosition =
     frc::Translation2d(units::meter_t{-kTrackwidthMeters / 2.0},
                        units::meter_t{-kWheelbaseMeters / 2.0});
 
-// const frc::SwerveDriveKinematics kSwerveKinematics =
-//     frc::SwerveDriveKinematics(kFrontLeftPosition, kFrontRightPosition,
-//                                kBackLeftPosition, kBackRightPosition);
-
 const double kDriveLimit = 0.15; // 0.7 fast
 const double kRotationLimit = kDriveLimit;
 
@@ -121,8 +117,7 @@ const bool kSteerMotorInverted = true;
 const auto kDriveMotorNeutral =
     ctre::phoenix6::signals::NeutralModeValue::Brake;
 const auto kSteerMotorNeutral =
-    ctre::phoenix6::signals::NeutralModeValue::Brake; // set back to brake to be
-                                                      // amazing
+    ctre::phoenix6::signals::NeutralModeValue::Brake; // set back to brake to be amazing
 const bool kEncoderInverted = false;
 
 const bool kSteerEnableCurrentLimit = true;
@@ -154,16 +149,12 @@ const double kSteerD = 0.0;
 } // namespace ModuleConstants
 
 namespace MathUtilNK {
-inline double calculateAxis(double axis, double deadband) {
-  if (std::abs(axis) > deadband) {
-    return (axis - std::copysign(deadband, axis)) / (1.0 - deadband);
-  } else {
-    return 0.0;
-  }
-}
+    inline double calculateAxis(double axis, double deadband) {
+        if (std::abs(axis) > deadband) {
+            return (axis - std::copysign(deadband, axis)) / (1.0 - deadband);
+        } else {
+            return 0.0;
+        }
+    }
 
 } // namespace MathUtilNK
-
-namespace ShooterConstants {
-const double motorRampSpeed = 5000; 
-}

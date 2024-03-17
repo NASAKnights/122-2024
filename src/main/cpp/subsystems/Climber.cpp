@@ -11,8 +11,6 @@ Climber::Climber() :
 {
 
     climberMotor2.SetControl(climberFollower);
-    // Lift();
-    // m_ClimberState = ClimberState::DOWN;
 
 }
 
@@ -20,9 +18,7 @@ Climber::Climber() :
 void Climber::Periodic() {
   frc::SmartDashboard::PutBoolean("Climber at Bot?",botLimit1.Get());
   frc::SmartDashboard::PutNumber("Climber_Position",climberMotor1.GetPosition().GetValueAsDouble());
-/* if (!botLimit1.Get()) {
-      climberMotor1.Set(0.0);
-    }*/
+
 }
 
 void Climber::engage() {
@@ -47,13 +43,11 @@ void Climber::disableBrake() {
 }
 
 void Climber::moveMotor() {
-    climberMotor1.Set(0.6); // retract when set to 0.1
-    // climberMotor2.Set(0.1); // retract when set to 0.1
+    climberMotor1.Set(0.1); // retracts when set to 0.1
 }
 
 void Climber::stopMotor() {
     climberMotor1.Set(0.0);
-    // climberMotor2.Set(0.0);
 }
 
 void Climber::extend() {
@@ -78,7 +72,6 @@ void Climber::extend() {
       climberMotor1.Set(-0.9);
       if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 300)
       {
-        //climberMotor1.StopMotor();
         climberMotor1.Set(0);
         m_ClimberState = CLIMBER_EXTEND_DONE;
       }
@@ -98,16 +91,16 @@ void Climber::retract(){
   {
     case CLIMBER_RETRACT_START:
     { 
-      m_ClimberState = CLIMBER_EXTEND_BRAKE_DISENGAGE;
+      m_ClimberState = CLIMBER_RETRACT_MOVING;
   
       break;
     }
     case CLIMBER_RETRACT_MOVING: 
     {
-      climberMotor1.Set(-0.9);
-      if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 75)
+      climberMotor1.Set(0.8);
+      // Soft Limit
+      if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) <= 75)
       {
-        //climberMotor1.StopMotor();
         climberMotor1.Set(0);
         m_ClimberState = CLIMBER_RETRACT_DONE;
       }
@@ -135,38 +128,6 @@ void Climber::retractLimit_Pit(){
     }
 }
 
-
-// void Climber::move_Climber(ClimberState movment){
-
-//  m_ClimberState == movment;
-
-// switch (m_ClimberState)
-//   {
-//     case UP:
-//     {
-//       disengage();
-//       if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) >= 3000)
-//       {
-//         climberMotor1.StopMotor();
-//         m_ClimberState = ClimberState::CLIMBER_DONE;
-//       }
-//       break;
-//     }
-//     case DOWN:
-//     { 
-//       engage();
-//       Lift();
-//       break;
-//     }
-//     case CLIMBER_DONE:
-//     {
-//       engage();
-//       break;
-//     }
-//     default:
-//       break;
-//   }
-// }
 
 
 

@@ -8,11 +8,14 @@
 #include <vector>
 #include <ctre/phoenix/led/CANdle.h>
 #include <frc2/command/WaitCommand.h>
+#include <ctre/phoenix/led/Animation.h>
 #include <ctre/phoenix/led/RgbFadeAnimation.h>
 #include <ctre/phoenix/led/RainbowAnimation.h>
 #include <ctre/phoenix/led/FireAnimation.h>
 #include <ctre/phoenix/led/ColorFlowAnimation.h>
 #include <ctre/phoenix/led/TwinkleAnimation.h>
+#include <ctre/phoenix/led/LarsonAnimation.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 class LED_Group{
  public:
@@ -52,6 +55,5 @@ class LED_Group{
   frc::Timer _timer;
 
   ctre::phoenix::led::RgbFadeAnimation rgbFade;
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
+  
 };

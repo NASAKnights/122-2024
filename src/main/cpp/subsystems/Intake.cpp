@@ -11,7 +11,7 @@ Intake::Intake() :
     m_intakeMotor.EnableVoltageCompensation(true);
 }
 
-void Intake::Periodic() {/*IDK what I should put here *yet*/}
+void Intake::Periodic() {}
 
 void Intake::runIntake() {
     //Makes the intake do the funny :3
