@@ -220,11 +220,15 @@ void Robot::BindCommands()
 frc2::CommandPtr Robot::GetAutonomousCommand()
 {
 
+  auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("MoveR")[0]->getPathPoses()[0];
+  m_swerveDrive.ResetPose(start);
+  return pathplanner::PathPlannerAuto("MoveR").ToPtr();
+
   // auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("ShootDriveB")[0]->getPathPoses()[0];
   // m_swerveDrive.ResetPose(start);
 
   // return pathplanner::PathPlannerAuto("ShootDriveB").ToPtr();
-  if(autoColor.Get())
+  /*if(autoColor.Get())
   { if(autoSwitch8.Get()){
     auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("3NoteSpeakerRun")[0]->getPathPoses()[0];
     m_swerveDrive.ResetPose(start);
@@ -249,7 +253,7 @@ frc2::CommandPtr Robot::GetAutonomousCommand()
       m_swerveDrive.ResetPose(start);
       return pathplanner::PathPlannerAuto("Move").ToPtr();
     }
-  }
+  }*/
 }
 
 void Robot::DisabledPeriodic()
