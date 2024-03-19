@@ -220,9 +220,12 @@ void Robot::BindCommands()
 frc2::CommandPtr Robot::GetAutonomousCommand()
 {
 
-  auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("MoveR")[0]->getPathPoses()[0];
+  auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("MoveB")[0]->getPathPoses()[0];
+  frc::SmartDashboard::PutNumber("MoveRY",start.Y().value());
+  frc::SmartDashboard::PutNumber("MoveRX",start.X().value());
+  start = pathplanner::GeometryUtil::flipFieldPose(start);
   m_swerveDrive.ResetPose(start);
-  return pathplanner::PathPlannerAuto("MoveR").ToPtr();
+  return pathplanner::PathPlannerAuto("MoveB").ToPtr();
 
   // auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("ShootDriveB")[0]->getPathPoses()[0];
   // m_swerveDrive.ResetPose(start);
