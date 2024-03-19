@@ -38,7 +38,7 @@ const int kAbsEncoderIdR = 0;
 
 const int kAngleEncoderPulsePerRev = 2048;
 const auto kFFks = units::volt_t(0.18); // Volts static (motor)
-const auto kFFkg = units::volt_t(0.5); // Volts
+const auto kFFkg = units::volt_t(0.0); // Volts
 const auto kFFkV = units::unit_t<frc::ArmFeedforward::kv_unit>(2.26); // volts*s/rad
 const auto kFFkA = units::unit_t<frc::ArmFeedforward::ka_unit>(0.06); // volts*s^2/rad
 
@@ -49,8 +49,8 @@ const double kArmPeakCurrentDuration = 0.1;
 
 const int kLinearMax = 1100;//1140
 const int kLinearMin = 1060;//1100
-const double kArmAngleOffsetL = 40.0;
-const double kArmAngleOffsetR = 0.0;
+const double kArmAngleOffsetL = 282.0;
+const double kArmAngleOffsetR = 223.0;
 
 
 const double kArmAngleStarting = 80.0; // With offset
@@ -77,6 +77,7 @@ class ArmSubsystem : public frc2::ProfiledPIDSubsystem<units::degrees> {
   // void get_pigeon();s
   void UseOutput(double output, State setpoint) override;
   units::degree_t GetMeasurement() override;
+  bool isOverLimit();
 
   units::time::second_t time_brake_released;
   ArmConstants::ArmState m_ArmState;

@@ -35,13 +35,13 @@ ArmSubsystem::ArmSubsystem()
 
     m_motor.GetConfigurator().Apply(armAngleConfig);
     m_motor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    // m_encoderL.Reset();
+    // m_encoderR.Reset();
 
     m_encoderL.SetPositionOffset(ArmConstants::kArmAngleOffsetL/360.0);
     m_encoderL.SetDistancePerRotation(360);
-    
-    
     m_encoderR.SetPositionOffset(ArmConstants::kArmAngleOffsetR/360.0);
-    m_encoderR.SetDistancePerRotation(360);
+    m_encoderR.SetDistancePerRotation(-360);
    
     Linear.SetBounds(units::time::microsecond_t{ArmConstants::kLinearMax}, 
                     0_ms, 
@@ -94,10 +94,15 @@ void ArmSubsystem::Emergency_Stop(){
     m_motor.StopMotor();
   }
 }
+
+bool ArmSubsystem::isOverLimit() {
+  return Kill.Get();
+}
+
 void ArmSubsystem::printLog()
 {
     frc::SmartDashboard::PutNumber("ARM_ENC_ABS", GetMeasurement().value()); 
-    frc::SmartDashboard::PutNumber("ARM_ENC_ABS_r", m_encoderR.GetDistance()); 
+    // frc::SmartDashboard::PutNumber("ARM_ENC_ABS_r", (m_encoderR.GetAbsolutePosition()-m_encoderR.GetPositionOffset())*-360.0); 
     frc::SmartDashboard::PutNumber("armGoal_POS", GetController().GetGoal().position.value());
     // frc::SmartDashboard::PutNumber("armGoal_vel", GetController().GetGoal().velocity.value());
     // frc::SmartDashboard::PutNumber("ARM_Motor_PID", ( GetController().Calculate(units::degree_t{m_encoder.GetAbsolutePosition()})));
@@ -111,7 +116,7 @@ void ArmSubsystem::printLog()
 }
 
 units::degree_t ArmSubsystem::GetMeasurement() { // original get measurement function
-  return units::degree_t{(m_encoderL.GetDistance())};
+  return units::degree_t{m_encoderR.GetDistance()};
 }
 
 
