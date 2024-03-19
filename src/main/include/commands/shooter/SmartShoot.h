@@ -52,8 +52,9 @@ class SmartShoot
     
     double shootSpeed;
     frc::DigitalInput* color;
-  
-
+    
+    units::time::second_t time_spinup;
+    bool Timer;
     float distance;
     SmartShooterState m_state;
 };

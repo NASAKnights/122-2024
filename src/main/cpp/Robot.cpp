@@ -170,9 +170,9 @@ void Robot::BindCommands()
 
 // --------------OPERATOR BUTTONS--------------------------------
   
-  frc2::JoystickButton(&m_operatorController, 1)
+  /*frc2::JoystickButton(&m_operatorController, 1)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.8, ArmConstants::kArmAngleShootFar).ToPtr()); //Far Shot
+                       0.8, ArmConstants::kArmAngleShootFar).ToPtr()); //Far Shot*/
 
   
   frc2::JoystickButton(&m_operatorController, 3)
@@ -186,10 +186,27 @@ void Robot::BindCommands()
           { return m_intake.stopIntake(); },
           {&m_intake}).ToPtr());
 
+  frc2::JoystickButton(&m_operatorController, 6)
+      .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
+                    0.85, &m_swerveDrive, &m_operatorController, &m_driverController, &autoColor).ToPtr());
 
+  frc2::POVButton(&m_operatorController, 270)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
+                       0.85, ArmConstants::kArmAngleShootFar)
+                     .ToPtr()); 
+
+  frc2::POVButton(&m_operatorController, 90)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
+                       0.85, ArmConstants::kArmAngleShootClose)
+                     .ToPtr());        
+
+  /*
   frc2::JoystickButton(&m_operatorController, 6)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
                       &m_LED_Controller, 0.85, ArmConstants::kArmAngleShootClose).ToPtr());
+  */
+
+  
 
   /* frc2::JoystickButton(&m_operatorController, 6)
               .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr());
@@ -203,15 +220,7 @@ void Robot::BindCommands()
           .WhileTrue(Extend(&m_climber).ToPtr());*/
 
 
-  frc2::POVButton(&m_operatorController, 270)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.4, 105 - 40)
-                     .ToPtr()); // -15, 145 AMP SHOT
 
-  frc2::POVButton(&m_operatorController, 90)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.8, ArmConstants::kArmAngleShootClose)
-                     .ToPtr());
   
 }
 /**
