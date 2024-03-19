@@ -132,13 +132,13 @@ units::degree_t ArmSubsystem::GetMeasurement() { // original get measurement fun
 // }
 
 void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
-  /*if(fabs((setpoint - GetController().GetGoal().position).value()) >= 1e-1 && m_ArmState != ArmConstants::BRAKED)
+  if(fabs((setpoint - GetController().GetGoal().position).value()) >= 1e-1 && m_ArmState != ArmConstants::BRAKED)
   {
 
     m_ArmState = ArmConstants::START_ARM;
     // SetGoal(setpoint);
-    Disable();
-  }*/
+    // Disable();
+  }
 
   switch (m_ArmState)
   {
@@ -151,20 +151,20 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
   case ArmConstants::BRAKED:
   {
   //  if ((frc::GetTime() - time_brake_released).value() > 0.2)
-    {
-      m_ArmState = ArmConstants::MOVING;
-      SetGoal(setpoint);
-      Enable();
-    }
+    // {
+    m_ArmState = ArmConstants::MOVING;
+    SetGoal(setpoint);
+    Enable();
+    // }
     break;
   }
   case ArmConstants::MOVING:
   {
     //if(fabs((GetController().GetGoal().position - GetMeasurement()).value()) <3)
-    {
+    // {
       //arm_Brake_In();
-      m_ArmState = ArmConstants::MOVING;
-    }
+      // m_ArmState = ArmConstants::MOVING;
+    // }
     if(GetController().AtGoal())
     {
       m_ArmState = ArmConstants::DONE;

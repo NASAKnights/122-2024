@@ -65,6 +65,7 @@ private:
   // Have it empty by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
   std::optional<frc2::CommandPtr> m_autonomousCommand;
+  void loadAutonomous();
 
   // Subsystems
   SwerveDrive m_swerveDrive;
@@ -93,6 +94,12 @@ private:
   // PS4 controllers
   frc::Joystick m_driverController{DriveConstants::kDriverPort};
   frc::Joystick m_operatorController{DriveConstants::kOperatorPort};
+
+  // Autocommands to load:
+  frc::Pose2d autoBlueStart1;
+  std::optional<frc2::CommandPtr> autoBlue1;
+  
+
 
 
   //

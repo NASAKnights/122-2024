@@ -28,6 +28,9 @@ Shooter::Shooter() :
 
     m_shootMotorTop.SetSmartCurrentLimit(30);
     m_shootMotorBot.SetSmartCurrentLimit(30);
+
+    m_shootMotorTop.EnableVoltageCompensation(12.0);
+    m_shootMotorBot.EnableVoltageCompensation(12.0);
     
     m_shootMotorTop.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     m_shootMotorBot.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
@@ -42,6 +45,7 @@ void Shooter::Periodic() {
 
 void Shooter::Shoot(double shootSpeed) {
     frc::SmartDashboard::PutNumber("Shooter Velocity", m_shootEncoderTop.GetVelocity());
+    frc::SmartDashboard::PutNumber("Shooter goal Vel", shootSpeed * 11000);
     
     m_shootMotorTop.Set(-shootSpeed);
     m_shootMotorBot.Set(shootSpeed);
@@ -67,11 +71,11 @@ double Shooter::getShuffleGoal() {
 }
 
 bool Shooter::atSetpoint() { //TODO: Add logic back in
-    // if(fabs(fabs(getSpeed()) - (SHOOT_speed*11000.0)) < 10.0) // Rpm
-    // {
+    if(fabs(getSpeed()) >= fabs(SHOOT_speed*11000.0)) // Rpm
+    {
         return true;
-    // }
-    // return false;
+    }
+    return false;
 }
 
 bool Shooter::isRunning() {

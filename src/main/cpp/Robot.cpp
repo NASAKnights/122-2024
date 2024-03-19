@@ -137,6 +137,7 @@ void Robot::CreateRobot()
 
   // Configure the button bindings
   BindCommands();
+  loadAutonomous();
   m_swerveDrive.ResetHeading();
   AddPeriodic([this]
               { m_arm.Periodic(); },
@@ -171,7 +172,7 @@ void Robot::BindCommands()
   
   frc2::JoystickButton(&m_operatorController, 1)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.8, 66.25).ToPtr()); //Far Shot
+                       0.8, ArmConstants::kArmAngleShootFar).ToPtr()); //Far Shot
 
   
   frc2::JoystickButton(&m_operatorController, 3)
@@ -188,7 +189,7 @@ void Robot::BindCommands()
 
   frc2::JoystickButton(&m_operatorController, 6)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
-                      &m_LED_Controller, 0.8, ArmConstants::kArmAngleShootClose).ToPtr());
+                      &m_LED_Controller, 0.85, ArmConstants::kArmAngleShootClose).ToPtr());
 
   /* frc2::JoystickButton(&m_operatorController, 6)
               .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr());
@@ -225,6 +226,11 @@ frc2::CommandPtr Robot::GetAutonomousCommand()
   start = pathplanner::GeometryUtil::flipFieldPose(start);
   m_swerveDrive.ResetPose(start);
   return pathplanner::PathPlannerAuto("MoveB").ToPtr();
+
+  int autonum = pow(2, 3) * autoColor.Get() + 
+                pow(2, 2) * autoSwitch6.Get() + 
+                pow(2, 1) * autoSwitch7.Get() + 
+                pow(2, 0) * autoSwitch8.Get();
 
   // auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("ShootDriveB")[0]->getPathPoses()[0];
   // m_swerveDrive.ResetPose(start);
@@ -306,6 +312,14 @@ void Robot::UpdateDashboard()
   frc::SmartDashboard::PutBoolean("EmergencySwitch4",m_arm.isOverLimit());
 
   m_arm.printLog();
+}
+
+void Robot::loadAutonomous() {
+  autoBlueStart1 = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("MoveB")[0]->getPathPoses()[0];
+  autoBlue1 = pathplanner::PathPlannerAuto("MoveB").ToPtr();
+
+
+
 }
 
 #ifndef RUNNING_FRC_TESTS

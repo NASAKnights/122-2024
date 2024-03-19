@@ -14,7 +14,9 @@ AddRequirements(climber);
 }
 
 // Called when the command is initially scheduled.
-void Retract::Initialize() {}
+void Retract::Initialize() {
+  climber->m_ClimberState = CLIMBER_RETRACT_START;
+}
 
 // Called repeatedly when this Command is scheduled to run
 void Retract::Execute() {

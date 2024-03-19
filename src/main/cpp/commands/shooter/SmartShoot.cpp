@@ -144,52 +144,52 @@ void SmartShoot::Arm_Position()
   switch (i)
   {
   case 0:
-    arm->handle_Setpoint(units::angle::degree_t{38});
+    arm->handle_Setpoint(units::angle::degree_t{8});
     break;
   case 1:
-    arm->handle_Setpoint(units::angle::degree_t{39});
+    arm->handle_Setpoint(units::angle::degree_t{9});
     break;
   case 2:
-    arm->handle_Setpoint(units::angle::degree_t{40});
+    arm->handle_Setpoint(units::angle::degree_t{10});
     break;
   case 3:
-    arm->handle_Setpoint(units::angle::degree_t{40});
+    arm->handle_Setpoint(units::angle::degree_t{10});
     break;
   case 4:
-    arm->handle_Setpoint(units::angle::degree_t{44});
+    arm->handle_Setpoint(units::angle::degree_t{14});
     break;
   case 5:
-    arm->handle_Setpoint(units::angle::degree_t{47});
+    arm->handle_Setpoint(units::angle::degree_t{17});
     break;
   case 6:
-    arm->handle_Setpoint(units::angle::degree_t{50});
+    arm->handle_Setpoint(units::angle::degree_t{20});
     break;
   case 7:
-    arm->handle_Setpoint(units::angle::degree_t{51});
+    arm->handle_Setpoint(units::angle::degree_t{21});
     break;
   case 8:
-    arm->handle_Setpoint(units::angle::degree_t{52});
+    arm->handle_Setpoint(units::angle::degree_t{22});
     break;
   case 9:
-    arm->handle_Setpoint(units::angle::degree_t{54});
+    arm->handle_Setpoint(units::angle::degree_t{24});
     break;
   case 10:
-    arm->handle_Setpoint(units::angle::degree_t{57});
+    arm->handle_Setpoint(units::angle::degree_t{27});
     break;
   case 11:
-    arm->handle_Setpoint(units::angle::degree_t{62});
+    arm->handle_Setpoint(units::angle::degree_t{32});
     break;
   case 12:
-    arm->handle_Setpoint(units::angle::degree_t{63});
+    arm->handle_Setpoint(units::angle::degree_t{33});
     break;
   case 13:
-    arm->handle_Setpoint(units::angle::degree_t{64});
+    arm->handle_Setpoint(units::angle::degree_t{34});
     break;
   case 14:
-    arm->handle_Setpoint(units::angle::degree_t{65});
+    arm->handle_Setpoint(units::angle::degree_t{35});
     break;
   default:
-    arm->handle_Setpoint(units::angle::degree_t{66});
+    arm->handle_Setpoint(units::angle::degree_t{36});
     break;
   }
 }

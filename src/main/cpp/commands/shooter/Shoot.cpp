@@ -43,7 +43,7 @@ void Shoot::Execute() {
       m_led_control->HandleShooterState();
       shoooter->Shoot(shootSpeed);//angle is 78
       arm->handle_Setpoint(units::angle::degree_t(shootAngle));
-      if(shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE)
+      if (shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE)
       {
         m_state = SHOOTING;
       }
@@ -53,7 +53,12 @@ void Shoot::Execute() {
     {
       m_led_control->m_shooterState = LED_SHOOTING;
       m_led_control->HandleShooterState();
-      intake->intakeIndex();
+      if (shoooter->atSetpoint()) {
+        intake->intakeIndex();
+      }
+      else {
+        intake->stopIntake();
+      }
       shoooter->Shoot(shootSpeed);
       break;
     }
