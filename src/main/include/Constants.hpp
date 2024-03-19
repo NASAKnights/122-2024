@@ -65,14 +65,23 @@ const units::meters_per_second_t kMaxTranslationalVelocity{4.5};
 
 const units::radians_per_second_t kMaxRotationalVelocity{4};
 const bool kIsFieldRelative = true;
-
-const frc::Rotation2d kFrontLeftOffset{-units::degree_t{-40-1.5}}; // module 1
+// Main Robot Code
+// const frc::Rotation2d kFrontLeftOffset{-units::degree_t{-40-1.5}}; // module 1
+// const frc::Rotation2d kFrontRightOffset{
+//     -units::degree_t{75+2.5}}; // module 2
+// const frc::Rotation2d kBackLeftOffset{-units::degree_t{-129-30+24+2}}; // module 3 // 
+// // const frc::Rotation2d kBackLeftOffset{-units::degree_t{74-24-24-4}}; // module 3
+// const frc::Rotation2d kBackRightOffset{
+//     -units::degree_t{178 - 5.5 - 27}}; // 265.517 // -93.867 // module 4
+// Baby Swerve Code
+    const frc::Rotation2d kFrontLeftOffset{-units::degree_t{103}}; // module 1
 const frc::Rotation2d kFrontRightOffset{
-    -units::degree_t{75+2.5}}; // module 2
-const frc::Rotation2d kBackLeftOffset{-units::degree_t{-129-30+24+2}}; // module 3 // 
-// const frc::Rotation2d kBackLeftOffset{-units::degree_t{74-24-24-4}}; // module 3
+    -units::degree_t{-40 - 2.5}}; // 139.658 // 139.658 // module 2
+const frc::Rotation2d kBackLeftOffset{
+    -units::degree_t{157 + 3.6}}; // module 3
 const frc::Rotation2d kBackRightOffset{
-    -units::degree_t{178 - 5.5 - 27}}; // 265.517 // -93.867 // module 4
+    -units::degree_t{82 + 3}}; // 265.517 // -93.867 // module 4
+
 
 // baby swerve, fl 103, fr 42.5, bl 160.6, br 85
 

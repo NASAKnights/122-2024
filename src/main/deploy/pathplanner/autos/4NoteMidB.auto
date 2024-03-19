@@ -28,6 +28,19 @@
           "data": {
             "pathName": "4NoteMid_step3"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "a_ArmDown"
+                }
+              }
+            ]
+          }
         }
       ]
     }
