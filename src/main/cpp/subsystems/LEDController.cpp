@@ -19,9 +19,9 @@ void LEDController::DefaultAnimation()
     }
     auto rgbfade = ctre::phoenix::led::RgbFadeAnimation(1.0, 0.7, -1, 8);
     auto rainbow = ctre::phoenix::led::RainbowAnimation(1.0, 0.7, -1, false, 8);
-    auto fire = ctre::phoenix::led::FireAnimation(1.0, 0.7, -1, 1, 1, false, 8);
+    auto fire = ctre::phoenix::led::FireAnimation(1.0, 0.7, -1, 1, 0.0, false, 8);
     auto twinkle = ctre::phoenix::led::TwinkleAnimation(0,0,255,1, 0.7, -1, ctre::phoenix::led::TwinkleAnimation::Percent100, 8);
-    candle.Animate(rainbow, 0);
+    // candle.Animate(fire, 0);
 }
 
 void LEDController::Periodic() {}

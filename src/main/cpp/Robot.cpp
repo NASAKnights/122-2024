@@ -160,7 +160,6 @@ void Robot::BindCommands()
       .OnFalse(frc2::CommandPtr(frc2::InstantCommand([this]
           { frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleDriving); }).ToPtr()));
 
-  
 
   frc2::JoystickButton(&m_driverController, 9)
                           .OnTrue(frc2::InstantCommand([this]
@@ -292,10 +291,12 @@ void Robot::UpdateDashboard()
   ARM_Angel = frc::SmartDashboard::GetNumber("ARM_Angel", ArmConstants::kArmAngleDriving);
   // ARM_Speed = frc::SmartDashboard::GetNumber("ARM_Speed", -120);
   servo_angle = frc::SmartDashboard::GetNumber("servo_angle", 100);
-  // frc::SmartDashboard::PutBoolean("AutoSwitches/color", autoColor.Get());
-  // frc::SmartDashboard::PutBoolean("AutoSwitches/6", autoSwitch6.Get());
-  // frc::SmartDashboard::PutBoolean("AutoSwitches/7", autoSwitch7.Get());
-  // frc::SmartDashboard::PutBoolean("AutoSwitches/8", autoSwitch8.Get());
+  frc::SmartDashboard::PutBoolean("AutoSwitches/color", autoColor.Get());
+  frc::SmartDashboard::PutBoolean("AutoSwitches/6", autoSwitch6.Get());
+  frc::SmartDashboard::PutBoolean("AutoSwitches/7", autoSwitch7.Get());
+  frc::SmartDashboard::PutBoolean("AutoSwitches/8", autoSwitch8.Get());
+
+  frc::SmartDashboard::PutBoolean("EmergencySwitch4",m_arm.isOverLimit());
 
   m_arm.printLog();
 }
