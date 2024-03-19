@@ -26,7 +26,7 @@ enum ArmState{
     DONE
   };  
 
-const double kAngleP = 0.3;
+const double kAngleP = 0.15;
 const double kAngleI = 0.0;
 const double kAngleD = 0.0;//0.0001
 const auto kArmVelLimit = units::degrees_per_second_t(140.0);
@@ -50,7 +50,7 @@ const double kArmPeakCurrentDuration = 0.1;
 const int kLinearMax = 1100;//1140
 const int kLinearMin = 1060;//1100
 const double kArmAngleOffsetL = 282.0;
-const double kArmAngleOffsetR = 223.0;
+const double kArmAngleOffsetR = 226.0;
 
 
 const double kArmAngleStarting = 80.0; // With offset
