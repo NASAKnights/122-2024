@@ -168,11 +168,15 @@ void Robot::BindCommands()
                           .OnFalse(frc2::CommandPtr(frc2::InstantCommand([this]
                             {frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleDriving); }).ToPtr()));
 
+  frc2::JoystickButton(&m_driverController, 10)
+      .OnTrue(frc2::RunCommand([this]{m_climber.retractLimit_Pit();},{&m_climber}).ToPtr())
+      .OnFalse(frc2::InstantCommand([this] {m_climber.stopMotor();},{&m_climber}).ToPtr());
+
 // --------------OPERATOR BUTTONS--------------------------------
   
-  /*frc2::JoystickButton(&m_operatorController, 1)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.8, ArmConstants::kArmAngleShootFar).ToPtr()); //Far Shot*/
+  // frc2::JoystickButton(&m_operatorController, 1)
+      // .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
+                      //  0.8, ArmConstants::kArmAngleShootFar).ToPtr()); //Far Shot
 
   
   frc2::JoystickButton(&m_operatorController, 3)
@@ -186,38 +190,35 @@ void Robot::BindCommands()
           { return m_intake.stopIntake(); },
           {&m_intake}).ToPtr());
 
-  frc2::JoystickButton(&m_operatorController, 6)
+  frc2::JoystickButton(&m_operatorController, 8)
       .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
                     0.85, &m_swerveDrive, &m_operatorController, &m_driverController, &autoColor).ToPtr());
 
+  // frc2::JoystickButton(&m_operatorController, 6)
+      // .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
+                      // &m_LED_Controller, 0.9, ArmConstants::kArmAngleShootClose).ToPtr());
+
   frc2::POVButton(&m_operatorController, 270)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.85, ArmConstants::kArmAngleShootFar)
+                       0.9, ArmConstants::kArmAngleShootFar)
                      .ToPtr()); 
 
   frc2::POVButton(&m_operatorController, 90)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.85, ArmConstants::kArmAngleShootClose)
+                       0.9, ArmConstants::kArmAngleShootClose)
                      .ToPtr());        
 
-  /*
-  frc2::JoystickButton(&m_operatorController, 6)
-      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
-                      &m_LED_Controller, 0.85, ArmConstants::kArmAngleShootClose).ToPtr());
-  */
-
-  
 
   /* frc2::JoystickButton(&m_operatorController, 6)
               .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr());
 
      */
-  /*
-    frc2::JoystickButton(&m_operatorController, 9)
-      .WhileTrue(Retract(&m_climber).ToPtr());
 
-    frc2::JoystickButton(&m_operatorController, 10)
-          .WhileTrue(Extend(&m_climber).ToPtr());*/
+  frc2::JoystickButton(&m_operatorController, 9)
+    .WhileTrue(Retract(&m_climber).ToPtr());
+
+  frc2::JoystickButton(&m_operatorController, 10)
+    .WhileTrue(Extend(&m_climber).ToPtr());
 
 
 
@@ -275,25 +276,19 @@ frc2::CommandPtr Robot::GetAutonomousCommand()
 
 void Robot::DisabledPeriodic()
 {
+  int numLED = pow(2, 2) * autoSwitch6.Get() + 
+                pow(2, 1) * autoSwitch7.Get() + 
+                pow(2, 0) * autoSwitch8.Get() + 1;
   if (autoColor.Get())
   {
-    m_LED_Controller.candle.SetLEDs(0, 0, 255, 0, 0, 4);
+    m_LED_Controller.candle.SetLEDs(0, 0, 255, 0, 0, numLED);
+    m_LED_Controller.candle.SetLEDs(0, 0, 0, 0, numLED, 7-numLED);
   }
   else
   {
-    m_LED_Controller.candle.SetLEDs(255, 0, 0, 0, 0, 4);
+    m_LED_Controller.candle.SetLEDs(255, 0, 0, 0, 0, numLED);
+    m_LED_Controller.candle.SetLEDs(0, 0, 0, 0, numLED, 7-numLED);
   }
-  if (autoSwitch8.Get())
-  {
-    autoName = 1;
-    m_LED_Controller.candle.SetLEDs(0, 255, 0, 0, 4, 4);
-  }
-  else
-  {
-    autoName = 2;
-    m_LED_Controller.candle.SetLEDs(0, 0, 0, 0, 4, 4);
-  }
-
   frc::SmartDashboard::PutNumber("Auto", autoName);
 }
 

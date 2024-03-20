@@ -26,9 +26,10 @@ enum ArmState{
     DONE
   };  
 
-const double kAngleP = 0.15;
-const double kAngleI = 0.0;
+const double kAngleP = 0.1;
+const double kAngleI = 0.09;
 const double kAngleD = 0.0;//0.0001
+const double kIZone = 3.0;
 const auto kArmVelLimit = units::degrees_per_second_t(140.0);
 const auto kArmAccelLimit = units::angular_acceleration::degrees_per_second_squared_t(120.0);
 const auto kControllerTolerance = units::degree_t(1.0);
@@ -37,7 +38,7 @@ const int kAbsEncoderIdL = 1;
 const int kAbsEncoderIdR = 0;
 
 const int kAngleEncoderPulsePerRev = 2048;
-const auto kFFks = units::volt_t(0.18); // Volts static (motor)
+const auto kFFks = units::volt_t(0.23); // Volts static (motor)
 const auto kFFkg = units::volt_t(0.0); // Volts
 const auto kFFkV = units::unit_t<frc::ArmFeedforward::kv_unit>(2.26); // volts*s/rad
 const auto kFFkA = units::unit_t<frc::ArmFeedforward::ka_unit>(0.06); // volts*s^2/rad
@@ -56,7 +57,7 @@ const double kArmAngleOffsetR = 226.0;
 const double kArmAngleStarting = 80.0; // With offset
 const double kArmAngleDriving = 30.0; // With offset
 const double kArmAngleIntake = -2.5; //with offset
-const double kArmAngleShootClose = 33.0; //with offset 0.0
+const double kArmAngleShootClose = 0.0; //with offset 0.0
 const double kArmAngleShootFar = 36.25; //with offset
 
 // 3.0 ft, 0.0

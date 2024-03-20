@@ -27,6 +27,7 @@ ArmSubsystem::ArmSubsystem()
     // arm_pigeon{9, "NKCANivore"}
 {
     auto armAngleConfig = ctre::phoenix6::configs::TalonFXConfiguration();
+    GetController().SetIZone(ArmConstants::kIZone);
 
     armAngleConfig.CurrentLimits.SupplyCurrentLimitEnable = ArmConstants::kArmEnableCurrentLimit;
     armAngleConfig.CurrentLimits.SupplyCurrentLimit = ArmConstants::kArmContinuousCurrentLimit;
@@ -67,15 +68,15 @@ void ArmSubsystem::UseOutput(double output, State setpoint) {
       m_feedforward.Calculate(setpoint.position, setpoint.velocity);
 
   // Output will be 0 if disabled.
-  if(fabs(output) < 1e-6 || GetController().AtGoal())
-  {
-    m_motor.SetVoltage(units::volt_t{0.0});
-      }
-  else
-  { 
+  // if(fabs(output) < 1e-6 || GetController().AtGoal())
+  // {
+    // m_motor.SetVoltage(units::volt_t{0.0});
+  // }
+  // else
+  // { 
     // Add the feedforward to the PID output to get the motor output
     m_motor.SetVoltage(units::volt_t{output} + feedforward);
-  }
+  // }
 }
 
 void ArmSubsystem::arm_Brake_In(){

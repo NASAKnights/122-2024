@@ -40,6 +40,8 @@ SmartShoot::SmartShoot(Shooter *_shooter,
 void SmartShoot::Initialize()
 {
   swerdrive->DisableDrive();
+  spinupTime.Reset();
+  spinupTime.Start();
   
   m_state = SMARTSPINUP;
 }
@@ -56,16 +58,9 @@ void SmartShoot::Execute()
       Arm_Position();
       if(operatorController->GetRawButton(6))
       {
-       
-
        shoooter->Shoot(shootSpeed); 
-       if(Timer == false)
-       {
-        time_spinup = frc::GetTime();
-        Timer = true;
-       }
        
-       if ((frc::GetTime() - time_spinup).value() > 1 && arm->m_ArmState == ArmConstants::DONE && swerdrive->atSetpoint() )
+       if (spinupTime.HasElapsed(2_s) && arm->m_ArmState == ArmConstants::DONE && swerdrive->atSetpoint() )
        {
          m_state = SMARTSHOOTING;
        }
@@ -90,7 +85,6 @@ void SmartShoot::End(bool interrupted)
   intake->stopIntake();
   swerdrive->EnableDrive();
   m_state = SMARTDONE;
-  Timer = false;
 }
 
 // Returns true when the command should end.
@@ -121,7 +115,7 @@ void SmartShoot::Arm_Position()
           -rightXAxis * DriveConstants::kMaxRotationalVelocity,
           swerdrive->GetHeading()));
 
-  if (/*color->Get()*/false) // true = blue, false = red
+  if (color->Get()) // true = blue, false = red
   { 
     auto currentPos = swerdrive->GetPose();
     auto robot2Speaker = currentPos.RelativeTo(blue_Speaker_Pos);

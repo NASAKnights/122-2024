@@ -43,6 +43,8 @@ class Shoot
 
     double shootSpeed;
     double shootAngle;
+
+    frc::Timer spinupTime;
     
     ShooterState m_state;
 };

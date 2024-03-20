@@ -98,7 +98,7 @@ void Climber::retract(){
     }
     case CLIMBER_RETRACT_MOVING: 
     {
-      climberMotor1.Set(0.8);
+      climberMotor1.Set(0.9);
       // Soft Limit
       if (fabs(climberMotor1.GetPosition().GetValueAsDouble()) <= 75)
       {
@@ -123,10 +123,9 @@ void Climber::retractLimit_Pit(){
       climberMotor1.Set(0.1);
     }
     else {
-      frc::SmartDashboard::PutBoolean("Climber",true);
       //climberMotor1.StopMotor();
       climberMotor1.Set(0);
-      climberMotor1.SetPosition(units::angle::turn_t{0}); //TODO: Speed up later/set to position
+      while(climberMotor1.SetPosition(units::angle::turn_t{0}) != ctre::phoenix::StatusCode::OK){}; //TODO: Speed up later/set to position
     }
 }
 

@@ -120,20 +120,6 @@ void SwerveDrive::Drive(frc::ChassisSpeeds speeds) {
 
 void SwerveDrive::Strafe(frc::ChassisSpeeds s_speeds, double desiredAngle) {
   auto currentAngle = m_poseEstimator.GetEstimatedPosition().Rotation().Radians().value();
-  /*if (fabs(currentAngle) > 2*M_PI)
-  {
-    currentAngle = fmod(currentAngle , 2 * M_PI);
-    if (currentAngle < 0)
-      currentAngle += 2 * M_PI;
-    // currentAngle = currentAngle - M_PI;
-  }
-  if (fabs(desiredAngle) > 2*M_PI)
-  {
-    desiredAngle = fmod(desiredAngle , 2 * M_PI);
-    if (desiredAngle < 0)
-      desiredAngle += 2 * M_PI;
-    // desiredAngle = desiredAngle - M_PI;
-  }*/
 
   double errorBand= (M_PI-(-M_PI))/2;
   pos_Error= frc::InputModulus(desiredAngle-currentAngle,-errorBand,errorBand);
@@ -147,7 +133,7 @@ void SwerveDrive::Strafe(frc::ChassisSpeeds s_speeds, double desiredAngle) {
   kSwerveKinematics.DesaturateWheelSpeeds(
       &states, s_speeds, units::meters_per_second_t{ModuleConstants::kMaxSpeed},
       DriveConstants::kMaxTranslationalVelocity,
-      units::radians_per_second_t{3.0});
+      units::radians_per_second_t{1.0});
 
   for (int i = 0; i < 4; i++) {
     modules[i].SetDesiredState(states[i]);
