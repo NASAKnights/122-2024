@@ -49,18 +49,26 @@ void SmartShoot::Execute()
 {
   // TODO: ADD CONSTANT FOR MOTOR SPEED CHECK
   // shoooter->Shoot(shootSpeed);//angle is 78
-  Arm_Position();
-  shoooter->Shoot(shootSpeed); // angle is 78
-  switch (m_state)
+   switch (m_state)
   {
     case SMARTSPINUP:
     { 
       Arm_Position();
-      shoooter->Shoot(shootSpeed); 
-      // Change button
-      if (shoooter->atSetpoint() && arm->m_ArmState == ArmConstants::DONE && swerdrive->atSetpoint() && operatorController->GetRawButton(6))
+      if(operatorController->GetRawButton(6))
       {
-        m_state = SMARTSHOOTING;
+       
+
+       shoooter->Shoot(shootSpeed); 
+       if(Timer == false)
+       {
+        time_spinup = frc::GetTime();
+        Timer = true;
+       }
+       
+       if ((frc::GetTime() - time_spinup).value() > 1 && arm->m_ArmState == ArmConstants::DONE && swerdrive->atSetpoint() )
+       {
+         m_state = SMARTSHOOTING;
+       }
       }
       break;
     }
@@ -82,6 +90,7 @@ void SmartShoot::End(bool interrupted)
   intake->stopIntake();
   swerdrive->EnableDrive();
   m_state = SMARTDONE;
+  Timer = false;
 }
 
 // Returns true when the command should end.
@@ -144,52 +153,72 @@ void SmartShoot::Arm_Position()
   switch (i)
   {
   case 0:
-    arm->handle_Setpoint(units::angle::degree_t{8});
+    arm->handle_Setpoint(units::angle::degree_t{0});
     break;
   case 1:
-    arm->handle_Setpoint(units::angle::degree_t{9});
+    arm->handle_Setpoint(units::angle::degree_t{0});
     break;
   case 2:
-    arm->handle_Setpoint(units::angle::degree_t{10});
+    arm->handle_Setpoint(units::angle::degree_t{3});
     break;
   case 3:
-    arm->handle_Setpoint(units::angle::degree_t{10});
+    arm->handle_Setpoint(units::angle::degree_t{5});
     break;
   case 4:
-    arm->handle_Setpoint(units::angle::degree_t{14});
+    arm->handle_Setpoint(units::angle::degree_t{8});
     break;
   case 5:
-    arm->handle_Setpoint(units::angle::degree_t{17});
+    arm->handle_Setpoint(units::angle::degree_t{11});
     break;
   case 6:
-    arm->handle_Setpoint(units::angle::degree_t{20});
+    arm->handle_Setpoint(units::angle::degree_t{13.5});
     break;
   case 7:
-    arm->handle_Setpoint(units::angle::degree_t{21});
+    arm->handle_Setpoint(units::angle::degree_t{17.5});
     break;
   case 8:
-    arm->handle_Setpoint(units::angle::degree_t{22});
+    arm->handle_Setpoint(units::angle::degree_t{19});
     break;
   case 9:
-    arm->handle_Setpoint(units::angle::degree_t{24});
+    arm->handle_Setpoint(units::angle::degree_t{21});
     break;
   case 10:
-    arm->handle_Setpoint(units::angle::degree_t{27});
+    arm->handle_Setpoint(units::angle::degree_t{22});
     break;
   case 11:
-    arm->handle_Setpoint(units::angle::degree_t{32});
+    arm->handle_Setpoint(units::angle::degree_t{23});
     break;
   case 12:
-    arm->handle_Setpoint(units::angle::degree_t{33});
+    arm->handle_Setpoint(units::angle::degree_t{24});
     break;
   case 13:
-    arm->handle_Setpoint(units::angle::degree_t{34});
+    arm->handle_Setpoint(units::angle::degree_t{26});
     break;
   case 14:
-    arm->handle_Setpoint(units::angle::degree_t{35});
+    arm->handle_Setpoint(units::angle::degree_t{28});
+    break;
+  case 15:
+    arm->handle_Setpoint(units::angle::degree_t{29});
+    break;
+  case 16:
+    arm->handle_Setpoint(units::angle::degree_t{30});
+    break;
+  case 17:
+    arm->handle_Setpoint(units::angle::degree_t{30.5});
+    break;
+  case 18:
+    arm->handle_Setpoint(units::angle::degree_t{31.5});
+    break;
+  case 19:
+    arm->handle_Setpoint(units::angle::degree_t{32});
+    break;
+  case 20:
+    arm->handle_Setpoint(units::angle::degree_t{33});
+    break;
+  case 21:
+    arm->handle_Setpoint(units::angle::degree_t{33});
     break;
   default:
-    arm->handle_Setpoint(units::angle::degree_t{36});
     break;
   }
 }
