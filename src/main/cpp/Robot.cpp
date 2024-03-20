@@ -6,7 +6,18 @@
 Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit(){
+  std::string a1Name = "";
+  auto a1 = pathplanner::PathPlannerAuto(a1Name);
+  auto a1Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a1Name)[0]->getPathPoses()[0];
+  auto entry1 = std::make_pair(std::move(a1),a1Pose);
+  autoMap.emplace(1, std::move(entry1));
+  // autoMap[1];
 
+  std::string a2Name = "";
+  auto a2 = pathplanner::PathPlannerAuto(a2Name);
+  auto a2Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a2Name)[0]->getPathPoses()[0];
+  auto entry2 = std::make_pair(std::move(a2),a1Pose);
+  autoMap.emplace(2, std::move(entry2));
 };
 
 /**
@@ -40,7 +51,20 @@ void Robot::DisabledInit()
  */
 void Robot::AutonomousInit()
 {
-  m_autonomousCommand = this->GetAutonomousCommand();
+  // m_autonomousCommand = this->GetAutonomousCommand();
+  int autonum = pow(2, 3) * autoColor.Get() + 
+                pow(2, 2) * autoSwitch6.Get() + 
+                pow(2, 1) * autoSwitch7.Get() + 
+                pow(2, 0) * autoSwitch8.Get();
+  
+  auto start = std::move(autoMap.at(autonum)).second;
+   
+  m_autonomousCommand = std::move(std::move(autoMap.at(autonum)).first).ToPtr();
+  // frc::SmartDashboard::PutNumber("MoveRY",start.Y().value());
+  // frc::SmartDashboard::PutNumber("MoveRX",start.X().value());
+  // if(autonum < 8) start = pathplanner::GeometryUtil::flipFieldPose(start);
+  // m_swerveDrive.ResetPose(start);
+  // auto a = std::move(autoMap[autonum].first);
 
   if (m_autonomousCommand)
   {
@@ -219,18 +243,18 @@ void Robot::BindCommands()
  */
 frc2::CommandPtr Robot::GetAutonomousCommand()
 {
-
   auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("MoveB")[0]->getPathPoses()[0];
   frc::SmartDashboard::PutNumber("MoveRY",start.Y().value());
   frc::SmartDashboard::PutNumber("MoveRX",start.X().value());
   start = pathplanner::GeometryUtil::flipFieldPose(start);
   m_swerveDrive.ResetPose(start);
-  return pathplanner::PathPlannerAuto("MoveB").ToPtr();
 
-  int autonum = pow(2, 3) * autoColor.Get() + 
-                pow(2, 2) * autoSwitch6.Get() + 
-                pow(2, 1) * autoSwitch7.Get() + 
-                pow(2, 0) * autoSwitch8.Get();
+
+              
+  // autonomousToRun = std::move(autoMap[autonum]);
+
+  // return autonomousToRun;
+
 
   // auto start = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("ShootDriveB")[0]->getPathPoses()[0];
   // m_swerveDrive.ResetPose(start);
@@ -266,29 +290,26 @@ frc2::CommandPtr Robot::GetAutonomousCommand()
 
 void Robot::DisabledPeriodic()
 {
+  int numLED = pow(2, 2) * autoSwitch6.Get() +
+               pow(2, 1) * autoSwitch7.Get() +
+               pow(2, 0) * autoSwitch8.Get();
+
   if (autoColor.Get())
   {
-    m_LED_Controller.candle.SetLEDs(0, 0, 255, 0, 0, 4);
+    m_LED_Controller.candle.SetLEDs(0, 0, 255, 0, 0, numLED);
+    m_LED_Controller.candle.SetLEDs(0, 0, 0, 0, numLED, 8-numLED);
   }
   else
   {
-    m_LED_Controller.candle.SetLEDs(255, 0, 0, 0, 0, 4);
-  }
-  if (autoSwitch8.Get())
-  {
-    autoName = 1;
-    m_LED_Controller.candle.SetLEDs(0, 255, 0, 0, 4, 4);
-  }
-  else
-  {
-    autoName = 2;
-    m_LED_Controller.candle.SetLEDs(0, 0, 0, 0, 4, 4);
+    m_LED_Controller.candle.SetLEDs(255, 0, 0, 0, 0, numLED);
+    m_LED_Controller.candle.SetLEDs(0, 0, 0, 0, numLED, 8-numLED);
   }
 
   frc::SmartDashboard::PutNumber("Auto", autoName);
 }
 
-/**
+/**'
+ * 
  * Updates the data on the dashboard
  */
 void Robot::UpdateDashboard()
@@ -317,9 +338,6 @@ void Robot::UpdateDashboard()
 void Robot::loadAutonomous() {
   autoBlueStart1 = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile("MoveB")[0]->getPathPoses()[0];
   autoBlue1 = pathplanner::PathPlannerAuto("MoveB").ToPtr();
-
-
-
 }
 
 #ifndef RUNNING_FRC_TESTS

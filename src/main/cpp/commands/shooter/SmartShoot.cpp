@@ -139,7 +139,7 @@ void SmartShoot::Arm_Position()
 
   // Make into feet
   distance = ((distance) * 3.28084) - 4;
-  int i = distance / 1;
+  int i = std::round(distance);
   frc::SmartDashboard::PutNumber("Distance_TEST", i);
   switch (i)
   {

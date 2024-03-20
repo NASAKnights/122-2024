@@ -98,9 +98,8 @@ private:
   // Autocommands to load:
   frc::Pose2d autoBlueStart1;
   std::optional<frc2::CommandPtr> autoBlue1;
-  
-
-
+  // std::map<int, pathplanner::PathPlannerAuto> autoMap;
+  std::map<int, std::pair<pathplanner::PathPlannerAuto, frc::Pose2d>> autoMap;
 
   //
   // Robot Container methods
