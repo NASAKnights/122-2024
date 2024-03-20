@@ -56,11 +56,10 @@ void SmartShoot::Execute()
     case SMARTSPINUP:
     { 
       Arm_Position();
+      shoooter->Shoot(shootSpeed); 
       if(operatorController->GetRawButton(6))
       {
-       shoooter->Shoot(shootSpeed); 
-       
-       if (spinupTime.HasElapsed(2_s) && arm->m_ArmState == ArmConstants::DONE && swerdrive->atSetpoint() )
+       if (arm->m_ArmState == ArmConstants::DONE && swerdrive->atSetpoint() )
        {
          m_state = SMARTSHOOTING;
        }
@@ -147,25 +146,25 @@ void SmartShoot::Arm_Position()
   switch (i)
   {
   case 0:
-    arm->handle_Setpoint(units::angle::degree_t{0});
+    arm->handle_Setpoint(units::angle::degree_t{0.0});
     break;
   case 1:
-    arm->handle_Setpoint(units::angle::degree_t{0});
-    break;
-  case 2:
     arm->handle_Setpoint(units::angle::degree_t{3});
     break;
+  case 2:
+    arm->handle_Setpoint(units::angle::degree_t{7});
+    break;
   case 3:
-    arm->handle_Setpoint(units::angle::degree_t{5});
+    arm->handle_Setpoint(units::angle::degree_t{17.5});
     break;
   case 4:
-    arm->handle_Setpoint(units::angle::degree_t{8});
+    arm->handle_Setpoint(units::angle::degree_t{11});
     break;
   case 5:
     arm->handle_Setpoint(units::angle::degree_t{11});
     break;
   case 6:
-    arm->handle_Setpoint(units::angle::degree_t{13.5});
+    arm->handle_Setpoint(units::angle::degree_t{22});
     break;
   case 7:
     arm->handle_Setpoint(units::angle::degree_t{17.5});

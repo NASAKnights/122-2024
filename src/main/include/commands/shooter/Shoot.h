@@ -24,7 +24,7 @@ class Shoot
  public:
   Shoot(Shooter* _shooter, Indexer* _indexer, 
       Intake* _intake, ArmSubsystem* _arm, LEDController* led_controller,
-      double _shootSpeed, double _shootAngle);
+      double _shootSpeed, double _shootAngle, units::second_t _spinupTime);
 
   void Initialize() override;
 
@@ -43,6 +43,8 @@ class Shoot
 
     double shootSpeed;
     double shootAngle;
+
+    units::second_t shooterSpinupTime;
 
     frc::Timer spinupTime;
     

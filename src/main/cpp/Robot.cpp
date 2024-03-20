@@ -128,7 +128,7 @@ void Robot::CreateRobot()
   // frc::SmartDashboard::PutNumber("ARM_Speed", -120);
 
   pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
-                                              ArmConstants::kArmAngleShootClose).ToPtr())); 
+                                              ArmConstants::kArmAngleShootClose, 1_s).ToPtr())); 
   pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(IntakeNote(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_ArmDown", std::move(ArmDown(&m_arm).ToPtr()));
 
@@ -225,12 +225,12 @@ void Robot::BindCommands()
 
   frc2::POVButton(&m_operatorController, 270)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.9, ArmConstants::kArmAngleShootFar)
+                       0.9, ArmConstants::kArmAngleShootFar, 2_s)
                      .ToPtr()); 
 
   frc2::POVButton(&m_operatorController, 90)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.9, ArmConstants::kArmAngleShootClose)
+                       0.9, ArmConstants::kArmAngleShootClose, 2_s)
                      .ToPtr());        
 
 

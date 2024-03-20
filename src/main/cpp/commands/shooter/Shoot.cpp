@@ -11,13 +11,14 @@
 
 Shoot::Shoot(Shooter* _shooter, Indexer* _indexer, 
           Intake* _intake, ArmSubsystem* _arm, LEDController* led_controller,
-          double _shootSpeed, double _shootAngle) : 
+          double _shootSpeed, double _shootAngle, units::second_t _spinupTime = 1_s) : 
       shoooter{_shooter},
       indexing{_indexer},
       intake{_intake},
       arm{_arm},
       shootSpeed{_shootSpeed},
       shootAngle{_shootAngle},
+      shooterSpinupTime{_spinupTime},
       m_led_control{led_controller}
 { 
   AddRequirements(indexing);
@@ -45,7 +46,7 @@ void Shoot::Execute() {
       shoooter->Shoot(shootSpeed);//angle is 78
       arm->handle_Setpoint(units::angle::degree_t(shootAngle));
       
-      if (spinupTime.HasElapsed(2_s) && arm->m_ArmState == ArmConstants::DONE)
+      if (spinupTime.HasElapsed(shooterSpinupTime) && arm->m_ArmState == ArmConstants::DONE)
       {
         m_state = SHOOTING;
       }
