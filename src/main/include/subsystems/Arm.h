@@ -27,7 +27,7 @@ enum ArmState{
   };  
 
 const double kAngleP = 0.1;
-const double kAngleI = 0.09;
+const double kAngleI = 0.1;
 const double kAngleD = 0.0;//0.0001
 const double kIZone = 3.0;
 const auto kArmVelLimit = units::degrees_per_second_t(140.0);

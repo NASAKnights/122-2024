@@ -139,79 +139,85 @@ void SmartShoot::Arm_Position()
     frc::SmartDashboard::PutNumber("rotataion", -angle - M_PI);
   }
 
+  //angle = 14.708*nl(distance-1) - 10.244
+
   // Make into feet
   distance = ((distance) * 3.28084) - 4;
   int i = std::round(distance);
   frc::SmartDashboard::PutNumber("Distance_TEST", i);
-  switch (i)
-  {
-  case 0:
-    arm->handle_Setpoint(units::angle::degree_t{0.0});
-    break;
-  case 1:
-    arm->handle_Setpoint(units::angle::degree_t{3});
-    break;
-  case 2:
-    arm->handle_Setpoint(units::angle::degree_t{7});
-    break;
-  case 3:
-    arm->handle_Setpoint(units::angle::degree_t{17.5});
-    break;
-  case 4:
-    arm->handle_Setpoint(units::angle::degree_t{11});
-    break;
-  case 5:
-    arm->handle_Setpoint(units::angle::degree_t{11});
-    break;
-  case 6:
-    arm->handle_Setpoint(units::angle::degree_t{22});
-    break;
-  case 7:
-    arm->handle_Setpoint(units::angle::degree_t{17.5});
-    break;
-  case 8:
-    arm->handle_Setpoint(units::angle::degree_t{19});
-    break;
-  case 9:
-    arm->handle_Setpoint(units::angle::degree_t{21});
-    break;
-  case 10:
-    arm->handle_Setpoint(units::angle::degree_t{22});
-    break;
-  case 11:
-    arm->handle_Setpoint(units::angle::degree_t{23});
-    break;
-  case 12:
-    arm->handle_Setpoint(units::angle::degree_t{24});
-    break;
-  case 13:
-    arm->handle_Setpoint(units::angle::degree_t{26});
-    break;
-  case 14:
-    arm->handle_Setpoint(units::angle::degree_t{28});
-    break;
-  case 15:
-    arm->handle_Setpoint(units::angle::degree_t{29});
-    break;
-  case 16:
-    arm->handle_Setpoint(units::angle::degree_t{30});
-    break;
-  case 17:
-    arm->handle_Setpoint(units::angle::degree_t{30.5});
-    break;
-  case 18:
-    arm->handle_Setpoint(units::angle::degree_t{31.5});
-    break;
-  case 19:
-    arm->handle_Setpoint(units::angle::degree_t{32});
-    break;
-  case 20:
-    arm->handle_Setpoint(units::angle::degree_t{33});
-    break;
-  case 21:
-    arm->handle_Setpoint(units::angle::degree_t{33});
-    break;
-  default:
-    break;
-  }
+  double angle = (14.708*log(distance+1)) - 0;
+  angle = std::min(std::max(0.0, angle), 37.0);
+
+  arm->handle_Setpoint(units::degree_t{angle});
+  // switch (i)
+  // {
+  // case 0:
+  //   arm->handle_Setpoint(units::angle::degree_t{0.0});
+  //   break;
+  // case 1:
+  //   arm->handle_Setpoint(units::angle::degree_t{3});
+  //   break;
+  // case 2:
+  //   arm->handle_Setpoint(units::angle::degree_t{7});
+  //   break;
+  // case 3:
+  //   arm->handle_Setpoint(units::angle::degree_t{17.5});
+  //   break;
+  // case 4:
+  //   arm->handle_Setpoint(units::angle::degree_t{11});
+  //   break;
+  // case 5:
+  //   arm->handle_Setpoint(units::angle::degree_t{11});
+  //   break;
+  // case 6:
+  //   arm->handle_Setpoint(units::angle::degree_t{22});
+  //   break;
+  // case 7:
+  //   arm->handle_Setpoint(units::angle::degree_t{17.5});
+  //   break;
+  // case 8:
+  //   arm->handle_Setpoint(units::angle::degree_t{19});
+  //   break;
+  // case 9:
+  //   arm->handle_Setpoint(units::angle::degree_t{21});
+  //   break;
+  // case 10:
+  //   arm->handle_Setpoint(units::angle::degree_t{22});
+  //   break;
+  // case 11:
+  //   arm->handle_Setpoint(units::angle::degree_t{23});
+  //   break;
+  // case 12:
+  //   arm->handle_Setpoint(units::angle::degree_t{24});
+  //   break;
+  // case 13:
+  //   arm->handle_Setpoint(units::angle::degree_t{26});
+  //   break;
+  // case 14:
+  //   arm->handle_Setpoint(units::angle::degree_t{28});
+  //   break;
+  // case 15:
+  //   arm->handle_Setpoint(units::angle::degree_t{29});
+  //   break;
+  // case 16:
+  //   arm->handle_Setpoint(units::angle::degree_t{30});
+  //   break;
+  // case 17:
+  //   arm->handle_Setpoint(units::angle::degree_t{30.5});
+  //   break;
+  // case 18:
+  //   arm->handle_Setpoint(units::angle::degree_t{31.5});
+  //   break;
+  // case 19:
+  //   arm->handle_Setpoint(units::angle::degree_t{32});
+  //   break;
+  // case 20:
+  //   arm->handle_Setpoint(units::angle::degree_t{33});
+  //   break;
+  // case 21:
+  //   arm->handle_Setpoint(units::angle::degree_t{33});
+  //   break;
+  // default:
+  //   break;
+  // }
 }
