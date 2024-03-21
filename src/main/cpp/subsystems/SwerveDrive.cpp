@@ -37,6 +37,8 @@ SwerveDrive::SwerveDrive()
   speeds = frc::ChassisSpeeds();
   networkTableInst.StartServer();
   frc::SmartDashboard::PutData("Field",&m_field);
+  auto visionStdDevs = wpi::array<double,3U>{0.9, 0.9, 1.8};
+  m_poseEstimator.SetVisionMeasurementStdDevs(visionStdDevs);
 
 
   poseTable = networkTableInst.GetTable("ROS2Bridge");
@@ -295,12 +297,7 @@ void SwerveDrive::PublishOdometry(frc::Pose2d odometryPose) {
         odoPoseQ.X(),odoPoseQ.Y(),odoPoseQ.Z(),odoPoseQ.W(), time};
   baseLinkPublisher.Set(poseDeconstruct, time);
 }
-/*
-void SwerveDrive::PrintNetworkTableValues() {
-  // TODO: write print function :3
-  
-}
-*/
+
 void SwerveDrive::EnableDrive() {
   enable = true;
   // frc::SmartDashboard::PutBoolean("TestTestTest", enable);

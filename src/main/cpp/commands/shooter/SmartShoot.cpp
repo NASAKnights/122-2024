@@ -145,7 +145,7 @@ void SmartShoot::Arm_Position()
   distance = ((distance) * 3.28084) - 4;
   int i = std::round(distance);
   frc::SmartDashboard::PutNumber("Distance_TEST", i);
-  double angle = (14.708*log(distance+1)) - 0;
+  double angle = (14.708*log(i+1)) - 0;
   angle = std::min(std::max(0.0, angle), 37.0);
 
   arm->handle_Setpoint(units::degree_t{angle});
