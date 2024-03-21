@@ -6,14 +6,14 @@
 Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit(){
-  std::string a1Name = "3NoteSpeakerRun";
+  std::string a1Name = "3NoteSpeakerRunB";
   auto a1 = pathplanner::PathPlannerAuto(a1Name);
   auto a1Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a1Name)[0]->getPathPoses()[0];
   auto entry1 = std::make_pair(std::move(a1),a1Pose);
   autoMap.emplace(0, std::move(entry1));
   // autoMap[1];
 
-  std::string a2Name = "2NoteSpeakerRun";
+  std::string a2Name = "2NoteSpeakerRunB";
   auto a2 = pathplanner::PathPlannerAuto(a2Name);
   auto a2Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a2Name)[0]->getPathPoses()[0];
   auto entry2 = std::make_pair(std::move(a2),a1Pose);
@@ -128,9 +128,11 @@ void Robot::CreateRobot()
   // frc::SmartDashboard::PutNumber("ARM_Speed", -120);
 
   pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
-                                              ArmConstants::kArmAngleShootClose, 1_s).ToPtr())); 
+                                              ArmConstants::kArmAngleShootClose+5, 1_s).ToPtr())); 
   pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(IntakeNote(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_ArmDown", std::move(ArmDown(&m_arm).ToPtr()));
+  pathplanner::NamedCommands::registerCommand("a_farShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
+                                              ArmConstants::kArmAngleShootFar, 1_s).ToPtr()));
 
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this]
@@ -203,7 +205,10 @@ void Robot::BindCommands()
       // .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
                       //  0.8, ArmConstants::kArmAngleShootFar).ToPtr()); //Far Shot
 
-  
+  frc2::JoystickButton(&m_operatorController, 1)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
+                       0.3, 92, 1_s)
+                     .ToPtr()); 
   frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(IntakeNote(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr());
 

@@ -137,6 +137,7 @@ void  ArmSubsystem::handle_Setpoint(units::angle::degree_t setpoint){
   {
 
     m_ArmState = ArmConstants::START_ARM;
+    GetController().Reset(GetMeasurement());
     // SetGoal(setpoint);
     // Disable();
   }
