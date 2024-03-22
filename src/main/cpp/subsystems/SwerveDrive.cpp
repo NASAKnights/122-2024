@@ -125,7 +125,7 @@ void SwerveDrive::Strafe(frc::ChassisSpeeds s_speeds, double desiredAngle) {
   double errorBand= (M_PI-(-M_PI))/2;
   pos_Error= frc::InputModulus(desiredAngle-currentAngle,-errorBand,errorBand);
 
-  s_speeds.omega = units::angular_velocity::radians_per_second_t{8*(pos_Error)};
+  s_speeds.omega = units::angular_velocity::radians_per_second_t{9.5*(pos_Error)};
   frc::SmartDashboard::PutNumber("wrapped cA", currentAngle);
   frc::SmartDashboard::PutNumber("wrapped dA", desiredAngle);
   
@@ -134,7 +134,7 @@ void SwerveDrive::Strafe(frc::ChassisSpeeds s_speeds, double desiredAngle) {
   kSwerveKinematics.DesaturateWheelSpeeds(
       &states, s_speeds, units::meters_per_second_t{ModuleConstants::kMaxSpeed},
       DriveConstants::kMaxTranslationalVelocity,
-      units::radians_per_second_t{1.0});
+      units::radians_per_second_t{0.5});
 
   for (int i = 0; i < 4; i++) {
     modules[i].SetDesiredState(states[i]);
@@ -253,7 +253,7 @@ void SwerveDrive::UpdatePoseEstimate() {
   auto result2 = baseLink2Subscribe.GetAtomic();
   // auto time = result.time; // time stamp
 
-  if (result1.value.size() > 0) {
+  if (result1.value.size() > 0 && useVision) {
     auto compressedResults = result1.value;
     rotation_q = frc::Quaternion(compressedResults.at(6),
                                      compressedResults.at(3),
@@ -268,7 +268,7 @@ void SwerveDrive::UpdatePoseEstimate() {
     m_poseEstimator.AddVisionMeasurement(visionMeasurement2d, 
                           units::second_t {compressedResults.at(7)});
   }
-  if (result2.value.size() > 0) {
+  if (result2.value.size() > 0 && useVision) {
     auto compressedResults = result2.value;
     rotation_q = frc::Quaternion(compressedResults.at(6),
                                      compressedResults.at(3),
@@ -308,9 +308,17 @@ void SwerveDrive::DisableDrive() {
 
 }
 bool SwerveDrive::atSetpoint(){
-   if(pos_Error < 0.015)
+   if(pos_Error < 0.05)
    {
     return true;
    }
    return false;
+}
+
+void SwerveDrive::TurnVisionOff() {
+  useVision = false;
+}
+
+void SwerveDrive::TurnVisionOn() {
+  useVision = true;
 }

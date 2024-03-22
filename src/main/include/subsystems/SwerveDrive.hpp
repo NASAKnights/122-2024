@@ -83,6 +83,8 @@ public:
   void SetVision();
   bool atSetpoint();
   frc::Pose2d GetVision();
+  void TurnVisionOn();
+  void TurnVisionOff();
 
 private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -104,6 +106,8 @@ private:
   bool hasRun = false;
   bool enable= true;
   double pos_Error;
+
+  bool useVision = false;
 
   frc::ChassisSpeeds priorSpeeds = frc::ChassisSpeeds();
   // ----------------------

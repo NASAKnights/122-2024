@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 15.882169540849914,
-      "y": 4.4645416956170285
+      "x": 0.77,
+      "y": 6.56
     },
-    "rotation": -119.87883912119236
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 2.0
                 }
               }
             ]
@@ -33,12 +33,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ShootDriveLeftR"
+            "pathName": "Amp2FarNote1"
           }
         }
       ]
     }
   },
-  "folder": "Red",
+  "folder": "Blue",
   "choreoAuto": false
 }

@@ -16,8 +16,16 @@ void Robot::RobotInit(){
   std::string a2Name = "2NoteSpeakerRunB";
   auto a2 = pathplanner::PathPlannerAuto(a2Name);
   auto a2Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a2Name)[0]->getPathPoses()[0];
-  auto entry2 = std::make_pair(std::move(a2),a1Pose);
+  auto entry2 = std::make_pair(std::move(a2),a2Pose);
   autoMap.emplace(1, std::move(entry2));
+
+  std::string a3Name = "1NoteFarAmpRun";
+  auto a3 = pathplanner::PathPlannerAuto(a3Name);
+  auto a3Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a3Name)[0]->getPathPoses()[0];
+  auto entry3 = std::make_pair(std::move(a3),a3Pose);
+  autoMap.emplace(2, std::move(entry3));
+
+  
 };
 
 /**
@@ -52,6 +60,7 @@ void Robot::DisabledInit()
 void Robot::AutonomousInit()
 {
   // m_autonomousCommand = this->GetAutonomousCommand();
+  m_swerveDrive.TurnVisionOff(); // don't use vision during Auto
   bool blue = autoColor.Get();
   int autonum = pow(2, 2) * autoSwitch6.Get() + 
                 pow(2, 1) * autoSwitch7.Get() + 
@@ -85,6 +94,7 @@ void Robot::TeleopInit()
   {
     m_autonomousCommand->Cancel();
   }
+  m_swerveDrive.TurnVisionOn(); // Turn Vision back on for Teleop
   // m_LED_Controller.candle.ClearAnimation(0);
 }
 
@@ -306,7 +316,7 @@ void Robot::DisabledPeriodic()
 {
   int numLED = pow(2, 2) * autoSwitch6.Get() +
                pow(2, 1) * autoSwitch7.Get() +
-               pow(2, 0) * autoSwitch8.Get();
+               pow(2, 0) * autoSwitch8.Get() + 1;
 
   if (autoColor.Get())
   {
