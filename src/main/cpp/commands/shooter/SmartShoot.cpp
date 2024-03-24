@@ -144,6 +144,11 @@ void SmartShoot::Arm_Position()
   // Make into feet
   distance = ((distance) * 3.28084) - 4;
   int i = std::round(distance);
+  if(i <= 3 )
+  {
+    shootSpeed = 0.75;
+  }
+  else{shootSpeed = 0.85;}
   frc::SmartDashboard::PutNumber("Distance_TEST", i);
   double angle = (14.708*log(i+1)) - 0;
   angle = std::min(std::max(0.0, angle), 37.0);

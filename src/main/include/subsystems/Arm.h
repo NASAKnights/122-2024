@@ -57,7 +57,7 @@ const double kArmAngleOffsetR = 226.0;
 const double kArmAngleStarting = 80.0; // With offset
 const double kArmAngleDriving = 30.0; // With offset
 const double kArmAngleIntake = -4.5; //with offset
-const double kArmAngleShootClose = 0.0; //with offset 0.0
+const double kArmAngleShootClose = 5.0; //with offset 0.0
 const double kArmAngleShootFar = 23; //with offset
 
 // 3.0 ft, 0.0

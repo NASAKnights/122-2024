@@ -11,7 +11,6 @@ void Robot::RobotInit(){
   auto a1Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a1Name)[0]->getPathPoses()[0];
   auto entry1 = std::make_pair(std::move(a1),a1Pose);
   autoMap.emplace(0, std::move(entry1));
-  // autoMap[1];
 
   std::string a2Name = "2NoteSpeakerRunB";
   auto a2 = pathplanner::PathPlannerAuto(a2Name);
@@ -19,13 +18,23 @@ void Robot::RobotInit(){
   auto entry2 = std::make_pair(std::move(a2),a2Pose);
   autoMap.emplace(1, std::move(entry2));
 
-  std::string a3Name = "1NoteFarAmpRun";
+  std::string a3Name = "Note1FarAmpRun";
   auto a3 = pathplanner::PathPlannerAuto(a3Name);
   auto a3Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a3Name)[0]->getPathPoses()[0];
   auto entry3 = std::make_pair(std::move(a3),a3Pose);
   autoMap.emplace(2, std::move(entry3));
 
-  
+  std::string a4Name = "Note5FarAmpRun";
+  auto a4 = pathplanner::PathPlannerAuto(a4Name);
+  auto a4Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a4Name)[0]->getPathPoses()[0];
+  auto entry4 = std::make_pair(std::move(a4),a4Pose);
+  autoMap.emplace(3, std::move(entry4));
+
+  std::string a5Name = "ShootB";
+  auto a5 = pathplanner::PathPlannerAuto(a5Name);
+  auto a5Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a5Name)[0]->getPathPoses()[0];
+  auto entry5 = std::make_pair(std::move(a5),a5Pose);
+  autoMap.emplace(4, std::move(entry5));
 };
 
 /**
@@ -137,8 +146,8 @@ void Robot::CreateRobot()
   frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleDriving);
   // frc::SmartDashboard::PutNumber("ARM_Speed", -120);
 
-  pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
-                                              ArmConstants::kArmAngleShootClose+5, 1_s).ToPtr())); 
+  pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.55, 
+                                              ArmConstants::kArmAngleShootClose, 1_s).ToPtr())); 
   pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(IntakeNote(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_ArmDown", std::move(ArmDown(&m_arm).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_farShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
@@ -246,8 +255,13 @@ void Robot::BindCommands()
   frc2::POVButton(&m_operatorController, 90)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
                        0.9, ArmConstants::kArmAngleShootClose, 2_s)
+                     .ToPtr());    
+  
+  /*frc2::POVButton(&m_operatorController, 180)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
+                       0.4, ArmConstants::kArmAngleShootClose, 2_s)
                      .ToPtr());        
-
+*/
 
   /* frc2::JoystickButton(&m_operatorController, 6)
               .WhileTrue(SmartShoot(&m_shooter, &m_indexer, &m_intake, &m_arm,0.8,&m_swerveDrive,&m_operatorController,&m_driverController,&autoColor).ToPtr());

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.804329165876642,
-      "y": 6.694047556228916
+      "x": 0.7401207704353835,
+      "y": 4.525948291491795
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -33,7 +33,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Vibrate"
+            "pathName": "Amp2FarNote5"
           }
         }
       ]
