@@ -146,7 +146,7 @@ void Robot::CreateRobot()
   frc::SmartDashboard::PutNumber("ARM_Angel", ArmConstants::kArmAngleDriving);
   // frc::SmartDashboard::PutNumber("ARM_Speed", -120);
 
-  pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.55, 
+  pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.7, 
                                               ArmConstants::kArmAngleShootClose, 1_s).ToPtr())); 
   pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(IntakeNote(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_ArmDown", std::move(ArmDown(&m_arm).ToPtr()));
