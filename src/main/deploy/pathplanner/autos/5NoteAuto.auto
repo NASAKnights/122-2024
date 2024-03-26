@@ -1,0 +1,56 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "a_shoot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FastSpeaker2Note2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FastSpeaker2Note3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FastSpeaker2Note1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker2FarNote2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Blue",
+  "choreoAuto": false
+}
