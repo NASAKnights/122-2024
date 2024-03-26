@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.52974991810873,
-        "y": 5.714665057465805
+        "x": 1.5257448464255032,
+        "y": 5.720529329196399
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 6.60931532381879
       },
       "prevControl": {
-        "x": 2.277420996241338,
-        "y": 6.475954102963023
+        "x": 2.278716616432239,
+        "y": 6.474645896261153
       },
       "nextControl": {
-        "x": 2.5461082785050406,
-        "y": 6.739495833609684
+        "x": 2.5448435593020777,
+        "y": 6.740772839130992
       },
       "isLocked": false,
       "linkedName": null
@@ -78,7 +78,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.25,
+      "waypointRelativePos": 1.05,
       "command": {
         "type": "race",
         "data": {

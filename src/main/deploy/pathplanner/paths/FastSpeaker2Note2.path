@@ -36,8 +36,8 @@
         "y": 5.545953474318579
       },
       "prevControl": {
-        "x": 2.5688718340806123,
-        "y": 5.549360858912709
+        "x": 1.3764243397327123,
+        "y": 5.546217111617871
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,7 +61,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "race",
         "data": {
@@ -84,7 +84,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.25,
+      "waypointRelativePos": 1.05,
       "command": {
         "type": "race",
         "data": {

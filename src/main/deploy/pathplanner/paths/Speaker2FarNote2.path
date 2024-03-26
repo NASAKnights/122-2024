@@ -8,36 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.46161388360405,
-        "y": 7.079018685545924
+        "x": 1.537247360209006,
+        "y": 6.091657897601509
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.573197744029467,
-        "y": 5.796921163397629
+        "x": 7.625820965927646,
+        "y": 5.769440110308793
       },
       "prevControl": {
-        "x": 6.655819301518877,
-        "y": 5.786017532696411
+        "x": 7.625820965927646,
+        "y": 6.454284520569981
       },
       "nextControl": {
-        "x": 8.07316243065625,
-        "y": 5.80286356410601
+        "x": 7.625820965927646,
+        "y": 5.453863788148266
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.47199888769789,
-        "y": 5.987440007947291
+        "x": 4.363365869588882,
+        "y": 6.232628179542074
       },
       "prevControl": {
-        "x": 5.028231399820838,
-        "y": 6.609278487228583
+        "x": 5.826771653543307,
+        "y": 6.340034108639646
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.65,
       "command": {
         "type": "race",
         "data": {
@@ -69,7 +69,7 @@
             {
               "type": "wait",
               "data": {
-                "waitTime": 1.2
+                "waitTime": 1.0
               }
             }
           ]
@@ -78,7 +78,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 1.2,
       "command": {
         "type": "race",
         "data": {
@@ -112,7 +112,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Fast",
   "previewStartingState": {
     "rotation": 0.5436153000843488,
     "velocity": 0
