@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4342694762926584,
-        "y": 7.6619945621590215
+        "x": 1.311787813854989,
+        "y": 7.6467442138134
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4342694762926573,
-        "y": 7.6619945621590215
+        "x": 2.3117878138549877,
+        "y": 7.6467442138134
       },
       "isLocked": false,
       "linkedName": null
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 6.067870485227858,
-        "y": 6.726897719758951
+        "x": 6.231240762795094,
+        "y": 6.69403948129447
       },
       "prevControl": {
-        "x": 6.080615945439416,
-        "y": 7.311162877029289
+        "x": 6.231240762795094,
+        "y": 7.04403948129447
       },
       "nextControl": {
-        "x": 6.053808583008144,
-        "y": 6.082285491126321
+        "x": 6.231240762795094,
+        "y": 6.3440394812944705
       },
       "isLocked": false,
       "linkedName": null
@@ -49,31 +49,31 @@
     {
       "anchor": {
         "x": 7.797827271110643,
-        "y": 5.7873804865340635
+        "y": 5.776992568095741
       },
       "prevControl": {
-        "x": 7.76312720313582,
-        "y": 6.2673612569289
+        "x": 7.799116551767881,
+        "y": 6.080783927531367
       },
       "nextControl": {
-        "x": 7.825540962495134,
-        "y": 5.404037175769828
+        "x": 7.796750453814662,
+        "y": 5.523263646953972
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.067870485227858,
-        "y": 4.51835995390919
+        "x": 6.231240762795094,
+        "y": 4.8095531994940846
       },
       "prevControl": {
-        "x": 6.057196435481823,
-        "y": 5.091145884896455
+        "x": 6.231240762795094,
+        "y": 5.143919910892562
       },
       "nextControl": {
-        "x": 6.07744799868163,
-        "y": 4.004415847343668
+        "x": 6.231240762795094,
+        "y": 4.496567343815486
       },
       "isLocked": false,
       "linkedName": null
@@ -84,76 +84,76 @@
         "y": 4.099969962340153
       },
       "prevControl": {
-        "x": 7.785786219332672,
-        "y": 4.54132223173986
+        "x": 7.799426806175349,
+        "y": 4.449967776793294
       },
       "nextControl": {
-        "x": 7.81510363191764,
-        "y": 3.671597254825069
+        "x": 7.801900570937786,
+        "y": 3.7499721478870125
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.039985186441297,
-        "y": 3.485240944968777
+        "x": 6.231240762795094,
+        "y": 3.3700529273920585
       },
       "prevControl": {
-        "x": 6.046100060415628,
-        "y": 3.8343781469489966
+        "x": 6.231240762795094,
+        "y": 3.7200529273920586
       },
       "nextControl": {
-        "x": 6.03256846443923,
-        "y": 3.0617729260796356
+        "x": 6.231240762795094,
+        "y": 3.0200529273920584
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.9943136432738084,
-        "y": 2.4492486819922332
+        "x": 7.797827271110643,
+        "y": 2.44928551858244
       },
       "prevControl": {
-        "x": 7.962638278155965,
-        "y": 3.039897522767882
+        "x": 7.797827271110643,
+        "y": 2.79928551858244
       },
       "nextControl": {
-        "x": 8.013616016542182,
-        "y": 2.089318359081416
+        "x": 7.797827271110643,
+        "y": 2.0992855185824397
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.039985186441297,
-        "y": 1.8777289849334546
+        "x": 6.231240762795094,
+        "y": 1.7584889424339853
       },
       "prevControl": {
-        "x": 6.047315667892454,
-        "y": 2.2428901036536404
+        "x": 6.215227782397018,
+        "y": 2.007975584278335
       },
       "nextControl": {
-        "x": 6.034572158465611,
-        "y": 1.6080840285366125
+        "x": 6.247253743193171,
+        "y": 1.5090023005896356
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.956298282180373,
-        "y": 0.7580439890070209
+        "x": 7.800663688556567,
+        "y": 0.7819877726414517
       },
       "prevControl": {
-        "x": 8.969436988722329,
-        "y": 0.6456132969622476
+        "x": 7.800663688556567,
+        "y": 0.9319877726414517
       },
       "nextControl": {
-        "x": 6.8920891911054065,
-        "y": 0.8761420972100783
+        "x": 7.800663688556567,
+        "y": 0.6319877726414517
       },
       "isLocked": false,
       "linkedName": null
@@ -188,16 +188,183 @@
   ],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.5,
+      "name": "Shoot",
+      "waypointRelativePos": 1.1500000000000001,
       "command": {
-        "type": "parallel",
+        "type": "race",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
+                "name": "a_knightShot"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.8
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 2.2,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "a_runIntake"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 3.5999999999999996,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "a_knightShot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 4.45,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "a_runIntake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 5.5,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "a_knightShot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 6.5,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "a_runIntake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 7.45,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
                 "name": "a_shoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 8.4,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "a_runIntake"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
               }
             }
           ]

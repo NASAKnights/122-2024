@@ -92,7 +92,7 @@
             {
               "type": "named",
               "data": {
-                "name": "a_ArmDown"
+                "name": "a_armDown"
               }
             }
           ]
@@ -115,7 +115,7 @@
             {
               "type": "named",
               "data": {
-                "name": "a_ArmDown"
+                "name": "a_armDown"
               }
             }
           ]
