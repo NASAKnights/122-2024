@@ -144,7 +144,26 @@ std::vector<std::vector<int>> LED_Group::ComputeGradent(int _r, int _g, int _b, 
     return gradValues;
 }
 
-void LED_Group::SetRainbow()
+void LED_Group::SetRainbow(int slot)
 {
-    _candle->Animate(rgbFade, 0);
+    auto rainbow = ctre::phoenix::led::RainbowAnimation(1.0, 0.7, _group.size(), false, _group[0]);
+    _candle->Animate(rainbow, slot);
+}
+
+void LED_Group::SetInvertedRainbow(int slot)
+{
+    auto rainbow = ctre::phoenix::led::RainbowAnimation(1.0, 0.7, _group.size(), true, _group[0]);
+    _candle->Animate(rainbow, slot);
+}
+
+void LED_Group::SetRGBFade(int slot)
+{
+    auto rgbFade = ctre::phoenix::led::RgbFadeAnimation(1.0, 0.7, _group.size(), _group[0]);
+    _candle->Animate(rgbFade, slot);
+}
+
+void LED_Group::SetInvertedRGBFade(int slot)
+{
+    auto rgbFade = ctre::phoenix::led::RgbFadeAnimation(1.0, 0.7, _group.size(), _group[0]);
+    _candle->Animate(rgbFade, slot);
 }

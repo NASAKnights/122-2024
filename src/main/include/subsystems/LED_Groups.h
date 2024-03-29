@@ -32,7 +32,10 @@ class LED_Group{
   void SetFlash(int _r, int _g, int _b, int _R, int _G, int _B, units::time::second_t Period);
   void SetGradient(int _r, int _g, int _b, int r, int g, int b);
   void SetScrollingGradient(int _r, int _g, int _b, int r, int g, int b);
-  void SetRainbow();
+  void SetRainbow(int slot);
+  void SetInvertedRainbow(int slot);
+  void SetRGBFade(int slot);
+  void SetInvertedRGBFade(int slot);
   std::vector<std::vector<int>> ComputeGradent(int _r, int _g, int _b, int _R, int _G, int _B);
     /**
    * Will be called periodically whenever the CommandScheduler runs.

@@ -78,7 +78,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.4,
+      "waypointRelativePos": 1.35,
       "command": {
         "type": "race",
         "data": {
