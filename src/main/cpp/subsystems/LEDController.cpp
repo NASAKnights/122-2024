@@ -13,7 +13,7 @@ LEDController::LEDController()
 
 void LEDController::DefaultAnimation()
 {
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 6; i++)
     {
         candle.ClearAnimation(i);
     }

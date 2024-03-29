@@ -35,6 +35,14 @@ void Robot::RobotInit(){
   auto a5Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a5Name)[0]->getPathPoses()[0];
   auto entry5 = std::make_pair(std::move(a5),a5Pose);
   autoMap.emplace(4, std::move(entry5));
+
+  std::string a6Name = "4NoteAutoButFast";
+  auto a6 = pathplanner::PathPlannerAuto(a6Name);
+  auto a6Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a6Name)[0]->getPathPoses()[0];
+  auto entry6 = std::make_pair(std::move(a6),a6Pose);
+  autoMap.emplace(5, std::move(entry6));
+
+  m_LED_Controller.DefaultAnimation();
 };
 
 /**
@@ -95,6 +103,7 @@ void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit()
 {
+  // m_led_control->m_intakeState;
   // This makes sure that the autonomous stops running when
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
@@ -147,7 +156,7 @@ void Robot::CreateRobot()
   // frc::SmartDashboard::PutNumber("ARM_Speed", -120);
 
   pathplanner::NamedCommands::registerCommand("a_shoot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.7, 
-                                              ArmConstants::kArmAngleShootClose, 1_s).ToPtr())); 
+                                              5, 0.75_s).ToPtr())); 
   pathplanner::NamedCommands::registerCommand("a_runIntake", std::move(IntakeNote(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_armDown", std::move(ArmDown(&m_arm).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_farShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 

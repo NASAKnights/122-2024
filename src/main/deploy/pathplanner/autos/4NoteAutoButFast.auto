@@ -1,0 +1,62 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.276424687256444,
+      "y": 5.545953474318579
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "a_shoot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.9
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FastSpeaker2Note2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FastSpeaker2Note3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FastSpeaker2Note1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker2FarNote2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Blue",
+  "choreoAuto": false
+}
