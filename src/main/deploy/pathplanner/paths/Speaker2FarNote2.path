@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 7.0254008110638795,
-        "y": 5.991123666967972
+        "x": 7.158784103791487,
+        "y": 6.161847193053056
       },
       "prevControl": {
-        "x": 6.030975093794252,
-        "y": 7.057145886642668
+        "x": 6.16435838652186,
+        "y": 7.227869412727752
       },
       "nextControl": {
-        "x": 7.298102088364952,
-        "y": 5.698788487086666
+        "x": 7.43148538109256,
+        "y": 5.869512013171749
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 6.399273086459515
       },
       "prevControl": {
-        "x": 4.8655964188659135,
-        "y": 6.506679015557087
+        "x": 5.540324239793373,
+        "y": 7.088074223654385
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,9 +46,9 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 0,
-      "rotateFast": false
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": -27.0,
+      "rotateFast": true
     }
   ],
   "constraintZones": [
@@ -81,7 +81,7 @@
             {
               "type": "wait",
               "data": {
-                "waitTime": 1.0
+                "waitTime": 2.0
               }
             }
           ]
@@ -90,7 +90,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.2,
+      "waypointRelativePos": 1.35,
       "command": {
         "type": "race",
         "data": {
@@ -120,7 +120,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 10.0,
+    "rotation": 14.45683176193832,
     "rotateFast": false
   },
   "reversed": false,
