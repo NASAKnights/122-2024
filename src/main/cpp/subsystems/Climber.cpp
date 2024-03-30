@@ -129,6 +129,10 @@ void Climber::retractLimit_Pit(){
     }
 }
 
+bool Climber::atBot() {
+  return (!botLimit1.Get());
+}
+
 
 
 

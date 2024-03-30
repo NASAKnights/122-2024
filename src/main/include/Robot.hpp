@@ -7,6 +7,7 @@
 #include <frc/Joystick.h>
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/PowerDistribution.h>
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/CommandScheduler.h>
@@ -77,6 +78,7 @@ private:
   Intake m_intake;
   LEDController m_LED_Controller;
   Climber m_climber;
+  frc::PowerDistribution m_pdh = frc::PowerDistribution{1,frc::PowerDistribution::ModuleType::kRev};
 
 
   double autoName = 0;

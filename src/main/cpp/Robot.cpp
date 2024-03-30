@@ -58,6 +58,9 @@ void Robot::RobotPeriodic()
   frc2::CommandScheduler::GetInstance().Run();
   this->UpdateDashboard();
   m_arm.Emergency_Stop(); //check if arm has triggered a stop
+  if (m_climber.atBot()) m_pdh.SetSwitchableChannel(false);
+  else m_pdh.SetSwitchableChannel(true);
+ 
 }
 
 /**

@@ -42,6 +42,7 @@ class Climber : public frc2::SubsystemBase {
   void moveMotor();
   void stopMotor();
   void disableBrake();
+  bool atBot();
   ResetState m_ClimberState;
 
  private:
