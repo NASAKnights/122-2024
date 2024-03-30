@@ -168,6 +168,8 @@ void Robot::CreateRobot()
                                               ArmConstants::kArmAngleIntake, 1_s).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_knightShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
                                               ArmConstants::kArmAngleShootClose, 1_s).ToPtr()));
+  pathplanner::NamedCommands::registerCommand("a_runShooter",std::move(ShooterON(&m_shooter).ToPtr()));
+  pathplanner::NamedCommands::registerCommand("a_runIndexer",std::move(IndexerON(&m_intake).ToPtr()));
 
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this]

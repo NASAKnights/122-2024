@@ -37,6 +37,7 @@ void Shoot::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() { 
   //TODO: ADD CONSTANT FOR MOTOR SPEED CHECK
+  
   switch (m_state)
   {
     case SPINUP:
