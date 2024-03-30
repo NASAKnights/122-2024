@@ -42,6 +42,12 @@ void Robot::RobotInit(){
   auto entry6 = std::make_pair(std::move(a6),a6Pose);
   autoMap.emplace(5, std::move(entry6));
 
+  std::string a7Name = "5NoteSteal";
+  auto a7 = pathplanner::PathPlannerAuto(a7Name);
+  auto a7Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a7Name)[0]->getPathPoses()[0];
+  auto entry7 = std::make_pair(std::move(a7),a7Pose);
+  autoMap.emplace(6, std::move(entry7));
+
   m_LED_Controller.DefaultAnimation();
 };
 
