@@ -48,6 +48,12 @@ void Robot::RobotInit(){
   auto entry7 = std::make_pair(std::move(a7),a7Pose);
   autoMap.emplace(6, std::move(entry7));
 
+  std::string a8Name = "KingslayerAuto";
+  auto a8 = pathplanner::PathPlannerAuto(a8Name);
+  auto a8Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a8Name)[0]->getPathPoses()[0];
+  auto entry8 = std::make_pair(std::move(a8),a8Pose);
+  autoMap.emplace(7, std::move(entry8));
+
   m_LED_Controller.DefaultAnimation();
 };
 
@@ -170,8 +176,8 @@ void Robot::CreateRobot()
   pathplanner::NamedCommands::registerCommand("a_armDown", std::move(ArmDown(&m_arm).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_farShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
                                               ArmConstants::kArmAngleShootFar, 1_s).ToPtr()));
-  pathplanner::NamedCommands::registerCommand("a_stealShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.2, 
-                                              ArmConstants::kArmAngleIntake, 1_s).ToPtr()));
+  pathplanner::NamedCommands::registerCommand("a_stealShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.2,
+                                              -1.5, 1_s).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_knightShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
                                               ArmConstants::kArmAngleShootClose, 1_s).ToPtr()));
 

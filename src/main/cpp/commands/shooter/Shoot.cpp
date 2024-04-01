@@ -46,7 +46,7 @@ void Shoot::Execute() {
       shoooter->Shoot(shootSpeed);//angle is 78
       arm->handle_Setpoint(units::angle::degree_t(shootAngle));
       
-      if (spinupTime.HasElapsed(shooterSpinupTime) && arm->m_ArmState == ArmConstants::DONE)
+      if (shootSpeed < 0.4 || (spinupTime.HasElapsed(shooterSpinupTime) && arm->m_ArmState == ArmConstants::DONE))
       {
         m_state = SHOOTING;
       }
@@ -54,9 +54,10 @@ void Shoot::Execute() {
     }
     case SHOOTING:
     {
+      arm->handle_Setpoint(units::angle::degree_t(shootAngle));
       m_led_control->m_shooterState = LED_SHOOTING;
       m_led_control->HandleShooterState();
-      if (shoooter->atSetpoint()) {
+      if (shoooter->atSetpoint() || shootSpeed < 0.5) {
         intake->intakeIndex();
       }
       else {

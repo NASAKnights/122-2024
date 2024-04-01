@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4494461514578671,
+      "y": 7.351646289666582
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Kingslayer"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Blue",
+  "choreoAuto": false
+}
