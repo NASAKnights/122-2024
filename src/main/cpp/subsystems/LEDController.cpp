@@ -23,6 +23,7 @@ void LEDController::DefaultAnimation()
     auto twinkle = ctre::phoenix::led::TwinkleAnimation(0,0,255,1, 0.7, -1, ctre::phoenix::led::TwinkleAnimation::Percent100, 8);
     ledGroup1.SetRainbow(1);
     ledGroup2.SetRainbow(2);
+    ledGroup3.SetRainbow(5);
     ledGroup5.SetInvertedRainbow(3);
     ledGroup4.SetRainbow(4);
 }

@@ -33,6 +33,8 @@
 #include "commands/intake/IntakeNote.h"
 #include "commands/TrajectoryFollower.hpp"
 #include "commands/ArmDown.h"
+#include "commands/shooter/MotorRun.h"
+#include "commands/intake/indexTheIntake.h"
 
 #include "util/NKTrajectoryManager.hpp"
 

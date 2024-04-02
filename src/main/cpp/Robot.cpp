@@ -36,7 +36,7 @@ void Robot::RobotInit(){
   auto entry5 = std::make_pair(std::move(a5),a5Pose);
   autoMap.emplace(4, std::move(entry5));
 
-  std::string a6Name = "4NoteAutoButFast";
+  std::string a6Name = "5NoteAutoButFast";
   auto a6 = pathplanner::PathPlannerAuto(a6Name);
   auto a6Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a6Name)[0]->getPathPoses()[0];
   auto entry6 = std::make_pair(std::move(a6),a6Pose);
@@ -176,10 +176,12 @@ void Robot::CreateRobot()
   pathplanner::NamedCommands::registerCommand("a_armDown", std::move(ArmDown(&m_arm).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_farShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
                                               ArmConstants::kArmAngleShootFar, 1_s).ToPtr()));
-  pathplanner::NamedCommands::registerCommand("a_stealShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.2,
+  pathplanner::NamedCommands::registerCommand("a_stealShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.25,
                                               -1.5, 1_s).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_knightShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
                                               ArmConstants::kArmAngleShootClose, 1_s).ToPtr()));
+  pathplanner::NamedCommands::registerCommand("a_runMotor", std::move(MotorRun(&m_shooter, 0.7, 1_s).ToPtr()));
+  pathplanner::NamedCommands::registerCommand("a_indexIndexer", std::move(indexTheIntake(&m_intake).ToPtr()));
 
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this]
@@ -282,7 +284,7 @@ void Robot::BindCommands()
 
   frc2::POVButton(&m_operatorController, 90)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.9, ArmConstants::kArmAngleShootClose, 2_s)
+                       0.9, ArmConstants::kArmAngleShootClose, 1_s)
                      .ToPtr());    
   
   /*frc2::POVButton(&m_operatorController, 180)

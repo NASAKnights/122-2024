@@ -8,52 +8,52 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7994674316030501,
-        "y": 7.9043056525394695
+        "x": 1.7957100994019548,
+        "y": 7.809451432756913
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.25,
-        "y": 7.6742611466978925
+        "x": 7.357887874270617,
+        "y": 7.629873055498678
       },
       "prevControl": {
-        "x": 7.211130910777106,
-        "y": 7.850702851372365
+        "x": 7.319018785047723,
+        "y": 7.80631476017315
       },
       "nextControl": {
-        "x": 7.314537706042345,
-        "y": 7.381299744783071
+        "x": 7.422425580312962,
+        "y": 7.336911653583856
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.25,
-        "y": 1.48339328676947
+        "x": 7.357887874270617,
+        "y": 1.572537835069969
       },
       "prevControl": {
-        "x": 7.260166898897082,
-        "y": 1.6937302168504
+        "x": 7.507887874270617,
+        "y": 1.572537835069969
       },
       "nextControl": {
-        "x": 7.2289836400585665,
-        "y": 1.0485983039231528
+        "x": 7.207887874270616,
+        "y": 1.572537835069969
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.4909299807197107,
-        "y": 3.1977313584045644
+        "x": 2.6427674912077306,
+        "y": 3.34780362690714
       },
       "prevControl": {
-        "x": 3.812910482963823,
-        "y": 2.9768859537719075
+        "x": 2.964747993451843,
+        "y": 3.126958222274483
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,7 +62,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0999999999999999,
+      "waypointRelativePos": 1.0499999999999998,
       "rotationDegrees": 0.0,
       "rotateFast": false
     },
@@ -75,19 +75,19 @@
   "constraintZones": [
     {
       "name": "New Constraints Zone",
-      "minWaypointRelativePos": 1.0499999999999998,
+      "minWaypointRelativePos": 1.0,
       "maxWaypointRelativePos": 2.0999999999999996,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 2.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
+        "maxAngularVelocity": 360.0,
+        "maxAngularAcceleration": 360.0
       }
     }
   ],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "StealShot",
       "waypointRelativePos": 0.0,
       "command": {
         "type": "race",
@@ -102,7 +102,7 @@
             {
               "type": "wait",
               "data": {
-                "waitTime": 6.2
+                "waitTime": 6.15
               }
             }
           ]
@@ -111,14 +111,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -40.0,
+    "rotation": -41.0,
     "rotateFast": false
   },
   "reversed": false,

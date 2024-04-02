@@ -8,36 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.657757069077422,
-        "y": 5.887944377798676
+        "x": 1.597087205006793,
+        "y": 6.258336292328228
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.158784103791487,
-        "y": 6.161847193053056
+        "x": 7.259755197959654,
+        "y": 6.205917824463928
       },
       "prevControl": {
-        "x": 6.16435838652186,
-        "y": 7.227869412727752
+        "x": 6.401573155911421,
+        "y": 6.841901554384637
       },
       "nextControl": {
-        "x": 7.43148538109256,
-        "y": 5.869512013171749
+        "x": 7.439450775209399,
+        "y": 6.072748569142777
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.4021906349114865,
-        "y": 6.399273086459515
+        "x": 3.110408003883282,
+        "y": 6.205917824463928
       },
       "prevControl": {
-        "x": 5.540324239793373,
-        "y": 7.088074223654385
+        "x": 4.499368474221555,
+        "y": 6.841827881204224
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
     {
       "waypointRelativePos": 1.0,
       "rotationDegrees": -27.0,
-      "rotateFast": true
+      "rotateFast": false
     }
   ],
   "constraintZones": [
@@ -89,22 +89,16 @@
       }
     },
     {
-      "name": "Shoot",
-      "waypointRelativePos": 1.35,
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.55,
       "command": {
-        "type": "race",
+        "type": "parallel",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "a_farShot"
-              }
-            },
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 2.0
               }
             }
           ]

@@ -75,7 +75,7 @@
             {
               "type": "wait",
               "data": {
-                "waitTime": 1.2
+                "waitTime": 1.1
               }
             }
           ]
@@ -84,7 +84,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.05,
+      "waypointRelativePos": 1.1,
       "command": {
         "type": "race",
         "data": {
@@ -98,7 +98,7 @@
             {
               "type": "wait",
               "data": {
-                "waitTime": 2.0
+                "waitTime": 1.9
               }
             }
           ]

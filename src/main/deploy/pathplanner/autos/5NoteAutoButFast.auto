@@ -24,7 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.9
+                  "waitTime": 2.0
                 }
               }
             ]
@@ -52,6 +52,12 @@
           "type": "path",
           "data": {
             "pathName": "Speaker2FarNote2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "a_farShot"
           }
         }
       ]
