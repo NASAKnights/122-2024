@@ -6,31 +6,32 @@
 Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit(){
-  std::string a1Name = "3NoteSpeakerRunB";
+  std::string a1Name = "4NoteSpeakerRun";
   auto a1 = pathplanner::PathPlannerAuto(a1Name);
   auto a1Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a1Name)[0]->getPathPoses()[0];
   auto entry1 = std::make_pair(std::move(a1),a1Pose);
   autoMap.emplace(0, std::move(entry1));
 
-  std::string a2Name = "2NoteSpeakerRunB";
+  std::string a2Name = "3NoteSpeakerRun";
   auto a2 = pathplanner::PathPlannerAuto(a2Name);
   auto a2Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a2Name)[0]->getPathPoses()[0];
   auto entry2 = std::make_pair(std::move(a2),a2Pose);
   autoMap.emplace(1, std::move(entry2));
 
-  std::string a3Name = "Note1FarAmpRun";
+  std::string a3Name = "Far1AmpRun";
   auto a3 = pathplanner::PathPlannerAuto(a3Name);
   auto a3Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a3Name)[0]->getPathPoses()[0];
   auto entry3 = std::make_pair(std::move(a3),a3Pose);
   autoMap.emplace(2, std::move(entry3));
+  //TODO: FIX THIS
 
-  std::string a4Name = "Note5FarAmpRun";
+  std::string a4Name = "Far5AmpRun";
   auto a4 = pathplanner::PathPlannerAuto(a4Name);
   auto a4Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a4Name)[0]->getPathPoses()[0];
   auto entry4 = std::make_pair(std::move(a4),a4Pose);
   autoMap.emplace(3, std::move(entry4));
 
-  std::string a5Name = "ShootB";
+  std::string a5Name = "Shoot";
   auto a5 = pathplanner::PathPlannerAuto(a5Name);
   auto a5Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a5Name)[0]->getPathPoses()[0];
   auto entry5 = std::make_pair(std::move(a5),a5Pose);
@@ -72,7 +73,6 @@ void Robot::RobotPeriodic()
   m_arm.Emergency_Stop(); //check if arm has triggered a stop
   if (m_climber.atBot()) m_pdh.SetSwitchableChannel(false);
   else m_pdh.SetSwitchableChannel(true);
- 
 }
 
 /**
@@ -144,6 +144,7 @@ void Robot::TeleopExit()
   m_arm.arm_Brake_Out();
   m_climber.engage();
   m_climber.disableBrake();
+  m_climber.stopMotor();
 }
 
 /**
@@ -178,8 +179,7 @@ void Robot::CreateRobot()
                                               ArmConstants::kArmAngleShootFar, 1_s).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_stealShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.25,
                                               -1.5, 1_s).ToPtr()));
-  pathplanner::NamedCommands::registerCommand("a_knightShot", std::move(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller, 0.8, 
-                                              ArmConstants::kArmAngleShootClose, 1_s).ToPtr()));
+
   pathplanner::NamedCommands::registerCommand("a_runMotor", std::move(MotorRun(&m_shooter, 0.7, 1_s).ToPtr()));
   pathplanner::NamedCommands::registerCommand("a_indexIndexer", std::move(indexTheIntake(&m_intake).ToPtr()));
 
@@ -229,7 +229,7 @@ void Robot::BindCommands()
 //---------------DRIVER BUTTONS----------------------------------
   frc2::JoystickButton(&m_driverController, 1)
       .OnTrue(frc2::CommandPtr(frc2::InstantCommand([this]
-                                                    { return m_swerveDrive.ResetHeading(); }))); // TODO assign as test
+                                                    { return m_swerveDrive.ResetHeading(); })));
 
   frc2::JoystickButton(&m_driverController, 6)
       .OnTrue(frc2::InstantCommand([this]

@@ -36,7 +36,6 @@ void Shoot::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() { 
-  //TODO: ADD CONSTANT FOR MOTOR SPEED CHECK
   switch (m_state)
   {
     case SPINUP:
@@ -46,7 +45,7 @@ void Shoot::Execute() {
       shoooter->Shoot(shootSpeed);//angle is 78
       arm->handle_Setpoint(units::angle::degree_t(shootAngle));
       
-      if (shootSpeed < 0.4 || (spinupTime.HasElapsed(shooterSpinupTime) && arm->m_ArmState == ArmConstants::DONE))
+      if (spinupTime.HasElapsed(shooterSpinupTime) && arm->m_ArmState == ArmConstants::DONE)
       {
         m_state = SHOOTING;
       }

@@ -6,7 +6,7 @@
 Climber::Climber() : 
     climberMotor1(3),
     climberMotor2(4),
-    lockServo(9), // TODO: need to check number
+    lockServo(9),
     climberFollower(climberMotor1.GetDeviceID(), false)
 {
 
@@ -125,7 +125,7 @@ void Climber::retractLimit_Pit(){
     else {
       //climberMotor1.StopMotor();
       climberMotor1.Set(0);
-      while(climberMotor1.SetPosition(units::angle::turn_t{0}) != ctre::phoenix::StatusCode::OK){}; //TODO: Speed up later/set to position
+      while(climberMotor1.SetPosition(units::angle::turn_t{0}) != ctre::phoenix::StatusCode::OK){};
     }
 }
 

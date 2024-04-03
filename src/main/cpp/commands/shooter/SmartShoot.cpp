@@ -49,7 +49,6 @@ void SmartShoot::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void SmartShoot::Execute()
 {
-  // TODO: ADD CONSTANT FOR MOTOR SPEED CHECK
   // shoooter->Shoot(shootSpeed);//angle is 78
    switch (m_state)
   {
