@@ -285,7 +285,12 @@ void Robot::BindCommands()
   frc2::POVButton(&m_operatorController, 90)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
                        0.9, ArmConstants::kArmAngleShootClose, 1_s)
+                     .ToPtr());   
+  frc2::POVButton(&m_operatorController, 180)
+      .WhileTrue(Trapshoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
+                       0.9, 11.68, 1_s, 1.1)
                      .ToPtr());    
+   
   
   /*frc2::POVButton(&m_operatorController, 180)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,

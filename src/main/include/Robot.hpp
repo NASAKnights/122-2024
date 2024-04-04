@@ -35,6 +35,8 @@
 #include "commands/ArmDown.h"
 #include "commands/shooter/MotorRun.h"
 #include "commands/intake/indexTheIntake.h"
+#include "commands/Trapshoot.h"
+
 
 #include "util/NKTrajectoryManager.hpp"
 

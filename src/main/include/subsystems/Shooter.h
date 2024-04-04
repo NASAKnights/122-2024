@@ -15,6 +15,7 @@ class Shooter : public frc2::SubsystemBase {
   void Periodic() override;
 
   void Shoot(double shootSpeed);
+  void TrapShoot(double shootSpeed, double difference = 1);
   void stopShooter();
 
   double getSpeed();

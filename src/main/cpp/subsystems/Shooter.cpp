@@ -53,6 +53,16 @@ void Shooter::Shoot(double shootSpeed) {
     running = true;
     SHOOT_speed = shootSpeed;
 }
+void Shooter::TrapShoot(double shootSpeed, double difference ) {
+    frc::SmartDashboard::PutNumber("Shooter Velocity", m_shootEncoderTop.GetVelocity());
+    frc::SmartDashboard::PutNumber("Shooter goal Vel", shootSpeed * 11000);
+    
+    m_shootMotorTop.Set(-shootSpeed);
+    m_shootMotorBot.Set(shootSpeed*difference);
+    
+    running = true;
+    SHOOT_speed = shootSpeed;
+}
 
 void Shooter::stopShooter() {
 
