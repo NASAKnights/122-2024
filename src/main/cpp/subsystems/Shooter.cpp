@@ -81,7 +81,7 @@ double Shooter::getShuffleGoal() {
 }
 
 bool Shooter::atSetpoint() {
-    if(fabs(getSpeed()) >= fabs(SHOOT_speed*11000.0)) // Rpm
+    if(fabs(getSpeed()) >= fabs((SHOOT_speed*11000.0))*0.95) // Rpm
     {
         return true;
     }

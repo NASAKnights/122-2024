@@ -288,7 +288,7 @@ void Robot::BindCommands()
                      .ToPtr());   
   frc2::POVButton(&m_operatorController, 180)
       .WhileTrue(Trapshoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
-                       0.9, 11.68, 1_s, 1.1)
+                       0.26,6, 1_s, 1.85)
                      .ToPtr());    
    
   
