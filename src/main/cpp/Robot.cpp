@@ -43,7 +43,7 @@ void Robot::RobotInit(){
   auto entry6 = std::make_pair(std::move(a6),a6Pose);
   autoMap.emplace(5, std::move(entry6));
 
-  std::string a7Name = "5NoteSteal";
+  std::string a7Name = "5AutoBut1st";
   auto a7 = pathplanner::PathPlannerAuto(a7Name);
   auto a7Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a7Name)[0]->getPathPoses()[0];
   auto entry7 = std::make_pair(std::move(a7),a7Pose);
@@ -286,10 +286,14 @@ void Robot::BindCommands()
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
                        0.9, ArmConstants::kArmAngleShootClose, 1_s)
                      .ToPtr());   
-  frc2::POVButton(&m_operatorController, 180)
+  /*frc2::POVButton(&m_operatorController, 180)
       .WhileTrue(Trapshoot(&m_shooter, &m_indexer, &m_intake, &m_arm, 
-                       0.26,6, 1_s, 1.85)
-                     .ToPtr());    
+                       0.245,7, 1_s, 1.8)
+                     .ToPtr());    */
+  frc2::POVButton(&m_operatorController, 0)
+      .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
+                       0.83, 4, 1_s)
+                     .ToPtr());   
    
   
   /*frc2::POVButton(&m_operatorController, 180)

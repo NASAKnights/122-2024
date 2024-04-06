@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.276424687256444,
+      "y": 5.545953474318579
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -18,10 +24,16 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.5
+                  "waitTime": 2.0
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FastSpeaker2Note1"
           }
         },
         {
@@ -39,13 +51,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FastSpeaker2Note1"
+            "pathName": "Speaker2FarNote2"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Speaker2FarNote2"
+            "name": "a_farShot"
           }
         }
       ]
