@@ -45,7 +45,7 @@ void Shoot::Execute() {
       shoooter->Shoot(shootSpeed);//angle is 78
       arm->handle_Setpoint(units::angle::degree_t(shootAngle));
       
-      if (spinupTime.HasElapsed(shooterSpinupTime) && arm->m_ArmState == ArmConstants::DONE)
+      if (spinupTime.HasElapsed(shooterSpinupTime) && (arm->m_ArmState == ArmConstants::DONE || shootAngle > 90))
       {
         m_state = SHOOTING;
       }

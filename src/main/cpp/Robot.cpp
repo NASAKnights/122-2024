@@ -256,7 +256,7 @@ void Robot::BindCommands()
 
   frc2::JoystickButton(&m_operatorController, 1)
       .WhileTrue(Shoot(&m_shooter, &m_indexer, &m_intake, &m_arm, &m_LED_Controller,
-                       0.3, 92, 1_s)
+                       0.3, 92, 2_s)
                      .ToPtr()); 
   frc2::JoystickButton(&m_operatorController, 3)
       .WhileTrue(IntakeNote(&m_intake, &m_indexer, &m_arm, &m_LED_Controller).ToPtr());

@@ -8,24 +8,56 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2860022007102168,
-        "y": 3.408620837338596
+        "x": 1.2157198533149385,
+        "y": 3.53416902146879
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.557600093193144,
-        "y": 0.7762270057990827
+        "x": 4.603127914962739,
+        "y": 1.964270456631385
       },
       "prevControl": {
-        "x": 7.457600093193144,
-        "y": 0.7762270057990827
+        "x": 4.128313501068279,
+        "y": 2.1782787244308817
       },
       "nextControl": {
-        "x": 7.657600093193143,
-        "y": 0.7762270057990827
+        "x": 5.037059795899728,
+        "y": 1.768688756782349
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.762722000643545,
+        "y": 1.0230832555450748
+      },
+      "prevControl": {
+        "x": 7.762722000643545,
+        "y": 1.1230832555450747
+      },
+      "nextControl": {
+        "x": 7.762722000643545,
+        "y": 0.9230832555450752
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.603127914962739,
+        "y": 1.964270456631385
+      },
+      "prevControl": {
+        "x": 5.045176231315975,
+        "y": 1.775249590978087
+      },
+      "nextControl": {
+        "x": 4.134967552745432,
+        "y": 2.164456892496382
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +68,8 @@
         "y": 4.521978198885975
       },
       "prevControl": {
-        "x": 1.8508176383513542,
-        "y": 2.6957591436562582
+        "x": 1.4049155051437423,
+        "y": 3.408766192538132
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +78,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 2.0,
       "rotationDegrees": 0,
       "rotateFast": false
     }
@@ -55,7 +87,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 1.6,
       "command": {
         "type": "race",
         "data": {
@@ -78,7 +110,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.7,
+      "waypointRelativePos": 3.3,
       "command": {
         "type": "race",
         "data": {

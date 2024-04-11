@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7531388214144722,
-      "y": 6.572537672156302
+      "x": 0.7421700318752754,
+      "y": 4.521978198885975
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -33,7 +33,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PreloadKingslayer"
+            "pathName": "Amp2FarNote5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp2FarNote4"
           }
         }
       ]
