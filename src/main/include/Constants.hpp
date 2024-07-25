@@ -111,8 +111,12 @@ const auto kMaxSpeed = DriveConstants::kMaxTranslationalVelocity;
 const auto kWheelDiameterMeters =
     units::meter_t{0.092815210491};
 // meters / turn
+
+const auto kWheelEffectiveDiameterCoeff = 1.11016;
+
 const auto kWheelCircumference =
-    kWheelDiameterMeters * std::numbers::pi / units::turn_t{1.0};
+    kWheelDiameterMeters * std::numbers::pi * kWheelEffectiveDiameterCoeff / units::turn_t{1.0};
+
 // ratio is motor rot / wheel rot
 const double kDriveGearRatio = 1.0 / DriveConstants::kSDSModule.driveReduction;
 const double kTurnGearRatio = 1.0 / DriveConstants::kSDSModule.steerReduction;

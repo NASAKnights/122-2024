@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2991794154609702,
-        "y": 5.5768617000416905
+        "x": 0.0,
+        "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2991794154609702,
-        "y": 5.5768617000416905
+        "x": 0.0,
+        "y": 5.5
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.113284226568454,
-        "y": 4.573750861787438
+        "x": 1.52,
+        "y": 5.5
       },
       "prevControl": {
-        "x": 2.113284226568454,
-        "y": 4.573750861787438
+        "x": 1.52,
+        "y": 5.5
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,59 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.4,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 1.0
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.75,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 1.0
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 1.0
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 0.5,
     "maxAcceleration": 3.0,

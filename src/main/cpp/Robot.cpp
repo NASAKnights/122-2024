@@ -31,7 +31,7 @@ void Robot::RobotInit(){
   auto entry4 = std::make_pair(std::move(a4),a4Pose);
   autoMap.emplace(3, std::move(entry4));
 
-  std::string a5Name = "Shoot";
+  std::string a5Name = "Move";
   auto a5 = pathplanner::PathPlannerAuto(a5Name);
   auto a5Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a5Name)[0]->getPathPoses()[0];
   auto entry5 = std::make_pair(std::move(a5),a5Pose);
