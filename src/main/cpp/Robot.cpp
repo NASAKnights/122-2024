@@ -83,6 +83,11 @@ void Robot::RobotPeriodic()
 void Robot::DisabledInit()
 {
   m_LED_Controller.DefaultAnimation();
+
+  frc::SmartDashboard::PutNumber("NX", 0.0);
+  frc::SmartDashboard::PutNumber("NY", 0.0);
+  frc::SmartDashboard::PutNumber("NR", 0.0);
+  frc::SmartDashboard::PutNumber("P", 0.0);
 }
 
 /**
@@ -123,6 +128,15 @@ void Robot::TeleopInit()
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
   // this line or comment it out.
+
+  // frc::SmartDashboard::SetPersistent("NX");
+  // frc::SmartDashboard::SetPersistent("NY");
+  // frc::SmartDashboard::SetPersistent("NR");
+  // frc::SmartDashboard::SetPersistent("P");
+  frc::SmartDashboard::SetDefaultNumber("NX", 0.0);
+  frc::SmartDashboard::SetDefaultNumber("NY", 0.0);
+  frc::SmartDashboard::SetDefaultNumber("NR", 0.0);
+  frc::SmartDashboard::SetDefaultNumber("P", 0.0);
   if (m_autonomousCommand)
   {
     m_autonomousCommand->Cancel();
@@ -186,6 +200,13 @@ void Robot::CreateRobot()
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this]
       {
+        Note_X_Pos = units::meters_per_second_t(frc::SmartDashboard::GetNumber("NX", 0.0));
+        Note_Y_Pos = units::meters_per_second_t(frc::SmartDashboard::GetNumber("NY", 0.0));
+        Note_R_Pos = units::radians_per_second_t(frc::SmartDashboard::GetNumber("NR", 0.0));
+        P = frc::SmartDashboard::GetNumber("P", 0.0);
+
+        Approach =  m_operatorController.GetRawButton(3);
+
         auto leftXAxis =
             MathUtilNK::calculateAxis(m_driverController.GetRawAxis(1),
                                       DriveConstants::kDefaultAxisDeadband);
@@ -196,10 +217,19 @@ void Robot::CreateRobot()
             MathUtilNK::calculateAxis(m_driverController.GetRawAxis(2),
                                       DriveConstants::kDefaultAxisDeadband);
 
+        auto vx = 
+            units::meters_per_second_t(double(Approach*(Note_X_Pos*P) + (-leftXAxis * DriveConstants::kMaxTranslationalVelocity)));
+
+        auto vy = 
+            units::meters_per_second_t(double(Approach*(Note_Y_Pos*P) + (-leftYAxis * DriveConstants::kMaxTranslationalVelocity)));
+
+        auto omega = 
+            units::radians_per_second_t(double(Approach*(Note_R_Pos*P) + (-rightXAxis * DriveConstants::kMaxRotationalVelocity)));
+
         m_swerveDrive.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-            -leftXAxis * DriveConstants::kMaxTranslationalVelocity,
-            -leftYAxis * DriveConstants::kMaxTranslationalVelocity,
-            -rightXAxis * DriveConstants::kMaxRotationalVelocity,
+            vx,
+            vy,
+            omega,
             m_swerveDrive.GetHeading()));
       },
       {&m_swerveDrive}));
@@ -383,7 +413,7 @@ void Robot::DisabledPeriodic()
   }
 }
 
-/**'
+/**
  * 
  * Updates the data on the dashboard
  */

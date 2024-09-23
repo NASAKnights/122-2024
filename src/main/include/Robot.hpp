@@ -84,10 +84,20 @@ private:
   Climber m_climber;
   frc::PowerDistribution m_pdh = frc::PowerDistribution{1,frc::PowerDistribution::ModuleType::kRev};
 
+  bool Approach = true;
+
+  double P = 1;
+
+  frc::Rotation2d WOW;
+
 
   double autoName = 0;
   double ARM_Angel = 60.0;
   // double ARM_Speed = -120;
+
+  units::meters_per_second_t Note_X_Pos;
+  units::meters_per_second_t Note_Y_Pos;
+  units::radians_per_second_t Note_R_Pos;
 
   double servo_angle = 100;
   float  distance;
