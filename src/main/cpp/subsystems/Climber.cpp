@@ -12,12 +12,22 @@ Climber::Climber() :
 
     climberMotor2.SetControl(climberFollower);
 
+    // Initialize Climber Logging
+    wpi::log::DataLog& log = frc::DataLogManager::GetLog();
+    m_PositionLog = wpi::log::DoubleLogEntry(log, "/Climber/Position");
+    m_StateLog = wpi::log::IntegerLogEntry(log, "/Climber/State");
+    m_LimitSwitchLog = wpi::log::BooleanLogEntry(log, "/Climber/LimitSwitch");
 }
 
 // This method will be called once per scheduler run
 void Climber::Periodic() {
   frc::SmartDashboard::PutBoolean("Climber at Bot?",botLimit1.Get());
   frc::SmartDashboard::PutNumber("Climber_Position",climberMotor1.GetPosition().GetValueAsDouble());
+
+  // Write out to Log file
+  m_PositionLog.Append(climberMotor1.GetPosition().GetValueAsDouble());
+  m_StateLog.Append(m_ClimberState);
+  m_LimitSwitchLog.Append(botLimit1.Get());
 
 }
 

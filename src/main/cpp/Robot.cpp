@@ -6,54 +6,63 @@
 Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit(){
-  std::string a1Name = "4NoteSpeakerRun";
-  auto a1 = pathplanner::PathPlannerAuto(a1Name);
-  auto a1Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a1Name)[0]->getPathPoses()[0];
-  auto entry1 = std::make_pair(std::move(a1),a1Pose);
-  autoMap.emplace(0, std::move(entry1));
 
-  std::string a2Name = "3NoteSpeakerRun";
-  auto a2 = pathplanner::PathPlannerAuto(a2Name);
-  auto a2Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a2Name)[0]->getPathPoses()[0];
-  auto entry2 = std::make_pair(std::move(a2),a2Pose);
-  autoMap.emplace(1, std::move(entry2));
+  frc::DataLogManager::Start();
+  wpi::log::DataLog& log = frc::DataLogManager::GetLog();
+  m_VoltageLog = wpi::log::DoubleLogEntry(log, "/PDP/Voltage");
+  m_CurrentLog = wpi::log::DoubleLogEntry(log, "/PDP/Current");
+  m_PowerLog = wpi::log::DoubleLogEntry(log, "/PDP/Power");
+  m_EnergyLog = wpi::log::DoubleLogEntry(log, "/PDP/Energy");
+  m_TemperatureLog = wpi::log::DoubleLogEntry(log, "/PDP/Temperature");
+  
+  // std::string a1Name = "4NoteSpeakerRun";
+  // auto a1 = pathplanner::PathPlannerAuto(a1Name);
+  // auto a1Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a1Name)[0]->getPathPoses()[0];
+  // auto entry1 = std::make_pair(std::move(a1),a1Pose);
+  // autoMap.emplace(0, std::move(entry1));
 
-  std::string a3Name = "Far1AmpRun";
-  auto a3 = pathplanner::PathPlannerAuto(a3Name);
-  auto a3Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a3Name)[0]->getPathPoses()[0];
-  auto entry3 = std::make_pair(std::move(a3),a3Pose);
-  autoMap.emplace(2, std::move(entry3));
-  //TODO: FIX THIS
+  // std::string a2Name = "3NoteSpeakerRun";
+  // auto a2 = pathplanner::PathPlannerAuto(a2Name);
+  // auto a2Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a2Name)[0]->getPathPoses()[0];
+  // auto entry2 = std::make_pair(std::move(a2),a2Pose);
+  // autoMap.emplace(1, std::move(entry2));
 
-  std::string a4Name = "Far5AmpRun";
-  auto a4 = pathplanner::PathPlannerAuto(a4Name);
-  auto a4Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a4Name)[0]->getPathPoses()[0];
-  auto entry4 = std::make_pair(std::move(a4),a4Pose);
-  autoMap.emplace(3, std::move(entry4));
+  // std::string a3Name = "Far1AmpRun";
+  // auto a3 = pathplanner::PathPlannerAuto(a3Name);
+  // auto a3Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a3Name)[0]->getPathPoses()[0];
+  // auto entry3 = std::make_pair(std::move(a3),a3Pose);
+  // autoMap.emplace(2, std::move(entry3));
+  // //TODO: FIX THIS
 
-  std::string a5Name = "Move";
-  auto a5 = pathplanner::PathPlannerAuto(a5Name);
-  auto a5Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a5Name)[0]->getPathPoses()[0];
-  auto entry5 = std::make_pair(std::move(a5),a5Pose);
-  autoMap.emplace(4, std::move(entry5));
+  // std::string a4Name = "Far5AmpRun";
+  // auto a4 = pathplanner::PathPlannerAuto(a4Name);
+  // auto a4Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a4Name)[0]->getPathPoses()[0];
+  // auto entry4 = std::make_pair(std::move(a4),a4Pose);
+  // autoMap.emplace(3, std::move(entry4));
 
-  std::string a6Name = "5NoteAutoButFast";
-  auto a6 = pathplanner::PathPlannerAuto(a6Name);
-  auto a6Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a6Name)[0]->getPathPoses()[0];
-  auto entry6 = std::make_pair(std::move(a6),a6Pose);
-  autoMap.emplace(5, std::move(entry6));
+  // std::string a5Name = "Move";
+  // auto a5 = pathplanner::PathPlannerAuto(a5Name);
+  // auto a5Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a5Name)[0]->getPathPoses()[0];
+  // auto entry5 = std::make_pair(std::move(a5),a5Pose);
+  // autoMap.emplace(4, std::move(entry5));
 
-  std::string a7Name = "5AutoBut1st";
-  auto a7 = pathplanner::PathPlannerAuto(a7Name);
-  auto a7Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a7Name)[0]->getPathPoses()[0];
-  auto entry7 = std::make_pair(std::move(a7),a7Pose);
-  autoMap.emplace(6, std::move(entry7));
+  // std::string a6Name = "5NoteAutoButFast";
+  // auto a6 = pathplanner::PathPlannerAuto(a6Name);
+  // auto a6Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a6Name)[0]->getPathPoses()[0];
+  // auto entry6 = std::make_pair(std::move(a6),a6Pose);
+  // autoMap.emplace(5, std::move(entry6));
 
-  std::string a8Name = "KingslayerAuto";
-  auto a8 = pathplanner::PathPlannerAuto(a8Name);
-  auto a8Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a8Name)[0]->getPathPoses()[0];
-  auto entry8 = std::make_pair(std::move(a8),a8Pose);
-  autoMap.emplace(7, std::move(entry8));
+  // std::string a7Name = "5AutoBut1st";
+  // auto a7 = pathplanner::PathPlannerAuto(a7Name);
+  // auto a7Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a7Name)[0]->getPathPoses()[0];
+  // auto entry7 = std::make_pair(std::move(a7),a7Pose);
+  // autoMap.emplace(6, std::move(entry7));
+
+  // std::string a8Name = "KingslayerAuto";
+  // auto a8 = pathplanner::PathPlannerAuto(a8Name);
+  // auto a8Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a8Name)[0]->getPathPoses()[0];
+  // auto entry8 = std::make_pair(std::move(a8),a8Pose);
+  // autoMap.emplace(7, std::move(entry8));
 
   m_LED_Controller.DefaultAnimation();
 };
@@ -73,6 +82,13 @@ void Robot::RobotPeriodic()
   m_arm.Emergency_Stop(); //check if arm has triggered a stop
   if (m_climber.atBot()) m_pdh.SetSwitchableChannel(false);
   else m_pdh.SetSwitchableChannel(true);
+  m_VoltageLog.Append(m_pdh.GetVoltage());
+  m_CurrentLog.Append(m_pdh.GetTotalCurrent());
+  m_PowerLog.Append(m_pdh.GetTotalPower());
+  m_EnergyLog.Append(m_pdh.GetTotalEnergy());
+  m_TemperatureLog.Append(m_pdh.GetTemperature());
+  m_arm.printLog();
+
 }
 
 /**
@@ -407,7 +423,6 @@ void Robot::UpdateDashboard()
 
   frc::SmartDashboard::PutBoolean("EmergencySwitch4",m_arm.isOverLimit());
 
-  m_arm.printLog();
 }
 
 void Robot::loadAutonomous() {

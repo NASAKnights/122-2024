@@ -4,36 +4,45 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
+#include "frc/DataLogManager.h"
+#include "wpi/DataLog.h"
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <frc/DigitalInput.h>
+#include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
 
-class Shooter : public frc2::SubsystemBase {
- public:
-  Shooter();
-  void Periodic() override;
+class Shooter : public frc2::SubsystemBase
+{
+  public:
+    Shooter();
+    void Periodic() override;
 
-  void Shoot(double shootSpeed);
-  void TrapShoot(double shootSpeed, double difference = 1);
-  void stopShooter();
+    void Shoot(double shootSpeed);
+    void TrapShoot(double shootSpeed, double difference = 1);
+    void stopShooter();
 
-  double getSpeed();
-  double getShuffleGoal();
+    double getSpeed();
+    double getShuffleGoal();
 
-  bool isRunning();
-  bool atSetpoint();
+    bool isRunning();
+    bool atSetpoint();
 
- private:
+  private:
+    rev::CANSparkMax m_shootMotorTop;
+    rev::CANSparkMax m_shootMotorBot;
+    rev::SparkMaxPIDController m_shootPIDTop = m_shootMotorTop.GetPIDController();
+    rev::SparkMaxPIDController m_shootPIDBot = m_shootMotorBot.GetPIDController();
 
-  rev::CANSparkMax m_shootMotorTop;
-  rev::CANSparkMax m_shootMotorBot;
-  rev::SparkMaxPIDController m_shootPIDTop = m_shootMotorTop.GetPIDController();
-  rev::SparkMaxPIDController m_shootPIDBot = m_shootMotorBot.GetPIDController();
+    rev::SparkRelativeEncoder m_shootEncoderTop = m_shootMotorTop.GetEncoder();
+    rev::SparkRelativeEncoder m_shootEncoderBot = m_shootMotorBot.GetEncoder();
 
-  rev::SparkRelativeEncoder m_shootEncoderTop = m_shootMotorTop.GetEncoder();
-  rev::SparkRelativeEncoder m_shootEncoderBot = m_shootMotorBot.GetEncoder();
+    wpi::log::DoubleLogEntry m_VelocityTopLog;
+    wpi::log::DoubleLogEntry m_VoltageTopLog;
+    wpi::log::DoubleLogEntry m_CurrentTopLog;
+    wpi::log::DoubleLogEntry m_VelocityBottomLog;
+    wpi::log::DoubleLogEntry m_VoltageBottomLog;
+    wpi::log::DoubleLogEntry m_CurrentBottomLog;
 
-  bool running = false;
-  int SHOOT_speed;
+    bool running = false;
+    int SHOOT_speed;
 };
