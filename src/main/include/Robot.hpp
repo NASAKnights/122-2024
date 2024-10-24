@@ -8,6 +8,8 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/PowerDistribution.h>
+#include "frc/DataLogManager.h"
+#include "wpi/DataLog.h"
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/CommandScheduler.h>
@@ -100,6 +102,13 @@ private:
   // PS4 controllers
   frc::Joystick m_driverController{DriveConstants::kDriverPort};
   frc::Joystick m_operatorController{DriveConstants::kOperatorPort};
+
+  // Power Distribution
+  wpi::log::DoubleLogEntry m_VoltageLog;
+  wpi::log::DoubleLogEntry m_CurrentLog;
+  wpi::log::DoubleLogEntry m_PowerLog;
+  wpi::log::DoubleLogEntry m_EnergyLog;
+  wpi::log::DoubleLogEntry m_TemperatureLog;
 
   // Autocommands to load:
   frc::Pose2d autoBlueStart1;

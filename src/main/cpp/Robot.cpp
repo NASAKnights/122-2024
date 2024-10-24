@@ -6,6 +6,15 @@
 Robot::Robot() { this->CreateRobot(); }
 
 void Robot::RobotInit(){
+
+  frc::DataLogManager::Start();
+  wpi::log::DataLog& log = frc::DataLogManager::GetLog();
+  m_VoltageLog = wpi::log::DoubleLogEntry(log, "/PDP/Voltage");
+  m_CurrentLog = wpi::log::DoubleLogEntry(log, "/PDP/Current");
+  m_PowerLog = wpi::log::DoubleLogEntry(log, "/PDP/Power");
+  m_EnergyLog = wpi::log::DoubleLogEntry(log, "/PDP/Energy");
+  m_TemperatureLog = wpi::log::DoubleLogEntry(log, "/PDP/Temperature");
+  
   std::string a1Name = "4NoteSpeakerRun";
   auto a1 = pathplanner::PathPlannerAuto(a1Name);
   auto a1Pose = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(a1Name)[0]->getPathPoses()[0];
@@ -73,6 +82,13 @@ void Robot::RobotPeriodic()
   m_arm.Emergency_Stop(); //check if arm has triggered a stop
   if (m_climber.atBot()) m_pdh.SetSwitchableChannel(false);
   else m_pdh.SetSwitchableChannel(true);
+  m_VoltageLog.Append(m_pdh.GetVoltage());
+  m_CurrentLog.Append(m_pdh.GetTotalCurrent());
+  m_PowerLog.Append(m_pdh.GetTotalPower());
+  m_EnergyLog.Append(m_pdh.GetTotalEnergy());
+  m_TemperatureLog.Append(m_pdh.GetTemperature());
+  m_arm.printLog();
+
 }
 
 /**
@@ -407,7 +423,6 @@ void Robot::UpdateDashboard()
 
   frc::SmartDashboard::PutBoolean("EmergencySwitch4",m_arm.isOverLimit());
 
-  m_arm.printLog();
 }
 
 void Robot::loadAutonomous() {

@@ -17,48 +17,48 @@
 
 #include "Constants.hpp"
 
-class SwerveModule : public frc2::SubsystemBase {
-public:
-  SwerveModule(int driveMotorId, int steerMotorId, int steerEncoderId,
-               frc::Rotation2d angleOffset);
+class SwerveModule : public frc2::SubsystemBase
+{
+  public:
+    SwerveModule(int driveMotorId, int steerMotorId, int steerEncoderId, frc::Rotation2d angleOffset);
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+    /**
+     * Will be called periodically whenever the CommandScheduler runs.
+     */
+    void Periodic() override;
 
-  /**
-   * Will be called perodically by the scheduler when simulation runs.
-   */
-  void SimulationPeriodic() override;
+    /**
+     * Will be called perodically by the scheduler when simulation runs.
+     */
+    void SimulationPeriodic() override;
 
-  frc::SwerveModuleState GetCurrentState();
-  frc::SwerveModulePosition GetPosition();
-  void SetDesiredState(frc::SwerveModuleState desiredState);
-  void ResetDriveEncoders();
-  void InitEncoder(int encoderID);
-  frc::Rotation2d GetRotation();
-  frc::Rotation2d GetAbsoluteRotation();
-  void Reset();
+    frc::SwerveModuleState GetCurrentState();
+    frc::SwerveModulePosition GetPosition();
+    void SetDesiredState(frc::SwerveModuleState desiredState);
+    void ResetDriveEncoders();
+    void InitEncoder(int encoderID);
+    frc::Rotation2d GetRotation();
+    frc::Rotation2d GetAbsoluteRotation();
+    void Reset();
 
-private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-  int m_id;
+  private:
+    // Components (e.g. motor controllers and sensors) should generally be
+    // declared private and exposed only through public methods.
+    int m_id;
 
-  ctre::phoenix6::hardware::TalonFX m_driveMotor;
-  ctre::phoenix6::hardware::TalonFX m_steerMotor;
-  ctre::phoenix6::hardware::CANcoder m_steerEncoder;
+    ctre::phoenix6::hardware::TalonFX m_driveMotor;
+    ctre::phoenix6::hardware::TalonFX m_steerMotor;
+    ctre::phoenix6::hardware::CANcoder m_steerEncoder;
 
-  frc::Rotation2d m_angleOffset;
+    frc::Rotation2d m_angleOffset;
 
-  // simulation fields
-  frc::Timer m_simTimer;
+    // simulation fields
+    frc::Timer m_simTimer;
 
-  frc::sim::SimDeviceSim m_driveSim;
-  frc::sim::SimDeviceSim m_steerSim;
+    frc::sim::SimDeviceSim m_driveSim;
+    frc::sim::SimDeviceSim m_steerSim;
 
-  hal::SimDouble m_driveSimVelocity;
-  hal::SimDouble m_driveSimPosition;
-  hal::SimDouble m_steerSimPosition;
+    hal::SimDouble m_driveSimVelocity;
+    hal::SimDouble m_driveSimPosition;
+    hal::SimDouble m_steerSimPosition;
 };

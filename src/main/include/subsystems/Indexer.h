@@ -4,27 +4,31 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
+#include "frc/DataLogManager.h"
+#include "wpi/DataLog.h"
 #include <frc/DigitalInput.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/SubsystemBase.h>
 
+class Indexer : public frc2::SubsystemBase
+{
+  public:
+    Indexer();
 
-class Indexer : public frc2::SubsystemBase {
- public:
-  Indexer();
+    /**
+     * Will be called periodically whenever the CommandScheduler runs.
+     */
+    void Periodic() override;
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+    bool hasNote();
+    bool FarNote();
+    void moveIndexer();
 
-  bool hasNote();
-  bool FarNote();
-  void moveIndexer();
+  private:
+    // Components (e.g. motor controllers and sensors) should generally be
+    // declared private and exposed only through public methods.
+    frc::DigitalInput limitSwitchNear;
+    frc::DigitalInput limitSwitchFar;
 
- private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-  frc::DigitalInput limitSwitchNear;
-  frc::DigitalInput limitSwitchFar;
+    wpi::log::BooleanLogEntry m_NoteLog;
 };
