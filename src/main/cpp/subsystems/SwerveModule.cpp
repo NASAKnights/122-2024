@@ -34,9 +34,9 @@ SwerveModule::SwerveModule(int driveMotorID, int steerMotorID,
   configs::CANcoderConfiguration CANcoderConfig{};
 
   configs::ClosedLoopRampsConfigs driveClosedRamps{};
-  driveClosedRamps.WithVoltageClosedLoopRampPeriod(0.5);
-  driveClosedRamps.WithDutyCycleClosedLoopRampPeriod(0.5);
-  driveClosedRamps.WithTorqueClosedLoopRampPeriod(0.5);
+  driveClosedRamps.WithVoltageClosedLoopRampPeriod(0.4);
+  driveClosedRamps.WithDutyCycleClosedLoopRampPeriod(0.4);
+  driveClosedRamps.WithTorqueClosedLoopRampPeriod(0.4);
   driveConfig.ClosedLoopRamps = driveClosedRamps;
 
   CANcoderConfig.MagnetSensor.AbsoluteSensorRange =

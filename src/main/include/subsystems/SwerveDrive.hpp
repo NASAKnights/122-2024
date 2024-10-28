@@ -5,10 +5,12 @@
 #include <array>
 
 #include <AHRS.h>
+#include <ctre/phoenix6/Pigeon2.hpp>
 #include <frc/SPI.h>
 #include <frc/controller/PIDController.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Pose3d.h>
+#include <frc/geometry/Quaternion.h>
 #include <frc/geometry/Rotation3d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/geometry/Translation3d.h>
@@ -19,19 +21,17 @@
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/smartdashboard/Field2d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/RunCommand.h>
 #include <frc2/command/SubsystemBase.h>
-#include <frc/geometry/Quaternion.h>
+#include <iostream>
 #include <networktables/DoubleArrayTopic.h>
 #include <networktables/NetworkTableInstance.h>
-#include <wpi/array.h>
-#include <iostream>
 #include <string>
-#include <ctre/phoenix6/Pigeon2.hpp>
-#include <frc2/command/RunCommand.h>
+#include <wpi/array.h>
 
-#include <frc/estimator/SwerveDrivePoseEstimator.h>
-#include <frc/estimator/PoseEstimator.h>
 #include <frc/DriverStation.h>
+#include <frc/estimator/PoseEstimator.h>
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/trajectory/constraint/SwerveDriveKinematicsConstraint.h>
 
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -42,88 +42,84 @@
 #include "Constants.hpp"
 #include "SwerveModule.hpp"
 
+class SwerveDrive : public frc2::SubsystemBase
+{
+  public:
+    SwerveDrive();
 
-class SwerveDrive : public frc2::SubsystemBase {
-public:
-  SwerveDrive();
+    /**
+     * Will be called periodically whenever the CommandScheduler runs.
+     */
+    void Periodic() override;
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+    void Drive(frc::ChassisSpeeds);
 
-  void Drive(frc::ChassisSpeeds);
+    void SetFast();
+    void SetSlow();
 
-  void SetFast();
-  void SetSlow();
+    frc::Rotation2d GetHeading();
+    void ResetHeading();
+    void ResetDriveEncoders();
+    void EnableDrive();
+    void DisableDrive();
 
-  frc::Rotation2d GetHeading();
-  void ResetHeading();
-  void ResetDriveEncoders();
-  void EnableDrive();
-  void DisableDrive();
+    std::array<frc::SwerveModulePosition, 4> GetModulePositions();
 
+    void ResetPose(frc::Pose2d position);
 
-  std::array<frc::SwerveModulePosition, 4> GetModulePositions();
+    frc::Pose2d GetPose();
 
-  void ResetPose(frc::Pose2d position);
+    void UpdateOdometry();
+    frc::ChassisSpeeds getRobotRelativeSpeeds();
 
-  frc::Pose2d GetPose();
+    void InitializePID();
+    void SetReference(frc::Pose2d);
+    void Strafe(frc::ChassisSpeeds speeds, double angle);
 
-  void UpdateOdometry();
-  frc::ChassisSpeeds getRobotRelativeSpeeds();
+    void UpdatePoseEstimate();
+    void PublishOdometry(frc::Pose2d);
+    void PrintNetworkTablseValues();
+    void SetVision();
+    bool atSetpoint();
+    frc::Pose2d GetVision();
+    void TurnVisionOn();
+    void TurnVisionOff();
 
-  void InitializePID();
-  void SetReference(frc::Pose2d);
-  void Strafe(frc::ChassisSpeeds speeds, double angle);
+  private:
+    // Components (e.g. motor controllers and sensors) should generally be
+    // declared private and exposed only through public methods.
+    AHRS navx{frc::SPI::Port::kMXP};
 
-  void UpdatePoseEstimate();
-  void PublishOdometry(frc::Pose2d);
-  void PrintNetworkTablseValues();
-  void SetVision();
-  bool atSetpoint();
-  frc::Pose2d GetVision();
-  void TurnVisionOn();
-  void TurnVisionOff();
+    ctre::phoenix6::hardware::Pigeon2 m_pigeon{2, "NKCANivore"};
 
-private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-  AHRS navx{frc::SPI::Port::kMXP};
+    std::array<SwerveModule, 4> modules;
+    frc::SwerveDriveKinematics<4> kSwerveKinematics;
 
-  ctre::phoenix6::hardware::Pigeon2 m_pigeon{2, "NKCANivore"};
+    frc::ChassisSpeeds speeds;
+    frc::Field2d m_field;
+    frc::PIDController pidX;
+    frc::PIDController pidY;
+    frc::PIDController pidRot;
 
-  std::array<SwerveModule, 4> modules;
-  frc::SwerveDriveKinematics<4> kSwerveKinematics;
+    bool hasRun = false;
+    bool enable = true;
+    double pos_Error;
 
-  frc::ChassisSpeeds speeds;
-  // frc::SwerveDriveOdometry<4> odometry;
-  frc::Field2d m_field;
-  frc::PIDController pidX;
-  frc::PIDController pidY;
-  frc::PIDController pidRot;
+    bool useVision = false;
 
-  bool hasRun = false;
-  bool enable= true;
-  double pos_Error;
+    frc::ChassisSpeeds priorSpeeds = frc::ChassisSpeeds();
 
-  bool useVision = false;
+    nt::NetworkTableInstance networkTableInst;
 
-  frc::ChassisSpeeds priorSpeeds = frc::ChassisSpeeds();
-  // ----------------------
+    std::string_view baseLink1 = "base_link_1";
+    std::string_view baseLink2 = "base_link_2";
+    std::string_view baseLink = "base_link";
+    std::shared_ptr<nt::NetworkTable> poseTable;
 
-  nt::NetworkTableInstance networkTableInst;
-  
-  std::string_view baseLink1 = "base_link_1";
-  std::string_view baseLink2 = "base_link_2";
-  std::string_view baseLink = "base_link";
-  std::shared_ptr<nt::NetworkTable> poseTable;
-  
-  nt::DoubleArraySubscriber baseLink1Subscribe;
-  nt::DoubleArraySubscriber baseLink2Subscribe;
-  frc::Quaternion rotation_q; //w, x, y, z
-  frc::SwerveDrivePoseEstimator<4> m_poseEstimator;
+    nt::DoubleArraySubscriber baseLink1Subscribe;
+    nt::DoubleArraySubscriber baseLink2Subscribe;
+    frc::Quaternion rotation_q; // w, x, y, z
+    frc::SwerveDrivePoseEstimator<4> m_poseEstimator;
 
-  nt::DoubleArrayPublisher baseLinkPublisher;
-  
+    nt::DoubleArrayPublisher baseLinkPublisher;
 };

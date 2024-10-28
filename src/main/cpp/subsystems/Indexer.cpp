@@ -4,18 +4,21 @@
 
 #include "subsystems/Indexer.h"
 
-Indexer::Indexer() : limitSwitchNear(2), limitSwitchFar(3) {
-
+Indexer::Indexer() : limitSwitchNear(2), limitSwitchFar(3)
+{
+    wpi::log::DataLog &log = frc::DataLogManager::GetLog();
+    m_NoteLog = wpi::log::BooleanLogEntry(log, "/Indexer/Note");
 }
 
 // This method will be called once per scheduler run
-void Indexer::Periodic() {
-    frc::SmartDashboard::PutBoolean("note",hasNote());
-
-
+void Indexer::Periodic()
+{
+    frc::SmartDashboard::PutBoolean("note", hasNote());
+    m_NoteLog.Append(hasNote());
 }
 
-bool Indexer::hasNote() {
+bool Indexer::hasNote()
+{
     return (limitSwitchNear.Get() || limitSwitchFar.Get());
 }
 /*
