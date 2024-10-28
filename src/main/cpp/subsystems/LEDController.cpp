@@ -13,19 +13,22 @@ LEDController::LEDController()
 
 void LEDController::DefaultAnimation()
 {
-    for(int i = 0; i < 10; i++)
+    if(!Green)
     {
-        candle.ClearAnimation(i);
+        for(int i = 0; i < 10; i++)
+        {
+            candle.ClearAnimation(i);
+        }
+        auto rgbfade = ctre::phoenix::led::RgbFadeAnimation(1.0, 0.7, -1, 8);
+        auto rainbow = ctre::phoenix::led::RainbowAnimation(1.0, 0.7, -1, false, 8);
+        auto fire = ctre::phoenix::led::FireAnimation(1.0, 0.7, -1, 1, 0.0, false, 8);
+        auto twinkle = ctre::phoenix::led::TwinkleAnimation(0,0,255,1, 0.7, -1, ctre::phoenix::led::TwinkleAnimation::Percent100, 8);
+        ledGroup1.SetRainbow(1);
+        ledGroup2.SetRainbow(2);
+        ledGroup3.SetRainbow(5);
+        ledGroup5.SetInvertedRainbow(3);
+        ledGroup4.SetRainbow(4);
     }
-    auto rgbfade = ctre::phoenix::led::RgbFadeAnimation(1.0, 0.7, -1, 8);
-    auto rainbow = ctre::phoenix::led::RainbowAnimation(1.0, 0.7, -1, false, 8);
-    auto fire = ctre::phoenix::led::FireAnimation(1.0, 0.7, -1, 1, 0.0, false, 8);
-    auto twinkle = ctre::phoenix::led::TwinkleAnimation(0,0,255,1, 0.7, -1, ctre::phoenix::led::TwinkleAnimation::Percent100, 8);
-    ledGroup1.SetRainbow(1);
-    ledGroup2.SetRainbow(2);
-    ledGroup3.SetRainbow(5);
-    ledGroup5.SetInvertedRainbow(3);
-    ledGroup4.SetRainbow(4);
 }
 
 void LEDController::Periodic() {}
@@ -41,10 +44,12 @@ void LEDController::HandleIntakeState() {
         {
         case NO_NOTE:
             candle.SetLEDs(255, 0, 0);
+            Green = false;
             break;
         
         case NOTE:
             candle.SetLEDs(0, 255, 0);
+            Green = true;
             break;
 
         default:
@@ -69,7 +74,7 @@ void LEDController::HandleShooterState(){
             break;
         
         case LED_SPIN_UP:
-            candle.SetLEDs(255, 255, 0); //Yellow
+            // candle.SetLEDs(255, 255, 0); //Yellow
             break;
 
         case LED_SHOOTING:
@@ -77,6 +82,7 @@ void LEDController::HandleShooterState(){
             ledGroup2.SetLarson(255, 30, 0, 3);
             ledGroup4.SetLarson(255, 30, 0, 3);
             ledGroup5.SetLarson(255, 30, 0, 3);
+            Green = false;
             break;
         case LED_BAD:
             AllLEDs.SetFlash(255, 0, 0, 255, 30, 0, Time);
