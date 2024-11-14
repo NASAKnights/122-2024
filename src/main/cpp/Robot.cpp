@@ -200,12 +200,7 @@ void Robot::CreateRobot()
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this]
       {
-        Note_X_Pos = units::meters_per_second_t(frc::SmartDashboard::GetNumber("NX", 0.0));
-        Note_Y_Pos = units::meters_per_second_t(frc::SmartDashboard::GetNumber("NY", 0.0));
-        Note_R_Pos = units::radians_per_second_t(frc::SmartDashboard::GetNumber("NR", 0.0));
-        P = frc::SmartDashboard::GetNumber("P", 0.0);
-
-        Approach =  m_operatorController.GetRawButton(3);
+        Approach = m_operatorController.GetRawButton(3);
 
         auto leftXAxis =
             MathUtilNK::calculateAxis(m_driverController.GetRawAxis(1),
@@ -215,22 +210,8 @@ void Robot::CreateRobot()
                                       DriveConstants::kDefaultAxisDeadband);
         auto rightXAxis =
             MathUtilNK::calculateAxis(m_driverController.GetRawAxis(2),
-                                      DriveConstants::kDefaultAxisDeadband);
-
-        auto vx = 
-            units::meters_per_second_t(double(Approach*(Note_X_Pos*P) + (-leftXAxis * DriveConstants::kMaxTranslationalVelocity)));
-
-        auto vy = 
-            units::meters_per_second_t(double(Approach*(Note_Y_Pos*P) + (-leftYAxis * DriveConstants::kMaxTranslationalVelocity)));
-
-        auto omega = 
-            units::radians_per_second_t(double(Approach*(Note_R_Pos*P) + (-rightXAxis * DriveConstants::kMaxRotationalVelocity)));
-
-        m_swerveDrive.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-            vx,
-            vy,
-            omega,
-            m_swerveDrive.GetHeading()));
+                                      DriveConstants::kDefaultAxisDeadband); 
+        m_swerveDrive.WeightedDriving(Approach, leftXAxis, leftYAxis, rightXAxis);
       },
       {&m_swerveDrive}));
 

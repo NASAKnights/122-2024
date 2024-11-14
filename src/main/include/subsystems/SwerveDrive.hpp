@@ -3,6 +3,7 @@
 #pragma once
 
 #include <array>
+#include <math.h>
 
 #include <AHRS.h>
 #include <frc/SPI.h>
@@ -62,7 +63,8 @@ public:
   void ResetDriveEncoders();
   void EnableDrive();
   void DisableDrive();
-
+  void WeightedDriving(bool approach, double leftXAxis, double leftYAxis,
+                        double rightXAxis);
 
   std::array<frc::SwerveModulePosition, 4> GetModulePositions();
 
@@ -103,6 +105,12 @@ private:
   frc::PIDController pidY;
   frc::PIDController pidRot;
 
+  units::meters_per_second_t Note_X_Pos;
+  units::meters_per_second_t Note_Y_Pos;
+  units::radians_per_second_t Note_R_Pos;
+
+  double P = 1;
+
   bool hasRun = false;
   bool enable= true;
   double pos_Error;
@@ -121,7 +129,10 @@ private:
   
   nt::DoubleArraySubscriber baseLink1Subscribe;
   nt::DoubleArraySubscriber baseLink2Subscribe;
+  nt::DoubleArraySubscriber objectPoseSubscribe;
   frc::Quaternion rotation_q; //w, x, y, z
+  frc::Quaternion noteRotation_q; //w, x, y, z
+  frc::Rotation3d noteRotation;
   frc::SwerveDrivePoseEstimator<4> m_poseEstimator;
 
   nt::DoubleArrayPublisher baseLinkPublisher;

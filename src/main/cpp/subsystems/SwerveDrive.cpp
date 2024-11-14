@@ -307,8 +307,52 @@ void SwerveDrive::EnableDrive() {
 void SwerveDrive::DisableDrive() {
   enable = false;
   // frc::SmartDashboard::PutBoolean("TestTestTest", enable);
-
 }
+
+void SwerveDrive::WeightedDriving(bool approach, double leftXAxis,
+                                  double leftYAxis, double rightXAxis) {
+
+  auto objectPose = objectPoseSubscribe.GetAtomic();
+
+  Note_X_Pos = units::meters_per_second_t(objectPose.value.at(0));
+  Note_Y_Pos = units::meters_per_second_t(objectPose.value.at(1));
+
+  noteRotation_q = frc::Quaternion(objectPose.value.at(6),
+                                  objectPose.value.at(3),
+                                  objectPose.value.at(4),
+                                  objectPose.value.at(5));
+  noteRotation = frc::Rotation3d(rotation_q);
+
+  Note_R_Pos = units::radians_per_second_t(noteRotation.ToRotation2d().Radians().value());
+  P = 0.1;
+
+  auto unsaturatedX = double(approach*Note_X_Pos*P);
+  auto unsaturatedY = double(approach*Note_Y_Pos*P);
+  auto unsaturatedO = double(approach*Note_R_Pos*P);
+
+  auto saturatedX =  std::copysign( std::min( std::abs(unsaturatedX), 0.1 ), unsaturatedX );
+  auto saturatedY =  std::copysign( std::min( std::abs(unsaturatedY), 0.1 ), unsaturatedY );
+  auto saturatedOmega = std::copysign( std::min( std::abs(unsaturatedO), 0.1 ), unsaturatedO );
+
+  auto vx = 
+      units::meters_per_second_t(saturatedX + 
+                                  double(-leftXAxis * DriveConstants::kMaxTranslationalVelocity));
+
+  auto vy = 
+      units::meters_per_second_t(saturatedY + 
+                                  double(-leftYAxis * DriveConstants::kMaxTranslationalVelocity));
+
+  auto omega = 
+      units::radians_per_second_t(saturatedOmega + 
+                                  double(-rightXAxis * DriveConstants::kMaxRotationalVelocity));
+
+  Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+      vx,
+      vy,
+      omega,
+      GetHeading()));
+}
+
 bool SwerveDrive::atSetpoint(){
    if(pos_Error < 0.05)
    {
