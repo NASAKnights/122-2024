@@ -87,6 +87,7 @@ public:
   frc::Pose2d GetVision();
   void TurnVisionOn();
   void TurnVisionOff();
+  frc::Transform2d GetObjectPose();
 
 private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -104,10 +105,6 @@ private:
   frc::PIDController pidX;
   frc::PIDController pidY;
   frc::PIDController pidRot;
-
-  units::meters_per_second_t Note_X_Pos;
-  units::meters_per_second_t Note_Y_Pos;
-  units::radians_per_second_t Note_R_Pos;
 
   double P = 1;
 
@@ -131,8 +128,6 @@ private:
   nt::DoubleArraySubscriber baseLink2Subscribe;
   nt::DoubleArraySubscriber objectPoseSubscribe;
   frc::Quaternion rotation_q; //w, x, y, z
-  frc::Quaternion noteRotation_q; //w, x, y, z
-  frc::Rotation3d noteRotation;
   frc::SwerveDrivePoseEstimator<4> m_poseEstimator;
 
   nt::DoubleArrayPublisher baseLinkPublisher;

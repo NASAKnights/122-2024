@@ -309,22 +309,35 @@ void SwerveDrive::DisableDrive() {
   // frc::SmartDashboard::PutBoolean("TestTestTest", enable);
 }
 
-void SwerveDrive::WeightedDriving(bool approach, double leftXAxis,
-                                  double leftYAxis, double rightXAxis) {
-
+frc::Transform2d SwerveDrive::GetObjectPose() {
   auto objectPose = objectPoseSubscribe.GetAtomic();
 
-  Note_X_Pos = units::meters_per_second_t(objectPose.value.at(0));
-  Note_Y_Pos = units::meters_per_second_t(objectPose.value.at(1));
+  if(objectPose.value.size() > 0) {
+    auto Note_X_Pos = units::length::meter_t(objectPose.value.at(0));
+    auto Note_Y_Pos = units::length::meter_t(objectPose.value.at(1));
 
-  noteRotation_q = frc::Quaternion(objectPose.value.at(6),
-                                  objectPose.value.at(3),
-                                  objectPose.value.at(4),
-                                  objectPose.value.at(5));
-  noteRotation = frc::Rotation3d(rotation_q);
+    frc::Quaternion noteRotation_q = frc::Quaternion(objectPose.value.at(6),
+                                                    objectPose.value.at(3),
+                                                    objectPose.value.at(4),
+                                                    objectPose.value.at(5));
+    auto noteRotation = frc::Rotation3d(noteRotation_q);
 
-  Note_R_Pos = units::radians_per_second_t(noteRotation.ToRotation2d().Radians().value());
+    auto NoteRotation2d = noteRotation.ToRotation2d();
+    return frc::Transform2d(Note_X_Pos, Note_Y_Pos, frc::Rotation2d());
+  }
+
+  return frc::Transform2d{};
+}
+
+void SwerveDrive::WeightedDriving(bool approach, double leftXAxis,
+                                  double leftYAxis, double rightXAxis) {
   P = 0.1;
+
+  auto noteTransform = GetObjectPose();
+
+  auto Note_X_Pos = noteTransform.X();
+  auto Note_Y_Pos = noteTransform.Y();
+  auto Note_R_Pos = noteTransform.Rotation().Radians().value();
 
   auto unsaturatedX = double(approach*Note_X_Pos*P);
   auto unsaturatedY = double(approach*Note_Y_Pos*P);
