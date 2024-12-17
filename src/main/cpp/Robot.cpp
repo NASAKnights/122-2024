@@ -200,7 +200,7 @@ void Robot::CreateRobot()
   m_swerveDrive.SetDefaultCommand(frc2::RunCommand(
       [this]
       {
-        Approach = m_operatorController.GetRawButton(3);
+        auto approach = m_driverController.GetRawButton(3);
 
         auto leftXAxis =
             MathUtilNK::calculateAxis(m_driverController.GetRawAxis(1),
@@ -211,7 +211,7 @@ void Robot::CreateRobot()
         auto rightXAxis =
             MathUtilNK::calculateAxis(m_driverController.GetRawAxis(2),
                                       DriveConstants::kDefaultAxisDeadband); 
-        m_swerveDrive.WeightedDriving(Approach, leftXAxis, leftYAxis, rightXAxis);
+        m_swerveDrive.WeightedDriving(approach, leftXAxis, leftYAxis, rightXAxis);
       },
       {&m_swerveDrive}));
 

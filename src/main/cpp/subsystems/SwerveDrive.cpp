@@ -47,6 +47,9 @@ SwerveDrive::SwerveDrive()
   baseLink2Subscribe = poseTable->GetDoubleArrayTopic(baseLink2).Subscribe(
       {}, {.periodic = 0.01, .sendAll = true});
 
+  objectPoseSubscribe = poseTable->GetDoubleArrayTopic(objectPose).Subscribe(
+      {}, {.periodic = 0.01, .sendAll = true});
+
   baseLinkPublisher = poseTable->GetDoubleArrayTopic(baseLink).Publish();
 
   //Configure Auto Swerve
@@ -322,8 +325,13 @@ frc::Transform2d SwerveDrive::GetObjectPose() {
                                                     objectPose.value.at(5));
     auto noteRotation = frc::Rotation3d(noteRotation_q);
 
-    auto NoteRotation2d = noteRotation.ToRotation2d();
-    return frc::Transform2d(Note_X_Pos, Note_Y_Pos, frc::Rotation2d());
+    auto NoteRotation2d = noteRotation.ToRotation2d(); 
+
+    frc::SmartDashboard::PutNumber("Note Pose X", Note_X_Pos.value());
+    frc::SmartDashboard::PutNumber("Note Pose Y", Note_Y_Pos.value());
+    frc::SmartDashboard::PutNumber("Note Pose O", NoteRotation2d.Radians().value());
+
+    return frc::Transform2d(Note_X_Pos, Note_Y_Pos, NoteRotation2d); // TODO: Set rotation to the angle between the robot and object
   }
 
   return frc::Transform2d{};
@@ -331,7 +339,11 @@ frc::Transform2d SwerveDrive::GetObjectPose() {
 
 void SwerveDrive::WeightedDriving(bool approach, double leftXAxis,
                                   double leftYAxis, double rightXAxis) {
-  P = 0.1;
+  auto Po = 1.0;
+  auto Px = 10.0;
+  auto Py = 1.0;
+
+  //TODO: Continue tuning
 
   auto noteTransform = GetObjectPose();
 
@@ -339,11 +351,11 @@ void SwerveDrive::WeightedDriving(bool approach, double leftXAxis,
   auto Note_Y_Pos = noteTransform.Y();
   auto Note_R_Pos = noteTransform.Rotation().Radians().value();
 
-  auto unsaturatedX = double(approach*Note_X_Pos*P);
-  auto unsaturatedY = double(approach*Note_Y_Pos*P);
-  auto unsaturatedO = double(approach*Note_R_Pos*P);
+  auto unsaturatedX = double(approach*Note_X_Pos*Px);
+  auto unsaturatedY = double(approach*Note_Y_Pos*Py);
+  auto unsaturatedO = double(approach*Note_R_Pos*Po);
 
-  auto saturatedX =  std::copysign( std::min( std::abs(unsaturatedX), 0.1 ), unsaturatedX );
+  auto saturatedX =  std::copysign( std::min( std::abs(unsaturatedX), 0.45 ), unsaturatedX );
   auto saturatedY =  std::copysign( std::min( std::abs(unsaturatedY), 0.1 ), unsaturatedY );
   auto saturatedOmega = std::copysign( std::min( std::abs(unsaturatedO), 0.1 ), unsaturatedO );
 

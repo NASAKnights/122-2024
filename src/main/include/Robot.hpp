@@ -84,8 +84,6 @@ private:
   Climber m_climber;
   frc::PowerDistribution m_pdh = frc::PowerDistribution{1,frc::PowerDistribution::ModuleType::kRev};
 
-  bool Approach = true;
-
   frc::Rotation2d WOW;
 
 

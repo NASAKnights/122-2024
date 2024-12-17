@@ -122,6 +122,7 @@ private:
   std::string_view baseLink1 = "base_link_1";
   std::string_view baseLink2 = "base_link_2";
   std::string_view baseLink = "base_link";
+  std::string_view objectPose = "note"; //TODO: CHANGE THIS TO __NOT__ BE NOTE
   std::shared_ptr<nt::NetworkTable> poseTable;
   
   nt::DoubleArraySubscriber baseLink1Subscribe;
