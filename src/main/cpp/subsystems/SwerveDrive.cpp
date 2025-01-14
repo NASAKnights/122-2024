@@ -4,7 +4,7 @@
 
 
 SwerveDrive::SwerveDrive()
-    : modules{{SwerveModule(ElectricalConstants::kFrontLeftDriveMotorID,
+: modules{{SwerveModule(ElectricalConstants::kFrontLeftDriveMotorID,
                             ElectricalConstants::kFrontLeftTurnMotorID,
                             ElectricalConstants::kFrontLeftEncoderID,
                             DriveConstants::kFrontLeftOffset),
@@ -40,6 +40,14 @@ SwerveDrive::SwerveDrive()
   auto visionStdDevs = wpi::array<double,3U>{0.9, 0.9, 1.8};
   m_poseEstimator.SetVisionMeasurementStdDevs(visionStdDevs);
 
+    
+  frc::SmartDashboard::PutNumber("Note Po", 0.0);
+  frc::SmartDashboard::PutNumber("Note Px", 0.0);
+  frc::SmartDashboard::PutNumber("Note Py", 0.0);
+  frc::SmartDashboard::PutNumber("Note P", 0.4);
+  frc::SmartDashboard::PutNumber("Note Do", 0.0);
+
+  timer.Start();
 
   poseTable = networkTableInst.GetTable("ROS2Bridge");
   baseLink1Subscribe = poseTable->GetDoubleArrayTopic(baseLink1).Subscribe(
@@ -93,6 +101,7 @@ void SwerveDrive::Periodic() {
   //PrintNetworkTableValues();
 
   frc::SmartDashboard::PutNumber("Heading", GetHeading().Degrees().value());
+  
   // UpdateOdometry();
 
 }
@@ -312,52 +321,56 @@ void SwerveDrive::DisableDrive() {
   // frc::SmartDashboard::PutBoolean("TestTestTest", enable);
 }
 
-frc::Transform2d SwerveDrive::GetObjectPose() {
-  auto objectPose = objectPoseSubscribe.GetAtomic();
+// frc::Transform2d SwerveDrive::GetObjectPose() {
+//   auto objectPose = objectPoseSubscribe.GetAtomic();
 
-  if(objectPose.value.size() > 0) {
-    auto Note_X_Pos = units::length::meter_t(objectPose.value.at(0));
-    auto Note_Y_Pos = units::length::meter_t(objectPose.value.at(1));
+//   if(objectPose.value.size() > 0) {
+//     auto noteXPos = units::length::meter_t(objectPose.value.at(0));
+//     auto noteYPos = units::length::meter_t(objectPose.value.at(1));
 
-    frc::Quaternion noteRotation_q = frc::Quaternion(objectPose.value.at(6),
-                                                    objectPose.value.at(3),
-                                                    objectPose.value.at(4),
-                                                    objectPose.value.at(5));
-    auto noteRotation = frc::Rotation3d(noteRotation_q);
+//     frc::Rotation2d rotationToNote = frc::Rotation2d(units::math::atan2(noteYPos, noteXPos));
 
-    auto NoteRotation2d = noteRotation.ToRotation2d(); 
+//     frc::SmartDashboard::PutNumber("Note Pose X", noteXPos.value());
+//     frc::SmartDashboard::PutNumber("Note Pose Y", noteYPos.value());
+//     frc::SmartDashboard::PutNumber("Note Pose O", rotationToNote.Radians().value());
 
-    frc::SmartDashboard::PutNumber("Note Pose X", Note_X_Pos.value());
-    frc::SmartDashboard::PutNumber("Note Pose Y", Note_Y_Pos.value());
-    frc::SmartDashboard::PutNumber("Note Pose O", NoteRotation2d.Radians().value());
+//     return frc::Transform2d(noteXPos, noteYPos, rotationToNote);
+//   }
 
-    return frc::Transform2d(Note_X_Pos, Note_Y_Pos, NoteRotation2d); // TODO: Set rotation to the angle between the robot and object
-  }
-
-  return frc::Transform2d{};
-}
+//   return frc::Transform2d{};
+// }
 
 void SwerveDrive::WeightedDriving(bool approach, double leftXAxis,
                                   double leftYAxis, double rightXAxis) {
-  auto Po = 1.0;
-  auto Px = 10.0;
-  auto Py = 1.0;
+
+  auto dT = timer.Get();
+  timer.Reset();
+  
+  auto Po = frc::SmartDashboard::GetNumber("Note Po", 0.0);
+  auto Px = frc::SmartDashboard::GetNumber("Note Px", 0.0);
+  auto Py = frc::SmartDashboard::GetNumber("Note Py", 0.0);
+  auto Do = frc::SmartDashboard::GetNumber("Note Do", 0.0);
 
   //TODO: Continue tuning
 
   auto noteTransform = GetObjectPose();
 
-  auto Note_X_Pos = noteTransform.X();
-  auto Note_Y_Pos = noteTransform.Y();
-  auto Note_R_Pos = noteTransform.Rotation().Radians().value();
+  auto noteXPos = noteTransform.X();
+  auto noteYPos = noteTransform.Y();
+  auto noteRotation = noteTransform.Rotation().Radians().value();
 
-  auto unsaturatedX = double(approach*Note_X_Pos*Px);
-  auto unsaturatedY = double(approach*Note_Y_Pos*Py);
-  auto unsaturatedO = double(approach*Note_R_Pos*Po);
+  auto unsaturatedX = double(approach*noteXPos*Px);
+  auto unsaturatedY = double(approach*noteYPos*Py);
+  auto unsaturatedPO = double(approach*noteRotation*Po);
+  auto unsaturatedDO = double(approach*(noteRotation - prevOError)/dT*Do);
+
+  prevOError = noteRotation;
 
   auto saturatedX =  std::copysign( std::min( std::abs(unsaturatedX), 0.45 ), unsaturatedX );
   auto saturatedY =  std::copysign( std::min( std::abs(unsaturatedY), 0.1 ), unsaturatedY );
-  auto saturatedOmega = std::copysign( std::min( std::abs(unsaturatedO), 0.1 ), unsaturatedO );
+
+  auto saturatedOmega = std::copysign( std::min( std::abs(unsaturatedPO - unsaturatedDO),
+          frc::SmartDashboard::GetNumber("Note P", 0.4) ), unsaturatedPO - unsaturatedDO);
 
   auto vx = 
       units::meters_per_second_t(saturatedX + 

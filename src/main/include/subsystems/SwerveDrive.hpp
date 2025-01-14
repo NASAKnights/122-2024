@@ -106,8 +106,10 @@ private:
   frc::PIDController pidY;
   frc::PIDController pidRot;
 
-  double P = 1;
+  frc::Timer timer;
 
+  double prevOError = 0;
+  
   bool hasRun = false;
   bool enable= true;
   double pos_Error;
